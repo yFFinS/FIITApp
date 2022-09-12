@@ -1,4 +1,4 @@
-# 1. Настройки проекта
+# 1. Настройки проектов
 - Runtime - **NET 6.0**
 - Language - **C# 11.0** (latest)
 - **Enable** nullable reference types
