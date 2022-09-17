@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="Recipes.Presentation/Recipes.Presentation/App.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Recipes.Presentation/Views/MainView.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/UI/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.csproj" />
+        <entry key="Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
