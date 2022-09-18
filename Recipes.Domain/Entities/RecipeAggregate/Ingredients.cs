@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Recipes.Domain.Entities.IngredientsAggregate;
+namespace Recipes.Domain.Entities.RecipeAggregate;
 
 public class Ingredients : IEnumerable<Ingredient>
 {

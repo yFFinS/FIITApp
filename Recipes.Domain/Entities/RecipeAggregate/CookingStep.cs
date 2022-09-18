@@ -1,4 +1,4 @@
-namespace Recipes.Domain.Entities.CookingTechnicAggregate;
+namespace Recipes.Domain.Entities.RecipeAggregate;
 
 public class CookingStep
 {

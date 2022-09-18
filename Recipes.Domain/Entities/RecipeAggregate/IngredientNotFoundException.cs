@@ -1,6 +1,6 @@
 using Recipes.Domain.Base;
 
-namespace Recipes.Domain.Entities.IngredientsAggregate;
+namespace Recipes.Domain.Entities.RecipeAggregate;
 
 public class IngredientNotFoundException : DomainException
 {
