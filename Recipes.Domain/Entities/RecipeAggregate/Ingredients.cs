@@ -1,56 +1,53 @@
 using System.Collections;
+using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
 
 public class Ingredients : IEnumerable<Ingredient>
 {
-    private readonly Dictionary<string, Ingredient> _ingredients;
+    private readonly Dictionary<EntityId, Ingredient> _ingredients;
 
     public Ingredients()
     {
-        _ingredients = new Dictionary<string, Ingredient>();
+        _ingredients = new Dictionary<EntityId, Ingredient>();
     }
 
     public Ingredients(IEnumerable<Ingredient> ingredients)
     {
-        _ingredients = ingredients.ToDictionary(x => x.Name);
+        _ingredients = ingredients.ToDictionary(x => x.Id);
     }
 
     public void Add(Ingredient ingredient)
     {
-        ThrowIfIngredientExists(ingredient.Name);
+        ThrowIfIngredientExists(ingredient.Id);
 
-        _ingredients.Add(ingredient.Name, ingredient);
+        _ingredients.Add(ingredient.Id, ingredient);
     }
 
-    public void UpdateIngredient(string ingredientName, int quantity)
+    public void Update(Ingredient ingredient)
     {
-        ThrowIfIngredientDoesNotExist(ingredientName);
+        ThrowIfIngredientDoesNotExist(ingredient.Id);
 
-        // TODO: Implement
-        // _ingredients[ingredientName].UpdateQuantity(quantity);
+        _ingredients[ingredient.Id] = ingredient;
     }
 
-    public void RemoveIngredient(string ingredientName)
+    public void Remove(EntityId ingredientId)
     {
-        if (!_ingredients.ContainsKey(ingredientName))
-        {
-            throw new IngredientNotFoundException(ingredientName);
-        }
+        ThrowIfIngredientDoesNotExist(ingredientId);
 
-        _ingredients.Remove(ingredientName);
+        _ingredients.Remove(ingredientId);
     }
 
-    public Ingredient GetIngredient(string ingredientName)
+    public Ingredient GetIngredientById(EntityId ingredientId)
     {
-        ThrowIfIngredientDoesNotExist(ingredientName);
+        ThrowIfIngredientDoesNotExist(ingredientId);
 
-        return _ingredients[ingredientName];
+        return _ingredients[ingredientId];
     }
 
-    public Ingredient? TryGetIngredient(string ingredientName)
+    public Ingredient? TryGetIngredientById(EntityId ingredientId)
     {
-        return _ingredients.TryGetValue(ingredientName, out var ingredient) ? ingredient : null;
+        return _ingredients.TryGetValue(ingredientId, out var ingredient) ? ingredient : null;
     }
 
     public IEnumerator<Ingredient> GetEnumerator()
@@ -63,19 +60,21 @@ public class Ingredients : IEnumerable<Ingredient>
         return GetEnumerator();
     }
 
-    private void ThrowIfIngredientDoesNotExist(string ingredientName)
+    public IReadOnlyCollection<Ingredient> AsReadOnlyCollection() => _ingredients.Values.ToList();
+
+    private void ThrowIfIngredientDoesNotExist(EntityId ingredientId)
     {
-        if (!_ingredients.ContainsKey(ingredientName))
+        if (!_ingredients.ContainsKey(ingredientId))
         {
-            throw new IngredientNotFoundException(ingredientName);
+            throw new IngredientNotFoundException(ingredientId);
         }
     }
 
-    private void ThrowIfIngredientExists(string ingredientName)
+    private void ThrowIfIngredientExists(EntityId ingredientId)
     {
-        if (_ingredients.ContainsKey(ingredientName))
+        if (_ingredients.ContainsKey(ingredientId))
         {
-            throw new IngredientExistsException(ingredientName);
+            throw new IngredientExistsException(ingredientId);
         }
     }
 }

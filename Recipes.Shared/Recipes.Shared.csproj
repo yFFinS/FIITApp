@@ -10,8 +10,4 @@
       <PackageReference Include="Ardalis.GuardClauses" Version="4.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Recipes.Shared\Recipes.Shared.csproj" />
-    </ItemGroup>
-
 </Project>

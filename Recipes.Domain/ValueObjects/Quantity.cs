@@ -1,18 +1,18 @@
 using Ardalis.GuardClauses;
+using Recipes.Domain.Base;
 using Recipes.Domain.Enums;
 using Recipes.Domain.Exceptions;
 using Recipes.Domain.Extensions;
+using Recipes.Shared;
 
 namespace Recipes.Domain.ValueObjects;
 
-public class Quantity
+public sealed class Quantity : ValueObject
 {
     public Quantity(double value, QuantityUnit unit)
     {
-        Guard.Against.NegativeOrZero(value);
-
-        Value = value;
-        Unit = unit;
+        Value = Guard.Against.NegativeOrInvalid(value);
+        Unit = Guard.Against.EnumOutOfRange(unit);
     }
 
     public readonly double Value;
@@ -28,5 +28,25 @@ public class Quantity
         }
 
         throw new NotImplementedException();
+    }
+
+    public override string ToString()
+    {
+        return Unit switch
+        {
+            QuantityUnit.Cups => $"{Value} кр",
+            QuantityUnit.Milliliters => $"{Value} мл",
+            QuantityUnit.Grams => $"{Value} г",
+            QuantityUnit.Pieces => $"{Value} шт",
+            QuantityUnit.Teaspoons => $"{Value} ч.л",
+            QuantityUnit.Tablespoons => $"{Value} ст.л",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
+        yield return Unit;
     }
 }

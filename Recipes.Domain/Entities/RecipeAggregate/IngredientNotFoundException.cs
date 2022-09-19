@@ -1,10 +1,11 @@
 using Recipes.Domain.Base;
+using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
 
 public class IngredientNotFoundException : DomainException
 {
-    public IngredientNotFoundException(string ingredientName) : base($"Ingredient {ingredientName} not found")
+    public IngredientNotFoundException(EntityId ingredientId) : base($"Ingredient with id {ingredientId} not found")
     {
     }
 }

@@ -1,6 +1,13 @@
+using Recipes.Domain.ValueObjects;
+
 namespace Recipes.Domain.Base;
 
-public class BaseEntity
+public abstract class BaseEntity
 {
-    public string Id { get; set; }
+    public EntityId Id { get; }
+
+    protected BaseEntity(EntityId id)
+    {
+        Id = id;
+    }
 }
