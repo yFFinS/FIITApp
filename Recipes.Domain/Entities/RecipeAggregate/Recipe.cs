@@ -1,5 +1,6 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
+using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
@@ -14,25 +15,25 @@ public class Recipe : BaseEntity
     public string Title
     {
         get => _title;
-        set => _title = Guard.Against.Null(value);
+        private set => _title = Guard.Against.Null(value);
     }
 
     public string? Description
     {
         get => _description;
-        set => _description = value;
+        private set => _description = value;
     }
 
     public int Servings
     {
         get => _servings;
-        set => _servings = Guard.Against.NegativeOrZero(value);
+        private set => _servings = Guard.Against.NegativeOrZero(value);
     }
 
     public TimeSpan CookDuration
     {
         get => _cookingTime;
-        set => _cookingTime = Guard.Against.NegativeOrZero(value);
+        private set => _cookingTime = Guard.Against.NegativeOrZero(value);
     }
 
     private readonly Ingredients _ingredients;
@@ -51,6 +52,13 @@ public class Recipe : BaseEntity
         Description = description;
         Servings = servings;
         CookDuration = cookDuration;
+    }
+
+    public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
+        Ingredients ingredients, CookingTechnic cookingTechnic) : this(id, title, description, servings, cookDuration)
+    {
+        _ingredients = ingredients;
+        _cookingTechnic = cookingTechnic;
     }
 
     public void AddCookingStep(CookingStep cookingStep)
@@ -89,6 +97,26 @@ public class Recipe : BaseEntity
     {
         ArgumentNullException.ThrowIfNull(ingredient);
         _ingredients.Remove(ingredient.Id);
+    }
+
+    public void UpdateTitle(string title)
+    {
+        Title = title;
+    }
+
+    public void UpdateDescription(string? description)
+    {
+        Description = description;
+    }
+
+    public void UpdateServings(int servings)
+    {
+        Servings = servings;
+    }
+
+    public void UpdateCookDuration(TimeSpan cookDuration)
+    {
+        CookDuration = cookDuration;
     }
 
     public IReadOnlyCollection<CookingStep> GetCookingSteps() => _cookingTechnic.CookingSteps;

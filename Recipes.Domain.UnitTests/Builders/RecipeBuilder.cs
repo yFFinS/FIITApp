@@ -1,12 +1,13 @@
 using System;
+using System.Collections.Generic;
+using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.UnitTests.Builders;
 
-public class RecipeBuilder
+public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
 {
-    private EntityId _id = EntityId.New();
     private string _title = "Test Recipe";
     private string? _description;
     private int _servings = 1;
@@ -14,10 +15,14 @@ public class RecipeBuilder
     private Ingredients _ingredients = new();
     private CookingTechnic _cookingTechnic = new();
 
-    public RecipeBuilder WithId(EntityId id)
+    protected override IEnumerable<object?> GetConstructorArguments()
     {
-        _id = id;
-        return this;
+        yield return _title;
+        yield return _description;
+        yield return _servings;
+        yield return _cookTime;
+        yield return _ingredients;
+        yield return _cookingTechnic;
     }
 
     public RecipeBuilder WithTitle(string title)
@@ -72,22 +77,4 @@ public class RecipeBuilder
         _cookingTechnic.AddStep(cookingStep);
         return this;
     }
-
-    public Recipe Build()
-    {
-        var recipe = new Recipe(_id, _title, _description, _servings, _cookTime);
-        foreach (var ingredient in _ingredients)
-        {
-            recipe.AddIngredient(ingredient);
-        }
-
-        foreach (var step in _cookingTechnic.CookingSteps)
-        {
-            recipe.AddCookingStep(step);
-        }
-
-        return recipe;
-    }
-
-    public static implicit operator Recipe(RecipeBuilder builder) => builder.Build();
 }

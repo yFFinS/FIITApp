@@ -19,7 +19,7 @@ public class EntityId : ValueObject
     public override string ToString() => Value.ToString();
 
 
-    public static EntityId New() => new(Guid.NewGuid());
+    public static EntityId NewId() => new(Guid.NewGuid());
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

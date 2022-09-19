@@ -1,3 +1,4 @@
+using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.Interfaces;
 

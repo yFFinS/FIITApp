@@ -1,7 +1,7 @@
 using System.Collections;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Domain.Entities.RecipeAggregate;
+namespace Recipes.Domain.Entities.IngredientAggregate;
 
 public class Ingredients : IEnumerable<Ingredient>
 {

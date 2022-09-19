@@ -1,24 +1,19 @@
-using Recipes.Domain.Entities.RecipeAggregate;
+using System.Collections.Generic;
+using Recipes.Domain.Entities.IngredientAggregate;
+using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Enums;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.UnitTests.Builders;
 
-public class IngredientBuilder
+public class IngredientBuilder : BaseEntityBuilder<Ingredient, IngredientBuilder>
 {
-    private EntityId _id = EntityId.New();
-    private string _name = "Ingredient";
-    private Quantity _quantity = new Quantity(1, QuantityUnit.Pieces);
+    private Product _product = new ProductBuilder().Build();
+    private Quantity _quantity = new(1, QuantityUnit.Pieces);
 
-    public IngredientBuilder WithId(EntityId id)
+    public IngredientBuilder WithProduct(Product product)
     {
-        _id = id;
-        return this;
-    }
-
-    public IngredientBuilder WithName(string name)
-    {
-        _name = name;
+        _product = product;
         return this;
     }
 
@@ -28,10 +23,9 @@ public class IngredientBuilder
         return this;
     }
 
-    public Ingredient Build()
+    protected override IEnumerable<object?> GetConstructorArguments()
     {
-        return new Ingredient(_id, _name, _quantity);
+        yield return _product;
+        yield return _quantity;
     }
-
-    public static implicit operator Ingredient(IngredientBuilder builder) => builder.Build();
 }
