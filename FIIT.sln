@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FA6EE61F-4CC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ACCD4909-D637-4DB1-8EA1-8DBA730E4204}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Tests", "Recipes.Tests\Recipes.Tests.csproj", "{E41A22E6-F54D-44C2-82B5-DB66310537CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Domain.UnitTests", "Recipes.Domain.UnitTests\Recipes.Domain.UnitTests.csproj", "{E41A22E6-F54D-44C2-82B5-DB66310537CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Infrastructure", "Recipes.Infrastructure\Recipes.Infrastructure.csproj", "{25E72FD8-3E87-40E8-A56F-7B4FF149CAD5}"
 EndProject
