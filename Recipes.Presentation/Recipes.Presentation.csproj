@@ -20,6 +20,6 @@
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\Recipes.Application\Recipes.Application.csproj" />
+      <ProjectReference Include="..\Recipes.Application\Recipes.Application.csproj" />
     </ItemGroup>
 </Project>

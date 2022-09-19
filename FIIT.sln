@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Presentation", "Recipes.Presentation\Recipes.Presentation\Recipes.Presentation.csproj", "{3A7BCEEF-C529-4127-9D30-42CEC2C2148E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Presentation", "Recipes.Presentation\Recipes.Presentation.csproj", "{3A7BCEEF-C529-4127-9D30-42CEC2C2148E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Presentation.Desktop", "Recipes.Presentation\Recipes.Presentation.Desktop\Recipes.Presentation.Desktop.csproj", "{51E6BEE2-BC49-4380-BDF0-158786FE2178}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Presentation.Desktop", "Recipes.Presentation.Desktop\Recipes.Presentation.Desktop.csproj", "{51E6BEE2-BC49-4380-BDF0-158786FE2178}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Application", "Recipes.Application\Recipes.Application.csproj", "{AFC4E46D-40D9-4F5D-9027-983D05F17F16}"
 EndProject
