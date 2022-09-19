@@ -1,25 +1,56 @@
+using System.Reflection.Metadata;
 using Ardalis.GuardClauses;
+using Recipes.Domain.Base;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
 
-public class Recipe
+public class Recipe : BaseEntity
 {
-    public string Title { get; }
-    public string? Description { get; }
-    public int Servings { get; }
-    public TimeSpan CookDuration { get; }
-    public Ingredients Ingredients { get; }
-    public CookingTechnic CookingTechnic { get; }
+    private bool _isValid;
+
+    private string _title;
+    private string? _description;
+    private int _servings;
+    private TimeSpan _cookingTime;
+
+    public string Title { get; set; }
+
+    private T Revalidate<T>(T value)
+    {   
+        return value;
+    }
+
+    public string? Description
+    {
+        get => _description;
+        set => _description = value;
+    }
+
+    public int Servings
+    {
+        get => _servings;
+        set => _servings = Guard.Against.NegativeOrZero(value);
+    }
+
+    public TimeSpan CookDuration
+    {
+        get => _cookingTime;
+        set => _cookingTime = Guard.Against.NegativeOrZero(value);
+    }
+
+    public Ingredients Ingredients { get; set; }
+    public CookingTechnic CookingTechnic { get; set; }
+
+    public Recipe()
+    {
+        _title = string.Empty;
+        Ingredients = new Ingredients();
+        CookingTechnic = new CookingTechnic();
+    }
 
     public Recipe(string title, string? description, int servings, TimeSpan cookDuration, Ingredients ingredients,
         CookingTechnic cookingTechnic)
     {
-        Guard.Against.NullOrWhiteSpace(title);
-        Guard.Against.NegativeOrZero(servings);
-        Guard.Against.NegativeOrZero(cookDuration);
-        Guard.Against.Null(ingredients);
-        Guard.Against.Null(cookingTechnic);
-
         Title = title;
         Description = description;
         Servings = servings;

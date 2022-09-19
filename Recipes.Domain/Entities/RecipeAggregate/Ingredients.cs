@@ -16,7 +16,7 @@ public class Ingredients : IEnumerable<Ingredient>
         _ingredients = ingredients.ToDictionary(x => x.Name);
     }
 
-    public void AddIngredient(Ingredient ingredient)
+    public void Add(Ingredient ingredient)
     {
         ThrowIfIngredientExists(ingredient.Name);
 
