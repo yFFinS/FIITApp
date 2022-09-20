@@ -1,5 +1,6 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
@@ -14,35 +15,35 @@ public class Recipe : BaseEntity
     public string Title
     {
         get => _title;
-        set => _title = Guard.Against.Null(value);
+        private set => _title = Guard.Against.Null(value);
     }
 
     public string? Description
     {
         get => _description;
-        set => _description = value;
+        private set => _description = value;
     }
 
     public int Servings
     {
         get => _servings;
-        set => _servings = Guard.Against.NegativeOrZero(value);
+        private set => _servings = Guard.Against.NegativeOrZero(value);
     }
 
     public TimeSpan CookDuration
     {
         get => _cookingTime;
-        set => _cookingTime = Guard.Against.NegativeOrZero(value);
+        private set => _cookingTime = Guard.Against.NegativeOrZero(value);
     }
 
-    private readonly Ingredients _ingredients;
+    private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
 
 
     public Recipe(EntityId id, string title) : base(id)
     {
         Title = title;
-        _ingredients = new Ingredients();
+        _ingredientGroup = new IngredientGroup();
         _cookingTechnic = new CookingTechnic();
     }
 
@@ -51,6 +52,14 @@ public class Recipe : BaseEntity
         Description = description;
         Servings = servings;
         CookDuration = cookDuration;
+    }
+
+    public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
+        IngredientGroup ingredientGroup, CookingTechnic cookingTechnic) : this(id, title, description, servings,
+        cookDuration)
+    {
+        _ingredientGroup = ingredientGroup;
+        _cookingTechnic = cookingTechnic;
     }
 
     public void AddCookingStep(CookingStep cookingStep)
@@ -76,21 +85,43 @@ public class Recipe : BaseEntity
     public void UpdateIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        _ingredients.Update(ingredient);
+        _ingredientGroup.Update(ingredient);
     }
 
     public void AddIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        _ingredients.Add(ingredient);
+        
+        _ingredientGroup.Add(ingredient);
     }
 
     public void RemoveIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        _ingredients.Remove(ingredient.Id);
+        
+        _ingredientGroup.Remove(ingredient);
     }
 
-    public IReadOnlyCollection<CookingStep> GetCookingSteps() => _cookingTechnic.CookingSteps;
-    public IReadOnlyCollection<Ingredient> GetIngredients() => _ingredients.AsReadOnlyCollection();
+    public void UpdateTitle(string title)
+    {
+        Title = title;
+    }
+
+    public void UpdateDescription(string? description)
+    {
+        Description = description;
+    }
+
+    public void UpdateServings(int servings)
+    {
+        Servings = servings;
+    }
+
+    public void UpdateCookDuration(TimeSpan cookDuration)
+    {
+        CookDuration = cookDuration;
+    }
+
+    public IReadOnlyCollection<CookingStep> CookingSteps => _cookingTechnic.CookingSteps;
+    public IReadOnlyCollection<Ingredient> Ingredients => _ingredientGroup.AsReadOnlyCollection();
 }

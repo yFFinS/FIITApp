@@ -7,7 +7,7 @@ using Recipes.Shared;
 
 namespace Recipes.Domain.ValueObjects;
 
-public sealed class Quantity : ValueObject
+public sealed class Quantity : ValueObject, IComparable<Quantity>
 {
     public Quantity(double value, QuantityUnit unit)
     {
@@ -17,6 +17,7 @@ public sealed class Quantity : ValueObject
 
     public readonly double Value;
     public readonly QuantityUnit Unit;
+    public Quantity Empty => new Quantity(0, Unit);
 
     public bool IsConvertibleTo(QuantityUnit unit) => Unit.IsConvertibleTo(unit);
 
@@ -27,7 +28,73 @@ public sealed class Quantity : ValueObject
             throw new QuantityUnitConversionException(Unit, unit);
         }
 
+        if (Unit == unit)
+        {
+            return this;
+        }
+
         throw new NotImplementedException();
+    }
+
+    public static Quantity operator +(Quantity left, Quantity right)
+    {
+        if (left.Unit != right.Unit)
+        {
+            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+        }
+
+        return new Quantity(left.Value + right.Value, left.Unit);
+    }
+
+
+    public static Quantity operator -(Quantity left, Quantity right)
+    {
+        if (left.Unit != right.Unit)
+        {
+            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+        }
+
+        return new Quantity(left.Value - right.Value, left.Unit);
+    }
+
+    public static bool operator >(Quantity left, Quantity right)
+    {
+        if (left.Unit != right.Unit)
+        {
+            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+        }
+
+        return left.Value > right.Value;
+    }
+
+    public static bool operator <(Quantity left, Quantity right)
+    {
+        if (left.Unit != right.Unit)
+        {
+            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+        }
+
+        return left.Value < right.Value;
+    }
+
+    public static bool operator >=(Quantity left, Quantity right)
+    {
+        if (left.Unit != right.Unit)
+        {
+            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+        }
+
+        return left.Value >= right.Value;
+    }
+
+    public static bool operator <=(Quantity left, Quantity right)
+    {
+        if (left.Unit != right.Unit)
+        {
+            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+        }
+
+        return left.Value <= right.Value;
     }
 
     public override string ToString()
@@ -48,5 +115,21 @@ public sealed class Quantity : ValueObject
     {
         yield return Value;
         yield return Unit;
+    }
+
+    public int CompareTo(Quantity? other)
+    {
+        if (ReferenceEquals(this, other))
+        {
+            return 0;
+        }
+
+        if (ReferenceEquals(null, other))
+        {
+            return 1;
+        }
+
+        var valueComparison = Value.CompareTo(other.Value);
+        return valueComparison != 0 ? valueComparison : Unit.CompareTo(other.Unit);
     }
 }

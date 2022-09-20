@@ -4,16 +4,11 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Recipe.Tests.Shared</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Recipes.Domain\Recipes.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Logging.Abstractions">
-        <HintPath>..\..\..\.nuget\packages\microsoft.extensions.logging.abstractions\7.0.0-rc.1.22426.10\lib\net6.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>
