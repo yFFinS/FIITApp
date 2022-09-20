@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Recipe.Tests.Shared\Recipe.Tests.Shared.csproj" />
       <ProjectReference Include="..\Recipes.Domain\Recipes.Domain.csproj" />
     </ItemGroup>
 

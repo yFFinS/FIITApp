@@ -7,6 +7,8 @@ public class Price : ValueObject
 {
     public readonly decimal Value;
 
+
+    // TODO: add currency
     public Price(decimal value)
     {
         Value = Guard.Against.Negative(value);

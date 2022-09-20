@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Domain.UnitTests.Builders;
+namespace Recipes.Tests.Shared.Builders;
 
 public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
 {
@@ -12,7 +10,7 @@ public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
     private string? _description;
     private int _servings = 1;
     private TimeSpan _cookTime = TimeSpan.FromHours(1);
-    private Ingredients _ingredients = new();
+    private IngredientGroup _ingredientGroup = new();
     private CookingTechnic _cookingTechnic = new();
 
     protected override IEnumerable<object?> GetConstructorArguments()
@@ -21,7 +19,7 @@ public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
         yield return _description;
         yield return _servings;
         yield return _cookTime;
-        yield return _ingredients;
+        yield return _ingredientGroup;
         yield return _cookingTechnic;
     }
 
@@ -54,15 +52,15 @@ public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
         return this;
     }
 
-    public RecipeBuilder WithIngredients(Ingredients ingredients)
+    public RecipeBuilder WithIngredients(IngredientGroup ingredientGroup)
     {
-        _ingredients = ingredients;
+        _ingredientGroup = ingredientGroup;
         return this;
     }
 
     public RecipeBuilder WithIngredient(Ingredient ingredient)
     {
-        _ingredients.Add(ingredient);
+        _ingredientGroup.Add(ingredient);
         return this;
     }
 

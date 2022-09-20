@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
-using Recipes.Domain.UnitTests.BuilderEntries;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
+using Recipes.Tests.Shared.BuilderEntries;
 
 namespace Recipes.Domain.UnitTests.Tests;
 
@@ -79,7 +79,7 @@ public class RecipeTests
         recipe.AddIngredient(ingredient3);
 
         var expected = new List<Ingredient> { ingredient1, ingredient2, ingredient3 };
-        Assert.That(recipe.GetIngredients(), Is.EqualTo(expected));
+        Assert.That(recipe.Ingredients, Is.EqualTo(expected));
     }
 
     [Test]
@@ -96,7 +96,7 @@ public class RecipeTests
         recipe.AddCookingStep(cookingStep3);
 
         var expected = new List<CookingStep> { cookingStep1, cookingStep2, cookingStep3 };
-        Assert.That(recipe.GetCookingSteps(), Is.EqualTo(expected));
+        Assert.That(recipe.CookingSteps, Is.EqualTo(expected));
     }
 
     [Test]
@@ -113,7 +113,7 @@ public class RecipeTests
         recipe.InsertCookingStep(0, cookingStep3);
 
         var expected = new List<CookingStep> { cookingStep3, cookingStep1, cookingStep2 };
-        Assert.That(recipe.GetCookingSteps(), Is.EqualTo(expected));
+        Assert.That(recipe.CookingSteps, Is.EqualTo(expected));
     }
 
     [Test]
@@ -121,15 +121,13 @@ public class RecipeTests
     {
         var id = EntityId.NewId();
 
-        Ingredient ingredient = An.Ingredient.WithId(id);
+        Ingredient ingredient = An.Ingredient.WithProduct(A.Product.WithName("A"));
         Recipe recipe = A.Recipe.WithIngredient(ingredient);
 
-        Ingredient updatedIngredient = An.Ingredient
-            .WithId(id)
-            .WithProduct(A.Product);
+        Ingredient updatedIngredient = An.Ingredient.WithProduct(A.Product.WithName("B"));
         recipe.UpdateIngredient(updatedIngredient);
 
-        Assert.That(recipe.GetIngredients(), Has.Exactly(1)
+        Assert.That(recipe.Ingredients, Has.Exactly(1)
             .With.Property(nameof(Ingredient.Product))
             .Property(nameof(Product.Id))
             .EqualTo(updatedIngredient.Product.Id));
@@ -139,13 +137,13 @@ public class RecipeTests
     public void Test_EmptyRecipe_HasEmptyCookingSteps()
     {
         Recipe recipe = A.Recipe;
-        Assert.That(recipe.GetCookingSteps(), Is.Empty);
+        Assert.That(recipe.CookingSteps, Is.Empty);
     }
 
     [Test]
     public void Test_EmptyRecipe_HasEmptyIngredients()
     {
         Recipe recipe = A.Recipe;
-        Assert.That(recipe.GetIngredients(), Is.Empty);
+        Assert.That(recipe.Ingredients, Is.Empty);
     }
 }

@@ -1,9 +1,8 @@
-using System.Collections.Generic;
 using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Enums;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Domain.UnitTests.Builders;
+namespace Recipes.Tests.Shared.Builders;
 
 public class ProductBuilder : BaseEntityBuilder<Product, ProductBuilder>
 {

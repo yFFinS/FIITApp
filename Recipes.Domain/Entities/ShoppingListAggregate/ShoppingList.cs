@@ -1,6 +1,6 @@
 using Recipes.Domain.Base;
-using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.ShoppingListAggregate;
@@ -8,36 +8,36 @@ namespace Recipes.Domain.Entities.ShoppingListAggregate;
 public class ShoppingList : BaseEntity
 {
     private readonly Dictionary<EntityId, Recipe> _recipes;
-    private readonly Ingredients _ingredients;
+    private readonly IngredientGroup _ingredientGroup;
 
     public ShoppingList(EntityId id) : base(id)
     {
         _recipes = new Dictionary<EntityId, Recipe>();
-        _ingredients = new Ingredients();
+        _ingredientGroup = new IngredientGroup();
     }
 
-    public ShoppingList(EntityId id, IEnumerable<Recipe> recipes, Ingredients ingredients) : base(id)
+    public ShoppingList(EntityId id, IEnumerable<Recipe> recipes, IngredientGroup ingredientGroup) : base(id)
     {
         ArgumentNullException.ThrowIfNull(recipes);
-        ArgumentNullException.ThrowIfNull(ingredients);
+        ArgumentNullException.ThrowIfNull(ingredientGroup);
 
         _recipes = recipes.ToDictionary(r => r.Id);
-        _ingredients = ingredients;
+        _ingredientGroup = ingredientGroup;
     }
 
     public void AddIngredient(Ingredient ingredient)
     {
-        _ingredients.Add(ingredient);
+        _ingredientGroup.Add(ingredient);
     }
 
     public void RemoveIngredient(EntityId ingredientId)
     {
-        _ingredients.Remove(ingredientId);
+        _ingredientGroup.RemoveByProductId(ingredientId);
     }
 
     public void UpdateIngredient(Ingredient ingredient)
     {
-        _ingredients.Update(ingredient);
+        _ingredientGroup.Update(ingredient);
     }
 
     public void AddRecipe(Recipe recipe)
@@ -79,5 +79,5 @@ public class ShoppingList : BaseEntity
     }
 
     public IReadOnlyCollection<Recipe> Recipes => _recipes.Values.ToList();
-    public IReadOnlyCollection<Ingredient> Ingredients => _ingredients.AsReadOnlyCollection();
+    public IReadOnlyCollection<Ingredient> Ingredients => _ingredientGroup.AsReadOnlyCollection();
 }

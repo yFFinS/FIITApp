@@ -1,6 +1,6 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
-using Recipes.Domain.Entities.IngredientAggregate;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
@@ -36,14 +36,14 @@ public class Recipe : BaseEntity
         private set => _cookingTime = Guard.Against.NegativeOrZero(value);
     }
 
-    private readonly Ingredients _ingredients;
+    private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
 
 
     public Recipe(EntityId id, string title) : base(id)
     {
         Title = title;
-        _ingredients = new Ingredients();
+        _ingredientGroup = new IngredientGroup();
         _cookingTechnic = new CookingTechnic();
     }
 
@@ -55,9 +55,10 @@ public class Recipe : BaseEntity
     }
 
     public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
-        Ingredients ingredients, CookingTechnic cookingTechnic) : this(id, title, description, servings, cookDuration)
+        IngredientGroup ingredientGroup, CookingTechnic cookingTechnic) : this(id, title, description, servings,
+        cookDuration)
     {
-        _ingredients = ingredients;
+        _ingredientGroup = ingredientGroup;
         _cookingTechnic = cookingTechnic;
     }
 
@@ -84,19 +85,21 @@ public class Recipe : BaseEntity
     public void UpdateIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        _ingredients.Update(ingredient);
+        _ingredientGroup.Update(ingredient);
     }
 
     public void AddIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        _ingredients.Add(ingredient);
+        
+        _ingredientGroup.Add(ingredient);
     }
 
     public void RemoveIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        _ingredients.Remove(ingredient.Id);
+        
+        _ingredientGroup.Remove(ingredient);
     }
 
     public void UpdateTitle(string title)
@@ -119,6 +122,6 @@ public class Recipe : BaseEntity
         CookDuration = cookDuration;
     }
 
-    public IReadOnlyCollection<CookingStep> GetCookingSteps() => _cookingTechnic.CookingSteps;
-    public IReadOnlyCollection<Ingredient> GetIngredients() => _ingredients.AsReadOnlyCollection();
+    public IReadOnlyCollection<CookingStep> CookingSteps => _cookingTechnic.CookingSteps;
+    public IReadOnlyCollection<Ingredient> Ingredients => _ingredientGroup.AsReadOnlyCollection();
 }

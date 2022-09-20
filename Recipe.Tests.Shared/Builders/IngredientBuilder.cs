@@ -1,12 +1,11 @@
-using System.Collections.Generic;
-using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Enums;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Domain.UnitTests.Builders;
+namespace Recipes.Tests.Shared.Builders;
 
-public class IngredientBuilder : BaseEntityBuilder<Ingredient, IngredientBuilder>
+public class IngredientBuilder : AbstractBuilder<Ingredient>
 {
     private Product _product = new ProductBuilder().Build();
     private Quantity _quantity = new(1, QuantityUnit.Pieces);
