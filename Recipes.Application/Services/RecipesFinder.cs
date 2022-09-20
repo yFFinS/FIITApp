@@ -1,4 +1,5 @@
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.Interfaces;
 
 namespace Recipes.Application.Services;
@@ -12,13 +13,13 @@ public class RecipesFinder
         _recipeRepository = recipeRepository;
     }
 
-    public async Task<List<Recipe>> FindRecipeAsync(Ingredients ingredients)
+    public async Task<List<Recipe>> FindRecipeAsync(IngredientGroup ingredientGroup)
     {
-        return await _recipeRepository.GetRecipesAsync(ingredients);
+        return await _recipeRepository.GetRecipesAsync(ingredientGroup);
     }
 
-    public async Task<List<Recipe>> FindRecipeAsync(Ingredients ingredients, int maxResults)
+    public async Task<List<Recipe>> FindRecipeAsync(IngredientGroup ingredientGroup, int maxResults)
     {
-        return await _recipeRepository.GetRecipesAsync(ingredients, maxResults);
+        return await _recipeRepository.GetRecipesAsync(ingredientGroup, maxResults);
     }
 }
