@@ -3,20 +3,20 @@ using Recipes.Domain.Entities.IngredientAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Domain.Entities.OrderAggregate;
+namespace Recipes.Domain.Entities.ShoppingListAggregate;
 
-public class Order : BaseEntity
+public class ShoppingList : BaseEntity
 {
     private readonly Dictionary<EntityId, Recipe> _recipes;
     private readonly Ingredients _ingredients;
 
-    public Order(EntityId id) : base(id)
+    public ShoppingList(EntityId id) : base(id)
     {
         _recipes = new Dictionary<EntityId, Recipe>();
         _ingredients = new Ingredients();
     }
 
-    public Order(EntityId id, IEnumerable<Recipe> recipes, Ingredients ingredients) : base(id)
+    public ShoppingList(EntityId id, IEnumerable<Recipe> recipes, Ingredients ingredients) : base(id)
     {
         ArgumentNullException.ThrowIfNull(recipes);
         ArgumentNullException.ThrowIfNull(ingredients);

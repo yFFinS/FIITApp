@@ -1,7 +1,7 @@
 using Recipes.Domain.Base;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Domain.Entities.OrderAggregate;
+namespace Recipes.Domain.Entities.ShoppingListAggregate;
 
 public class RecipeNonexistentException : DomainException
 {
