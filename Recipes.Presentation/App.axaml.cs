@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Recipes.Infrastructure;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 
@@ -11,24 +12,6 @@ namespace Recipes.Presentation
 {
     internal static class DependencyInjection
     {
-        public static void ConfigureServices(this IServiceCollection services)
-        {
-            services.AddLogging(builder => builder.AddConsole());
-
-            services.AddSingleton<ILogger>(x =>
-                x.GetRequiredService<ILoggerFactory>().CreateLogger("Default"));
-
-            services.AddTransient<MainViewModel>();
-            services.AddSingleton(x => new MainWindow()
-            {
-                DataContext = x.GetRequiredService<MainViewModel>()
-            });
-            services.AddSingleton(x => new MainView()
-            {
-                DataContext = x.GetRequiredService<MainViewModel>()
-            });
-        }
-
         public static IServiceProvider GetServiceProvider(this IResourceHost control)
         {
             var serviceProvider = control.FindResource(typeof(IServiceProvider)) as IServiceProvider;
@@ -40,8 +23,18 @@ namespace Recipes.Presentation
     {
         public override void Initialize()
         {
-            IServiceCollection services = new ServiceCollection();
-            services.ConfigureServices();
+            var services = Bootstrap.ConfigureServices();
+
+            services.AddTransient<MainViewModel>();
+            services.AddSingleton(x => new MainWindow()
+            {
+                DataContext = x.GetRequiredService<MainViewModel>()
+            });
+            services.AddSingleton(x => new MainView()
+            {
+                DataContext = x.GetRequiredService<MainViewModel>()
+            });
+
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             AvaloniaXamlLoader.Load(this);
