@@ -15,9 +15,9 @@ public abstract class BaseEntityBuilder<TEntity, TBuilder> : AbstractBuilder<TEn
         return (TBuilder)this;
     }
 
-    protected override TEntity Build(IList<object?> arguments)
+    protected override TEntity Build(object?[] arguments)
     {
-        var argumentsWithId = new List<object?> { Id }.Concat(arguments).ToList();
+        var argumentsWithId = new List<object?> { Id }.Concat(arguments).ToArray();
         return base.Build(argumentsWithId);
     }
 }

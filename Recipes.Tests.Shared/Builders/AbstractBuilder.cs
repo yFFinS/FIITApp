@@ -4,7 +4,7 @@ namespace Recipes.Tests.Shared.Builders;
 
 public abstract class AbstractBuilder<TResult>
 {
-    protected virtual TResult Build(IList<object?> arguments)
+    protected virtual TResult Build(object?[] arguments)
     {
         try
         {
@@ -21,7 +21,7 @@ public abstract class AbstractBuilder<TResult>
 
     public TResult Build()
     {
-        var arguments = GetConstructorArguments().ToList();
+        var arguments = GetConstructorArguments().ToArray();
         return Build(arguments);
     }
 

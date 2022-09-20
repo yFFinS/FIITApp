@@ -12,7 +12,7 @@ public class Ingredient : ValueObject
     public readonly Quantity Quantity;
 
     public EntityId ProductId => Product.Id;
-    public Ingredient Empty => new Ingredient(Product, Quantity.Empty);
+    public Ingredient Empty => new(Product, Quantity.Empty);
 
     public Ingredient(Product product, Quantity quantity)
     {

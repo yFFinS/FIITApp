@@ -121,16 +121,15 @@ public class RecipeTests
     {
         var id = EntityId.NewId();
 
-        Ingredient ingredient = An.Ingredient.WithProduct(A.Product.WithName("A"));
+        Ingredient ingredient = An.Ingredient.WithProduct(A.Product.WithId(id));
         Recipe recipe = A.Recipe.WithIngredient(ingredient);
 
-        Ingredient updatedIngredient = An.Ingredient.WithProduct(A.Product.WithName("B"));
+        Ingredient updatedIngredient = An.Ingredient.WithProduct(A.Product.WithId(id));
         recipe.UpdateIngredient(updatedIngredient);
 
         Assert.That(recipe.Ingredients, Has.Exactly(1)
-            .With.Property(nameof(Ingredient.Product))
-            .Property(nameof(Product.Id))
-            .EqualTo(updatedIngredient.Product.Id));
+            .With.Property(nameof(Ingredient.ProductId))
+            .EqualTo(updatedIngredient.ProductId));
     }
 
     [Test]

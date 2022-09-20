@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Shared", "Recipes.S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Application.UnitTests", "Recipes.Application.UnitTests\Recipes.Application.UnitTests.csproj", "{E4BE0A7C-DEF0-4AE3-AA21-50B50385AE70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipe.Tests.Shared", "Recipe.Tests.Shared\Recipe.Tests.Shared.csproj", "{797A4533-11F4-4A38-B438-D55678260D0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recipes.Tests.Shared", "Recipes.Tests.Shared\Recipes.Tests.Shared.csproj", "{797A4533-11F4-4A38-B438-D55678260D0B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
