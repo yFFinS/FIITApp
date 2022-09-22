@@ -50,11 +50,10 @@ jobs:
 
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
         configuration: [Debug, Release]
 
-    runs-on: windows-latest
-    runs-on: ubuntu-latest
-    runs-on: macos-latest
+    runs-on:  ${{ matrix.os }}
 
     env:
       Solution_Name: FIIT.sln                      # Replace with your solution name, i.e. MyWpfApp.sln.
