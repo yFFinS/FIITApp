@@ -10,19 +10,39 @@
         Title="Recipes.Presentation"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True">
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="35">
+    <Window.Styles>
+        <Style Selector="TitleBar Button">
+            <Setter Property="Background" Value="#40F4E6C0"/>
+            <Setter Property="Foreground" Value="#000000"/>
+        </Style>
+        <StyleInclude Source="/Views/Styles/TitleBarStyles.axaml"/>
+    </Window.Styles>
     <Panel>
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
+                    BackgroundSource="None"
                     TintColor="#F4E6C0"
                     TintOpacity="1"
-                    MaterialOpacity="0.65" />
+                    MaterialOpacity="0.5" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <Panel Margin="5 40 5 5">
-            <views:MainView/>
+        <Panel Height="35" 
+               VerticalAlignment="Top" 
+               HorizontalAlignment="Stretch" 
+               IsHitTestVisible="False" 
+               Background="#80F4E6C0">
+            <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+                <Button Classes="title-btn"/>
+                <Button Classes="title-btn"/>
+                <Button Classes="title-btn" Background="red" Click="CloseBtn_OnClick"/>
+            </StackPanel>
+        </Panel>
+        <Panel Margin="5 35 5 5">
+            <!-- <views:MainView/> -->
         </Panel>
     </Panel>
 </Window>

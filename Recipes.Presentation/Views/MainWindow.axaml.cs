@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace Recipes.Presentation.Views
 {
@@ -8,5 +9,7 @@ namespace Recipes.Presentation.Views
         {
             InitializeComponent();
         }
+
+        private void CloseBtn_OnClick(object? sender, RoutedEventArgs e) => Close();
     }
 }
