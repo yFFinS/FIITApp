@@ -8,8 +8,8 @@
         x:Class="Recipes.Presentation.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Recipes.Presentation"
-        TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
+        TransparencyLevelHint="Blur"
+        Background="#E8D9B4"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="35">
@@ -20,29 +20,25 @@
         </Style>
         <StyleInclude Source="/Views/Styles/TitleBarStyles.axaml"/>
     </Window.Styles>
-    <Panel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="None"
-                    TintColor="#F4E6C0"
-                    TintOpacity="1"
-                    MaterialOpacity="0.5" />
-            </ExperimentalAcrylicBorder.Material>
-        </ExperimentalAcrylicBorder>
+    <Panel Name="Main">
         <Panel Height="35" 
                VerticalAlignment="Top" 
                HorizontalAlignment="Stretch" 
                IsHitTestVisible="False" 
-               Background="#80F4E6C0">
+               Background="#D8C595">
             <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
-                <Button Classes="title-btn"/>
-                <Button Classes="title-btn"/>
-                <Button Classes="title-btn" Background="red" Click="CloseBtn_OnClick"/>
+                <StackPanel.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Background" Value="#D8C595"></Setter>
+                    </Style>
+                </StackPanel.Styles>
+                <Button Classes="title-btn" Click="MinimizeBtn_OnClick"/>
+                <Button Classes="title-btn" Click="MaximizeBtn_OnClick"/>
+                <Button Classes="title-btn close" Click="CloseBtn_OnClick"/>
             </StackPanel>
         </Panel>
         <Panel Margin="5 35 5 5">
-            <!-- <views:MainView/> -->
+            <views:MainView/>
         </Panel>
     </Panel>
 </Window>

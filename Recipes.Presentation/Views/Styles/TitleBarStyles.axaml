@@ -19,11 +19,15 @@
         </Setter>
     </Style>
     
-    <Style Selector="Button.title-btn:pointerover/template/Border#Hover">
-        <Setter Property="Background" Value="#20000000"/>
+    <Style Selector="Button.close:pointerover/template/Border#Base">
+        <Setter Property="Background" Value="#ef0000"/>
+    </Style> 
+    
+    <Style Selector="Button.title-btn:not(.close):pointerover/template/Border#Hover">
+        <Setter Property="Background" Value="#C6B27E"/>
     </Style>
     
-    <Style Selector="Button.title-btn:pressed/template/Border#Hover">
-        <Setter Property="Background" Value="#40000000"/>
+    <Style Selector="Button.title-btn:not(.close):pressed/template/Border#Hover">
+        <Setter Property="Background" Value="#FFC9B88B"/>
     </Style>
 </Styles>

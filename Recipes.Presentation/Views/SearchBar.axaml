@@ -1,0 +1,31 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Recipes.Presentation.Views.SearchBar"
+             HorizontalAlignment="Stretch"
+             Height="60">
+    <UserControl.Styles>
+        <StyleInclude Source="/Views/Styles/SearchBarStyles.axaml"/>
+    </UserControl.Styles>
+    <Grid ColumnDefinitions="*,4*,*"
+          RowDefinitions="*">
+        <Border Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"
+                CornerRadius="30"
+                Background="#F4EAD0"
+                ZIndex="100"
+                Height="40"
+                VerticalAlignment="Center">
+            <TextBox Classes="search"
+                     Background="Transparent"
+                     Margin="30 0 30 0"
+                     Watermark="Search recipes"
+                     TextAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     FontSize="24"
+                     FontFamily="Montserrat"
+                     Foreground="Black"/>
+        </Border>
+    </Grid>
+</UserControl>
