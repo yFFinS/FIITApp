@@ -12,9 +12,9 @@ public abstract class ValueObject
         return left != null && (ReferenceEquals(left, right) || left.Equals(right));
     }
 
-    protected static bool NotEqualOperator(ValueObject left, ValueObject? right)
+    protected static bool NotEqualOperator(ValueObject? left, ValueObject? right)
     {
-        return !(EqualOperator(left, right));
+        return !EqualOperator(left, right);
     }
 
     protected abstract IEnumerable<object> GetEqualityComponents();

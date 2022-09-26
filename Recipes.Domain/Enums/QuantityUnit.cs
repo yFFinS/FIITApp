@@ -5,7 +5,11 @@ public enum QuantityUnit
     Grams,
     Milliliters,
     Pieces,
-    Teaspoons,
-    Tablespoons,
+    TeaSpoons,
+    TableSpoons,
+    DessertSpoons,
     Cups,
+    Kilograms,
+    Decilitres,
+    Liters,
 }
