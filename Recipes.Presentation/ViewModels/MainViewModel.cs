@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Recipes.Presentation.ViewModels
@@ -16,7 +17,5 @@ namespace Recipes.Presentation.ViewModels
             _logger = logger;
             logger.LogInformation("ViewModelBase created");
         }
-
-        public string Greeting => "Welcome to Avalonia!";
     }
 }

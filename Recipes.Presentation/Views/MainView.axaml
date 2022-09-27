@@ -11,10 +11,7 @@
              VerticalAlignment="Stretch"
              HorizontalAlignment="Stretch">
     <Design.DataContext>
-        <viewModels:MainViewModel />
+        <viewModels:MainViewModel/>
     </Design.DataContext>
-
-    <StackPanel>
-        <views:SearchBar/>
-    </StackPanel>
+    <views:SearchView/>
 </UserControl>
