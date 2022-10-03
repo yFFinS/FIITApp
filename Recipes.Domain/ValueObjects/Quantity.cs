@@ -21,6 +21,13 @@ public sealed class Quantity : ValueObject
         SetGramsAndMiilliliters(); 
     }
 
+    public readonly double Value;
+    public readonly QuantityUnit Unit;
+
+    private double? density;
+    private double? grams;
+    private double? milliliters;
+
     private void SetGramsAndMiilliliters()
     {
         var inGrams = Unit.GetGrams();
@@ -42,13 +49,6 @@ public sealed class Quantity : ValueObject
             }
         }
     }
-
-    public readonly double Value;
-    public readonly QuantityUnit Unit;
-
-    private double? density;
-    private double? grams;
-    private double? milliliters;
 
     public Quantity ConvertTo(QuantityUnit unit)
     {
@@ -76,6 +76,56 @@ public sealed class Quantity : ValueObject
         throw new QuantityUnitConversionException(Unit, unit);
     }
 
+    public static bool operator ==(Quantity q1, Quantity q2)
+    {
+        if (ReferenceEquals(q1, q2))
+        {
+            return true;
+        }
+        if (q1.milliliters != null && q2.milliliters != null)
+        {
+            return q1.milliliters.Equals(q2.milliliters);
+        }
+        if (q1.grams != null && q2.grams != null)
+        {
+            return q1.grams.Equals(q2.grams);
+        }
+        throw new QuantityUncomparableException(q1, q2);
+    }
+
+    public static bool operator !=(Quantity q1, Quantity q2)
+    {
+        return !(q1 == q2);
+    }
+
+    public static bool operator <(Quantity q1, Quantity q2)
+    {
+        if (q1.milliliters != null && q2.milliliters != null)
+        {
+            return q1.milliliters <= q2.milliliters;
+        }
+        if (q1.grams != null && q2.grams != null)
+        {
+            return q1.grams <= q2.grams;
+        }
+        throw new QuantityUncomparableException(q1, q2);
+    }
+
+    public static bool operator >(Quantity q1, Quantity q2)
+    {
+        return !(q1 < q2);
+    }
+
+    public static bool operator <=(Quantity q1, Quantity q2)
+    {
+        return q1 == q2 || q1 < q2;
+    }
+
+    public static bool operator >=(Quantity q1, Quantity q2)
+    {
+        return q1 == q2 || q1 > q2;
+    }
+
     public override string ToString()
     {
         return Unit switch
@@ -98,5 +148,32 @@ public sealed class Quantity : ValueObject
     {
         yield return Value;
         yield return Unit;
+    }
+
+    public override bool Equals(object? q)
+    {
+        if (ReferenceEquals(q, null))
+        {
+            return false;
+        }
+
+        if (!(q is Quantity))
+        {
+            return false;
+        }
+        
+        if (ReferenceEquals(this, q))
+        {
+            return true;
+        }
+
+        var q1 = (Quantity)q;
+        return milliliters.Equals(q1.milliliters) &&
+               grams.Equals(q1.grams);
+    }
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
     }
 }
