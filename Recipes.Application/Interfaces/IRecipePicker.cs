@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Recipes.Application.Interfaces;
 
-public interface IRecipeFinderByAvailableIngredients
+public interface IRecipePicker
 {
+    IEnumerable<Recipe> FindRecipesByIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients);
+
     IEnumerable<Recipe> FindRecipesByAvailableIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients);
 }
 

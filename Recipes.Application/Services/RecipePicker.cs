@@ -9,9 +9,36 @@ using System.Threading.Tasks;
 
 namespace Recipes.Application.Services;
 
-public class RecipeFinderByAvailableIngredients : IRecipeFinderByAvailableIngredients
+public class RecipePicker : IRecipePicker
 {
     public IEnumerable<Recipe> FindRecipesByAvailableIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients)
+    {
+        return PickRecipesByParametrs(recipes, ingredients, PickRecipesByAvilableIngredients);
+    }
+
+    public IEnumerable<Recipe> FindRecipesByIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients)
+    {
+        return PickRecipesByParametrs(recipes, ingredients, PickRecipesByIngredients);
+    }
+
+    private bool PickRecipesByAvilableIngredients(Ingredient ingredient, Ingredient recipeIngredient)
+    {
+        var product = ingredient.Product.Id;
+        var productQuantity = ingredient.Quantity;
+        var recipeProduct = recipeIngredient.Product.Id;
+        var recipeProductQuantity = recipeIngredient.Quantity;
+        return recipeProduct == product && productQuantity >= recipeProductQuantity;
+    }
+
+    private bool PickRecipesByIngredients(Ingredient ingredient, Ingredient recipeIngredient)
+    {
+        var product = ingredient.Product.Id;
+        var recipeProduct = recipeIngredient.Product.Id;
+        return recipeProduct == product;
+    }
+
+    private IEnumerable<Recipe> PickRecipesByParametrs(IEnumerable<Recipe> recipes, IngredientGroup ingredients,
+        Func<Ingredient, Ingredient, bool> comparator)
     {
         var resultRecipes = new List<Recipe>();
         var ingredientsCollection = ingredients.AsReadOnlyCollection();
@@ -20,14 +47,10 @@ public class RecipeFinderByAvailableIngredients : IRecipeFinderByAvailableIngred
             var recipeContainsAll = true;
             foreach (var ingredient in ingredientsCollection)
             {
-                var product = ingredient.Product.Id;
-                var productQuantity = ingredient.Quantity;
                 var contains = false;
                 foreach (var recipeIngredient in recipe.Ingredients)
                 {
-                    var recipeProduct = recipeIngredient.Product.Id;
-                    var recipeProductQuantity = recipeIngredient.Quantity;
-                    if (recipeProduct == product && productQuantity >= recipeProductQuantity)
+                    if (comparator(ingredient, recipeIngredient))
                     {
                         contains = true;
                         break;
