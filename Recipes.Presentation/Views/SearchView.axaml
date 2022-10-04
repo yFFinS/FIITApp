@@ -47,7 +47,13 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border MinWidth="300" Height="200" Background="#40000000" Margin="5" CornerRadius="10"/>
+                        <Button MinWidth="300" 
+                                Height="200" 
+                                Background="#40000000" 
+                                Margin="5" 
+                                CornerRadius="10"
+                                CommandParameter="{Binding}"
+                                Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

@@ -12,7 +12,7 @@ public partial class SearchView : UserControl
     public SearchView()
     {
         InitializeComponent();
-        DataContext = new SearchViewModel(new RecipesDataBase().Items);
+        // DataContext = new SearchViewModel(new RecipesDataBase().Items);
     }
 
     private void InitializeComponent()

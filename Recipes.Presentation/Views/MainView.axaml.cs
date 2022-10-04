@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Recipes.Presentation.ViewModels;
 
 namespace Recipes.Presentation.Views
 {
@@ -6,6 +7,7 @@ namespace Recipes.Presentation.Views
     {
         public MainView()
         {
+            DataContext = new MainViewModel();
             InitializeComponent();
         }
     }

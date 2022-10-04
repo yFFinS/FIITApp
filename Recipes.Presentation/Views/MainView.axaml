@@ -9,9 +9,9 @@
              Foreground="Black"
              Background="Transparent"
              VerticalAlignment="Stretch"
-             HorizontalAlignment="Stretch">
+             HorizontalAlignment="Stretch"
+             Content="{Binding Content}">
     <Design.DataContext>
         <viewModels:MainViewModel/>
     </Design.DataContext>
-    <views:SearchView/>
 </UserControl>
