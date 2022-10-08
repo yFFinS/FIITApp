@@ -3,13 +3,15 @@ namespace Recipes.Domain.Enums;
 public enum QuantityUnit
 {
     Grams,
-    Milliliters,
+    Kilograms,
+
     Pieces,
+
     TeaSpoons,
     TableSpoons,
     DessertSpoons,
     Cups,
-    Kilograms,
+    Milliliters,
     Decilitres,
     Liters,
 }

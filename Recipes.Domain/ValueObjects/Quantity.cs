@@ -13,7 +13,7 @@ public sealed class Quantity : ValueObject
     {
         Value = Guard.Against.NegativeOrInvalid(value);
         Unit = Guard.Against.EnumOutOfRange(unit);
-        if (density != null)
+        if (density is not null)
         {
             this.density = Guard.Against.NegativeOrZero((double)density);
         }
@@ -33,7 +33,7 @@ public sealed class Quantity : ValueObject
         var gotMilliliters = Unit.GetMilliliters(out var inMilliliters);
         if (!gotGrams && gotMilliliters)
         {
-            if (density != null)
+            if (density is not null)
             {
                 grams = Value * inMilliliters * density;
             }
@@ -42,7 +42,7 @@ public sealed class Quantity : ValueObject
         else if (gotGrams && !gotMilliliters)
         {
             grams = Value * inGrams;
-            if (density != null)
+            if (density is not null)
             {
                 milliliters = Value * inGrams / density;
             }
@@ -55,21 +55,19 @@ public sealed class Quantity : ValueObject
         {
             throw new QuantityUnitNonConvertibleException(Unit);
         }
-        if (!unit.IsConvertible())
-        {
-            throw new QuantityUnitNonConvertibleException(unit);
-        }
 
         var gotGrams = unit.GetGrams(out var newGrams);
-        if (grams != null && gotGrams)
+        if (grams is not null && gotGrams)
         {
-            return new Quantity((double)grams / newGrams, unit, density);
+            return new Quantity(Math.Round((double)grams / newGrams * 10000) / 10000,
+                unit, density);
         }
 
         var gotMilliliters = unit.GetMilliliters(out var newMilliliters);
-        if (milliliters != null && gotMilliliters)
+        if (milliliters is not null && gotMilliliters)
         {
-            return new Quantity((double)milliliters / newMilliliters, unit, density);
+            return new Quantity(Math.Round((double)milliliters / newMilliliters * 10000) / 10000,
+                unit, density);
         }
 
         throw new QuantityUnitConversionException(Unit, unit);
@@ -81,13 +79,13 @@ public sealed class Quantity : ValueObject
         {
             return true;
         }
-        if (q1.milliliters != null && q2.milliliters != null)
+        if (q1.milliliters is not null && q2.milliliters is not null)
         {
-            return q1.milliliters.Equals(q2.milliliters);
+            return Math.Abs((double)q1.milliliters - (double)q2.milliliters) < 0.0001;
         }
-        if (q1.grams != null && q2.grams != null)
+        if (q1.grams is not null && q2.grams is not null)
         {
-            return q1.grams.Equals(q2.grams);
+            return Math.Abs((double)q1.grams - (double)q2.grams) < 0.0001;
         }
         throw new QuantityUncomparableException(q1, q2);
     }
@@ -99,11 +97,11 @@ public sealed class Quantity : ValueObject
 
     public static bool operator <(Quantity q1, Quantity q2)
     {
-        if (q1.milliliters != null && q2.milliliters != null)
+        if (q1.milliliters is not null && q2.milliliters is not null)
         {
             return q1.milliliters <= q2.milliliters;
         }
-        if (q1.grams != null && q2.grams != null)
+        if (q1.grams is not null && q2.grams is not null)
         {
             return q1.grams <= q2.grams;
         }
