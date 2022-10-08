@@ -11,17 +11,17 @@ namespace Recipes.Application.Services;
 
 public class RecipePicker : IRecipePicker
 {
-    public IEnumerable<Recipe> FindRecipesByAvailableIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients)
+    public IEnumerable<Recipe> PickRecipesByAvailableIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients)
     {
-        return PickRecipesByParametrs(recipes, ingredients, PickRecipesByAvilableIngredients);
+        return PickRecipesByParameters(recipes, ingredients, ByAvailableIngredients);
     }
 
-    public IEnumerable<Recipe> FindRecipesByIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients)
+    public IEnumerable<Recipe> PickRecipesByIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients)
     {
-        return PickRecipesByParametrs(recipes, ingredients, PickRecipesByIngredients);
+        return PickRecipesByParameters(recipes, ingredients, ByIngredients);
     }
 
-    private bool PickRecipesByAvilableIngredients(Ingredient ingredient, Ingredient recipeIngredient)
+    private bool ByAvailableIngredients(Ingredient ingredient, Ingredient recipeIngredient)
     {
         var product = ingredient.Product.Id;
         var productQuantity = ingredient.Quantity;
@@ -30,14 +30,14 @@ public class RecipePicker : IRecipePicker
         return recipeProduct == product && productQuantity >= recipeProductQuantity;
     }
 
-    private bool PickRecipesByIngredients(Ingredient ingredient, Ingredient recipeIngredient)
+    private bool ByIngredients(Ingredient ingredient, Ingredient recipeIngredient)
     {
         var product = ingredient.Product.Id;
         var recipeProduct = recipeIngredient.Product.Id;
         return recipeProduct == product;
     }
 
-    private IEnumerable<Recipe> PickRecipesByParametrs(IEnumerable<Recipe> recipes, IngredientGroup ingredients,
+    private IEnumerable<Recipe> PickRecipesByParameters(IEnumerable<Recipe> recipes, IngredientGroup ingredients,
         Func<Ingredient, Ingredient, bool> comparator)
     {
         var resultRecipes = new List<Recipe>();

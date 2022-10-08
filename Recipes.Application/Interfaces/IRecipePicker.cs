@@ -10,8 +10,8 @@ namespace Recipes.Application.Interfaces;
 
 public interface IRecipePicker
 {
-    IEnumerable<Recipe> FindRecipesByIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients);
+    IEnumerable<Recipe> PickRecipesByIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients);
 
-    IEnumerable<Recipe> FindRecipesByAvailableIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients);
+    IEnumerable<Recipe> PickRecipesByAvailableIngredients(IEnumerable<Recipe> recipes, IngredientGroup ingredients);
 }
 
