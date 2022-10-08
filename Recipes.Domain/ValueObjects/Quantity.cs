@@ -3,7 +3,6 @@ using Recipes.Domain.Base;
 using Recipes.Domain.Enums;
 using Recipes.Domain.Exceptions;
 using Recipes.Domain.Extensions;
-using Recipes.Domain.Interfaces;
 using Recipes.Shared;
 
 namespace Recipes.Domain.ValueObjects;
@@ -24,15 +23,15 @@ public sealed class Quantity : ValueObject
     public readonly double Value;
     public readonly QuantityUnit Unit;
 
-    private double? density;
+    private readonly double? density;
     private double? grams;
     private double? milliliters;
 
     private void SetGramsAndMiilliliters()
     {
-        var inGrams = Unit.GetGrams();
-        var inMilliliters = Unit.GetMilliliters();
-        if (inGrams == -1 && inMilliliters != -1)
+        var gotGrams = Unit.GetGrams(out var inGrams);
+        var gotMilliliters = Unit.GetMilliliters(out var inMilliliters);
+        if (!gotGrams && gotMilliliters)
         {
             if (density != null)
             {
@@ -40,7 +39,7 @@ public sealed class Quantity : ValueObject
             }
             milliliters = Value * inMilliliters;
         }
-        else if (inGrams != -1 && inMilliliters == -1)
+        else if (gotGrams && !gotMilliliters)
         {
             grams = Value * inGrams;
             if (density != null)
@@ -61,14 +60,14 @@ public sealed class Quantity : ValueObject
             throw new QuantityUnitNonConvertibleException(unit);
         }
 
-        var newGrams = unit.GetGrams();
-        if (grams != null && newGrams != -1)
+        var gotGrams = unit.GetGrams(out var newGrams);
+        if (grams != null && gotGrams)
         {
             return new Quantity((double)grams / newGrams, unit, density);
         }
 
-        var newMilliliters = unit.GetMilliliters();
-        if (milliliters != null && newMilliliters != -1)
+        var gotMilliliters = unit.GetMilliliters(out var newMilliliters);
+        if (milliliters != null && gotMilliliters)
         {
             return new Quantity((double)milliliters / newMilliliters, unit, density);
         }
@@ -152,12 +151,12 @@ public sealed class Quantity : ValueObject
 
     public override bool Equals(object? q)
     {
-        if (ReferenceEquals(q, null))
+        if (q is null)
         {
             return false;
         }
 
-        if (!(q is Quantity))
+        if (q is not Quantity)
         {
             return false;
         }

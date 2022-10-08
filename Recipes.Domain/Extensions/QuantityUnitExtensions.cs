@@ -16,28 +16,50 @@ public static class QuantityUnitExtensions
 
     public static bool IsConvertible(this QuantityUnit unit) => unit != QuantityUnit.Pieces;
 
-    public static double GetMilliliters(this QuantityUnit unit)
+    public static bool GetMilliliters(this QuantityUnit unit, out double milliliters)
     {
-        return unit switch
+        switch (unit)
         {
-            QuantityUnit.Milliliters => 1,
-            QuantityUnit.TeaSpoons => 5,
-            QuantityUnit.TableSpoons => 12,
-            QuantityUnit.DessertSpoons => 10,
-            QuantityUnit.Cups => 250,
-            QuantityUnit.Decilitres => 100,
-            QuantityUnit.Liters => 1000,
-            _ => -1
+            case QuantityUnit.Milliliters:
+                milliliters = 1;
+                return true;
+            case QuantityUnit.TeaSpoons:
+                milliliters = 5;
+                return true;
+            case QuantityUnit.TableSpoons:
+                milliliters = 12;
+                return true;
+            case QuantityUnit.DessertSpoons:
+                milliliters = 10;
+                return true;
+            case QuantityUnit.Cups:
+                milliliters = 250;
+                return true;
+            case QuantityUnit.Decilitres:
+                milliliters = 100;
+                return true;
+            case QuantityUnit.Liters:
+                milliliters = 1000;
+                return true;
+            default:
+                milliliters = 0;
+                return false;
         };
     }
 
-    public static double GetGrams(this QuantityUnit unit)
+    public static bool GetGrams(this QuantityUnit unit, out double grams)
     {
-        return unit switch
+        switch (unit)
         {
-            QuantityUnit.Grams => 1,
-            QuantityUnit.Kilograms => 1000,
-            _ => -1
+            case QuantityUnit.Grams:
+                grams = 1;
+                return true;
+            case QuantityUnit.Kilograms:
+                grams = 1000;
+                return true;
+            default:
+                grams = 0;
+                return false;
         };
     }
 }
