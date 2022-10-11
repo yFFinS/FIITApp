@@ -91,6 +91,6 @@ public class Recipe : BaseEntity
         _ingredients.Remove(ingredient.Id);
     }
 
-    public IReadOnlyCollection<CookingStep> GetCookingSteps() => _cookingTechnic.CookingSteps;
-    public IReadOnlyCollection<Ingredient> GetIngredients() => _ingredients.AsReadOnlyCollection();
+    public IReadOnlyCollection<CookingStep> CookingSteps => _cookingTechnic.CookingSteps;
+    public IReadOnlyCollection<Ingredient> Ingredients => _ingredients.AsReadOnlyCollection();
 }

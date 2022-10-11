@@ -53,7 +53,9 @@
                                 Margin="5" 
                                 CornerRadius="10"
                                 CommandParameter="{Binding}"
-                                Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"/>
+                                Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
+                            <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Title}"/>
+                        </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
