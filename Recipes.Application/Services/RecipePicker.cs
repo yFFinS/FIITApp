@@ -41,6 +41,7 @@ public class RecipePicker : IRecipePicker
             .Where(recipe =>
                 !recipe.Ingredients.Any(ingredient =>
                     !ingredientsDictionary.ContainsKey(ingredient.ProductId) ||
-                    ingredientsDictionary[ingredient.ProductId].Quantity < ingredient.Quantity));
+                    ingredientsDictionary[ingredient.ProductId].Quantity
+                        .LessThanWithMargin(ingredient.Quantity, margin)));
     }
 }

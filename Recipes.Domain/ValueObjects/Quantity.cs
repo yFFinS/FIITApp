@@ -109,6 +109,34 @@ public sealed class Quantity : ValueObject
         throw new QuantityUncomparableException(q1, q2);
     }
 
+    public bool LessThanWithMargin(Quantity q, double margin)
+    {
+        margin = Guard.Against.NegativeOrZero(margin) + 1;
+        if (milliliters is not null && q.milliliters is not null)
+        {
+            return milliliters <= q.milliliters * margin;
+        }
+        if (grams is not null && q.grams is not null)
+        {
+            return grams <= q.grams * margin;
+        }
+        throw new QuantityUncomparableException(this, q);
+    }
+
+    public bool GreaterThanWithMargin(Quantity q, double margin)
+    {
+        margin = Guard.Against.NegativeOrZero(margin) + 1;
+        if (q.milliliters is not null && q.milliliters is not null)
+        {
+            return q.milliliters * margin >= q.milliliters;
+        }
+        if (q.grams is not null && q.grams is not null)
+        {
+            return q.grams * margin >= q.grams;
+        }
+        throw new QuantityUncomparableException(this, q);
+    }
+
     public static bool operator >(Quantity q1, Quantity q2)
     {
         return !(q1 < q2);
