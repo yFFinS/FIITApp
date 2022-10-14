@@ -2,14 +2,14 @@ namespace Recipes.Domain.Base;
 
 public abstract class ValueObject
 {
-    public static bool operator ==(ValueObject? left, ValueObject? right)
+    protected static bool EqualOperator(ValueObject? left, ValueObject? right)
     {
         if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
         {
             return false;
         }
 
-        return left is not null && (ReferenceEquals(left, right) || left.Equals(right));
+        return left != null && (ReferenceEquals(left, right) || left.Equals(right));
     }
 
     protected static bool NotEqualOperator(ValueObject? left, ValueObject? right)
@@ -17,11 +17,11 @@ public abstract class ValueObject
         return !EqualOperator(left, right);
     }
 
-    protected abstract IEnumerable<object?> GetEqualityComponents();
+    protected abstract IEnumerable<object> GetEqualityComponents();
 
     public override bool Equals(object? obj)
     {
-        if (obj is null || obj.GetType() != GetType())
+        if (obj == null || obj.GetType() != GetType())
         {
             return false;
         }
@@ -33,7 +33,7 @@ public abstract class ValueObject
     public override int GetHashCode()
     {
         return GetEqualityComponents()
-            .Select(x => x is null ? 0 : x.GetHashCode())
+            .Select(x => x.GetHashCode())
             .Aggregate((x, y) => x ^ y);
     }
 }

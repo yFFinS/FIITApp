@@ -7,7 +7,7 @@ using Recipes.Shared;
 
 namespace Recipes.Domain.ValueObjects;
 
-public sealed class Quantity : ValueObject, IComparable<Quantity>
+public sealed class Quantity : ValueObject
 {
     public Quantity(double value, QuantityUnit unit, double? density = null)
     {
