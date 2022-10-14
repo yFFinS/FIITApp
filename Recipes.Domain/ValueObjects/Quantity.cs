@@ -9,104 +9,135 @@ namespace Recipes.Domain.ValueObjects;
 
 public sealed class Quantity : ValueObject, IComparable<Quantity>
 {
-    public Quantity(double value, QuantityUnit unit)
+    public Quantity(double value, QuantityUnit unit, double? density = null)
     {
         Value = Guard.Against.NegativeOrInvalid(value);
         Unit = Guard.Against.EnumOutOfRange(unit);
+        if (density is not null)
+        {
+            this.density = Guard.Against.NegativeOrZero((double)density);
+        }
+        SetGramsAndMiilliliters(); 
     }
 
     public readonly double Value;
     public readonly QuantityUnit Unit;
     public Quantity Empty => new Quantity(0, Unit);
 
-    public bool IsConvertibleTo(QuantityUnit unit) => Unit.IsConvertibleTo(unit);
+    private readonly double? density;
+    private double? grams;
+    private double? milliliters;
+
+    private void SetGramsAndMiilliliters()
+    {
+        var gotGrams = Unit.GetGrams(out var inGrams);
+        var gotMilliliters = Unit.GetMilliliters(out var inMilliliters);
+        if (!gotGrams && gotMilliliters)
+        {
+            if (density is not null)
+            {
+                grams = Value * inMilliliters * density;
+            }
+            milliliters = Value * inMilliliters;
+        }
+        else if (gotGrams && !gotMilliliters)
+        {
+            grams = Value * inGrams;
+            if (density is not null)
+            {
+                milliliters = Value * inGrams / density;
+            }
+        }
+    }
 
     public Quantity ConvertTo(QuantityUnit unit)
     {
-        if (!IsConvertibleTo(unit))
+        if (!Unit.IsConvertible())
         {
-            throw new QuantityUnitConversionException(Unit, unit);
+            throw new QuantityUnitNonConvertibleException(Unit);
         }
 
-        if (Unit == unit)
+        var gotGrams = unit.GetGrams(out var newGrams);
+        if (grams is not null && gotGrams)
         {
-            return this;
+            return new Quantity(Math.Round((double)grams / newGrams * 10000) / 10000,
+                unit, density);
         }
 
-        throw new NotImplementedException();
+        var gotMilliliters = unit.GetMilliliters(out var newMilliliters);
+        if (milliliters is not null && gotMilliliters)
+        {
+            return new Quantity(Math.Round((double)milliliters / newMilliliters * 10000) / 10000,
+                unit, density);
+        }
+
+        throw new QuantityUnitConversionException(Unit, unit);
     }
 
-    public static Quantity operator +(Quantity left, Quantity right)
+    public static bool operator ==(Quantity q1, Quantity q2)
     {
-        if (left.Unit != right.Unit)
+        if (ReferenceEquals(q1, q2))
         {
-            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+            return true;
         }
-
-        return new Quantity(left.Value + right.Value, left.Unit);
+        if (q1.milliliters is not null && q2.milliliters is not null)
+        {
+            return Math.Abs((double)q1.milliliters - (double)q2.milliliters) < 0.0001;
+        }
+        if (q1.grams is not null && q2.grams is not null)
+        {
+            return Math.Abs((double)q1.grams - (double)q2.grams) < 0.0001;
+        }
+        throw new QuantityUncomparableException(q1, q2);
     }
 
-
-    public static Quantity operator -(Quantity left, Quantity right)
+    public static bool operator !=(Quantity q1, Quantity q2)
     {
-        if (left.Unit != right.Unit)
-        {
-            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
-        }
-
-        return new Quantity(left.Value - right.Value, left.Unit);
+        return !(q1 == q2);
     }
 
-    public static bool operator >(Quantity left, Quantity right)
+    public static bool operator <(Quantity q1, Quantity q2)
     {
-        if (left.Unit != right.Unit)
+        if (q1.milliliters is not null && q2.milliliters is not null)
         {
-            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
+            return q1.milliliters <= q2.milliliters;
         }
-
-        return left.Value > right.Value;
+        if (q1.grams is not null && q2.grams is not null)
+        {
+            return q1.grams <= q2.grams;
+        }
+        throw new QuantityUncomparableException(q1, q2);
     }
 
-    public static bool operator <(Quantity left, Quantity right)
+    public static bool operator >(Quantity q1, Quantity q2)
     {
-        if (left.Unit != right.Unit)
-        {
-            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
-        }
-
-        return left.Value < right.Value;
+        return !(q1 < q2);
     }
 
-    public static bool operator >=(Quantity left, Quantity right)
+    public static bool operator <=(Quantity q1, Quantity q2)
     {
-        if (left.Unit != right.Unit)
-        {
-            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
-        }
-
-        return left.Value >= right.Value;
+        return q1 == q2 || q1 < q2;
     }
 
-    public static bool operator <=(Quantity left, Quantity right)
+    public static bool operator >=(Quantity q1, Quantity q2)
     {
-        if (left.Unit != right.Unit)
-        {
-            throw new QuantityUnitMismatchException(left.Unit, right.Unit);
-        }
-
-        return left.Value <= right.Value;
+        return q1 == q2 || q1 > q2;
     }
 
     public override string ToString()
     {
         return Unit switch
         {
-            QuantityUnit.Cups => $"{Value} кр",
-            QuantityUnit.Milliliters => $"{Value} мл",
             QuantityUnit.Grams => $"{Value} г",
+            QuantityUnit.Milliliters => $"{Value} мл",
             QuantityUnit.Pieces => $"{Value} шт",
-            QuantityUnit.Teaspoons => $"{Value} ч.л",
-            QuantityUnit.Tablespoons => $"{Value} ст.л",
+            QuantityUnit.TeaSpoons => $"{Value} ч.л",
+            QuantityUnit.TableSpoons => $"{Value} ст.л",
+            QuantityUnit.DessertSpoons => $"{Value} дс.л",
+            QuantityUnit.Cups => $"{Value} ст",
+            QuantityUnit.Kilograms => $"{Value} кг",
+            QuantityUnit.Decilitres => $"{Value} дл",
+            QuantityUnit.Liters => $"{Value} л",
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -117,19 +148,30 @@ public sealed class Quantity : ValueObject, IComparable<Quantity>
         yield return Unit;
     }
 
-    public int CompareTo(Quantity? other)
+    public override bool Equals(object? q)
     {
-        if (ReferenceEquals(this, other))
+        if (q is null)
         {
-            return 0;
+            return false;
         }
 
-        if (ReferenceEquals(null, other))
+        if (q is not Quantity)
         {
-            return 1;
+            return false;
+        }
+        
+        if (ReferenceEquals(this, q))
+        {
+            return true;
         }
 
-        var valueComparison = Value.CompareTo(other.Value);
-        return valueComparison != 0 ? valueComparison : Unit.CompareTo(other.Unit);
+        var q1 = (Quantity)q;
+        return milliliters.Equals(q1.milliliters) &&
+               grams.Equals(q1.grams);
+    }
+
+    public override int GetHashCode()
+    {
+        throw new NotImplementedException();
     }
 }
