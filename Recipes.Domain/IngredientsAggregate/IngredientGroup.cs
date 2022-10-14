@@ -1,5 +1,5 @@
-using System.Collections;
 using Recipes.Domain.ValueObjects;
+using System.Collections;
 
 namespace Recipes.Domain.IngredientsAggregate;
 

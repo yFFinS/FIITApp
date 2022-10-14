@@ -91,14 +91,14 @@ public class Recipe : BaseEntity
     public void AddIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        
+
         _ingredientGroup.Add(ingredient);
     }
 
     public void RemoveIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        
+
         _ingredientGroup.Remove(ingredient);
     }
 

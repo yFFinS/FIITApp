@@ -24,7 +24,7 @@ public class RecipePicker : IRecipePicker
     {
         var ingredientsDictionary = ingredients.ToDictionary(ingredient => ingredient.ProductId);
         return recipes
-            .Where(recipe => 
+            .Where(recipe =>
                 !recipe.Ingredients.Any(ingredient =>
                     !ingredientsDictionary.ContainsKey(ingredient.ProductId) ||
                     ingredientsDictionary[ingredient.ProductId].Quantity < ingredient.Quantity));

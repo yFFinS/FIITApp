@@ -1,9 +1,8 @@
-using System;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Recipes.Domain.Enums;
 using Recipes.Domain.Exceptions;
 using Recipes.Domain.ValueObjects;
+using System;
 
 namespace Recipes.Domain.UnitTests.Tests;
 
@@ -99,7 +98,7 @@ public class ValueObjectsTests
     public void Test_Quantity_Throws_WithConversionException()
     {
         var quantity = new Quantity(5, QuantityUnit.Kilograms);
-        Assert.Throws<QuantityUnitConversionException>(() => 
+        Assert.Throws<QuantityUnitConversionException>(() =>
         _ = quantity.ConvertTo(QuantityUnit.Cups));
     }
 

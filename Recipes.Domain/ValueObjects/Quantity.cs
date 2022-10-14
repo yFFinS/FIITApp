@@ -17,7 +17,7 @@ public sealed class Quantity : ValueObject
         {
             this.density = Guard.Against.NegativeOrZero((double)density);
         }
-        SetGramsAndMiilliliters(); 
+        SetGramsAndMiilliliters();
     }
 
     public readonly double Value;
@@ -187,7 +187,7 @@ public sealed class Quantity : ValueObject
         {
             return false;
         }
-        
+
         if (ReferenceEquals(this, q))
         {
             return true;

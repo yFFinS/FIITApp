@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Exceptions;
 using Recipes.Application.Interfaces;
-using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.IngredientsAggregate;
 
 namespace Recipes.Application.Services;
