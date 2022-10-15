@@ -111,7 +111,7 @@ public sealed class Quantity : ValueObject
 
     public bool LessThanWithMargin(Quantity q, double margin)
     {
-        margin = Guard.Against.NegativeOrZero(margin) + 1;
+        margin = Guard.Against.Negative(margin) + 1;
         if (milliliters is not null && q.milliliters is not null)
         {
             return milliliters <= q.milliliters * margin;
@@ -125,7 +125,7 @@ public sealed class Quantity : ValueObject
 
     public bool GreaterThanWithMargin(Quantity q, double margin)
     {
-        margin = Guard.Against.NegativeOrZero(margin) + 1;
+        margin = Guard.Against.Negative(margin) + 1;
         if (q.milliliters is not null && q.milliliters is not null)
         {
             return q.milliliters * margin >= q.milliliters;

@@ -11,37 +11,67 @@ public class RecipePicker : IRecipePicker
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients)
     {
-        var ingredientsDictionary = ingredients.ToDictionary(ingredient => ingredient.ProductId);
         return recipes
             .Where(recipe =>
                 !recipe.Ingredients.Any(ingredient =>
-                    !ingredientsDictionary.ContainsKey(ingredient.ProductId)));
+                    ingredients.TryGetByProductId(ingredient.ProductId) is not null));
     }
+
+    //public IEnumerable<Recipe> PickRecipesByAvailableIngredients(
+    //    IEnumerable<Recipe> recipes,
+    //    IngredientGroup ingredients,
+    //    double margin = 0)
+    //{
+    //    margin = Guard.Against.Negative(margin);
+    //    return recipes
+    //        .Where(recipe =>
+    //            !recipe.Ingredients.Any(recipeIngredient =>
+    //                margin == 0 ? 
+    //                    ByIngredient(ingredients, recipeIngredient) :
+    //                    ByIngredientWithMargin(ingredients, recipeIngredient, margin)));
+    //}
 
     public IEnumerable<Recipe> PickRecipesByAvailableIngredients(
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients)
     {
-        var ingredientsDictionary = ingredients.ToDictionary(ingredient => ingredient.ProductId);
         return recipes
             .Where(recipe =>
-                !recipe.Ingredients.Any(ingredient =>
-                    !ingredientsDictionary.ContainsKey(ingredient.ProductId) ||
-                    ingredientsDictionary[ingredient.ProductId].Quantity < ingredient.Quantity));
+                !recipe.Ingredients.Any(recipeIngredient =>
+                        ByIngredient(ingredients, recipeIngredient)));
     }
 
-    public IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithMarginOfError(
+    public IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithMargin(
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients,
         double margin)
     {
-        margin = Guard.Against.NegativeOrZero(margin);
-        var ingredientsDictionary = ingredients.ToDictionary(ingredient => ingredient.ProductId);
+        margin = Guard.Against.Negative(margin);
         return recipes
             .Where(recipe =>
-                !recipe.Ingredients.Any(ingredient =>
-                    !ingredientsDictionary.ContainsKey(ingredient.ProductId) ||
-                    ingredientsDictionary[ingredient.ProductId].Quantity
-                        .LessThanWithMargin(ingredient.Quantity, margin)));
+                !recipe.Ingredients.Any(recipeIngredient =>
+                        ByIngredientWithMargin(ingredients, recipeIngredient, margin)));
+    }
+
+    private static bool ByIngredient(IngredientGroup ingredients, Ingredient recipeIngredient)
+    {
+        var ingredient = ingredients.TryGetByProductId(recipeIngredient.ProductId);
+        if (ingredient is not null)
+        {
+            return ingredient.Quantity < recipeIngredient.Quantity;
+        }
+        return false;
+    }
+
+    private static bool ByIngredientWithMargin(IngredientGroup ingredients, Ingredient recipeIngredient, double margin)
+    {
+        var ingredient = ingredients.TryGetByProductId(recipeIngredient.ProductId);
+        if (ingredient is not null)
+        {
+            return ingredient.Quantity.LessThanWithMargin(
+                recipeIngredient.Quantity,
+                margin);
+        }
+        return false;
     }
 }

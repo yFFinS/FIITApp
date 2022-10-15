@@ -13,7 +13,7 @@ public interface IRecipePicker
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients);
 
-    IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithMarginOfError(
+    IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithMargin(
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients,
         double margin);
