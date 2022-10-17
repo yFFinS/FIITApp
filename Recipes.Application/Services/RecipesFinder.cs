@@ -1,10 +1,11 @@
+using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.Interfaces;
 
 namespace Recipes.Application.Services;
 
-public class RecipesFinder
+public class RecipesFinder : IRecipesFinder
 {
     private readonly IRecipeRepository _recipeRepository;
 
