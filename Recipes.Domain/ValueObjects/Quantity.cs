@@ -9,69 +9,38 @@ namespace Recipes.Domain.ValueObjects;
 
 public sealed class Quantity : ValueObject
 {
-    public Quantity(double value, QuantityUnit unit, double? density = null)
+    public const double ComparisonEpsilon = 1e-8;
+
+    public Quantity(double value, QuantityUnit unit)
     {
         Value = Guard.Against.NegativeOrInvalid(value);
         Unit = Guard.Against.EnumOutOfRange(unit);
-        if (density is not null)
-        {
-            this.density = Guard.Against.NegativeOrZero((double)density);
-        }
-        SetGramsAndMiilliliters();
     }
 
     public readonly double Value;
     public readonly QuantityUnit Unit;
-    public Quantity Empty => new Quantity(0, Unit);
+    public Quantity Empty => new(0, Unit);
 
-    private readonly double? density;
-    private double? grams;
-    private double? milliliters;
-
-    private void SetGramsAndMiilliliters()
+    public Quantity ImplicitlyConvertTo(QuantityUnit unit)
     {
-        var gotGrams = Unit.GetGrams(out var inGrams);
-        var gotMilliliters = Unit.GetMilliliters(out var inMilliliters);
-        if (!gotGrams && gotMilliliters)
+        if (unit == Unit)
         {
-            if (density is not null)
-            {
-                grams = Value * inMilliliters * density;
-            }
-            milliliters = Value * inMilliliters;
-        }
-        else if (gotGrams && !gotMilliliters)
-        {
-            grams = Value * inGrams;
-            if (density is not null)
-            {
-                milliliters = Value * inGrams / density;
-            }
-        }
-    }
-
-    public Quantity ConvertTo(QuantityUnit unit)
-    {
-        if (!Unit.IsConvertible())
-        {
-            throw new QuantityUnitNonConvertibleException(Unit);
+            return this;
         }
 
-        var gotGrams = unit.GetGrams(out var newGrams);
-        if (grams is not null && gotGrams)
+        var grams = Unit.TryGetGrams();
+        if (grams.HasValue)
         {
-            return new Quantity(Math.Round((double)grams / newGrams * 10000) / 10000,
-                unit, density);
+            return new Quantity(unit.FromGrams(grams.Value), unit);
         }
 
-        var gotMilliliters = unit.GetMilliliters(out var newMilliliters);
-        if (milliliters is not null && gotMilliliters)
+        var milliliters = Unit.TryGetMilliliters();
+        if (milliliters.HasValue)
         {
-            return new Quantity(Math.Round((double)milliliters / newMilliliters * 10000) / 10000,
-                unit, density);
+            return new Quantity(unit.FromMilliliters(milliliters.Value), unit);
         }
 
-        throw new QuantityUnitConversionException(Unit, unit);
+        throw new QuantityUnitNonConvertibleException(Unit);
     }
 
     public static bool operator ==(Quantity q1, Quantity q2)
@@ -80,15 +49,13 @@ public sealed class Quantity : ValueObject
         {
             return true;
         }
-        if (q1.milliliters is not null && q2.milliliters is not null)
+
+        if (ReferenceEquals(q1, null) || ReferenceEquals(q2, null))
         {
-            return Math.Abs((double)q1.milliliters - (double)q2.milliliters) < 0.0001;
+            return false;
         }
-        if (q1.grams is not null && q2.grams is not null)
-        {
-            return Math.Abs((double)q1.grams - (double)q2.grams) < 0.0001;
-        }
-        throw new QuantityUncomparableException(q1, q2);
+
+        return q1.Equals(q2);
     }
 
     public static bool operator !=(Quantity q1, Quantity q2)
@@ -98,48 +65,22 @@ public sealed class Quantity : ValueObject
 
     public static bool operator <(Quantity q1, Quantity q2)
     {
-        if (q1.milliliters is not null && q2.milliliters is not null)
+        if (q1.Unit == q2.Unit)
         {
-            return q1.milliliters <= q2.milliliters;
+            return q1.Value < q2.Value;
         }
-        if (q1.grams is not null && q2.grams is not null)
-        {
-            return q1.grams <= q2.grams;
-        }
-        throw new QuantityUncomparableException(q1, q2);
-    }
 
-    public bool LessThanWithMargin(Quantity q, double margin)
-    {
-        margin = Guard.Against.Negative(margin) + 1;
-        if (milliliters is not null && q.milliliters is not null)
-        {
-            return milliliters <= q.milliliters * margin;
-        }
-        if (grams is not null && q.grams is not null)
-        {
-            return grams <= q.grams * margin;
-        }
-        throw new QuantityUncomparableException(this, q);
-    }
-
-    public bool GreaterThanWithMargin(Quantity q, double margin)
-    {
-        margin = Guard.Against.Negative(margin) + 1;
-        if (q.milliliters is not null && q.milliliters is not null)
-        {
-            return q.milliliters * margin >= q.milliliters;
-        }
-        if (q.grams is not null && q.grams is not null)
-        {
-            return q.grams * margin >= q.grams;
-        }
-        throw new QuantityUncomparableException(this, q);
+        throw new QuantityIncomparableException(q1, q2);
     }
 
     public static bool operator >(Quantity q1, Quantity q2)
     {
-        return !(q1 < q2);
+        if (q1.Unit == q2.Unit)
+        {
+            return q1.Value > q2.Value;
+        }
+
+        throw new QuantityIncomparableException(q1, q2);
     }
 
     public static bool operator <=(Quantity q1, Quantity q2)
@@ -150,6 +91,43 @@ public sealed class Quantity : ValueObject
     public static bool operator >=(Quantity q1, Quantity q2)
     {
         return q1 == q2 || q1 > q2;
+    }
+
+    public static Quantity operator +(Quantity q1, Quantity q2)
+    {
+        if (q1.Unit == q2.Unit)
+        {
+            return new Quantity(q1.Value + q2.Value, q1.Unit);
+        }
+
+        throw new QuantityUnitMismatchException(q1.Unit, q2.Unit);
+    }
+
+    public static Quantity operator -(Quantity q1, Quantity q2)
+    {
+        if (q1.Unit == q2.Unit)
+        {
+            return new Quantity(q1.Value - q2.Value, q1.Unit);
+        }
+
+        throw new QuantityUnitMismatchException(q1.Unit, q2.Unit);
+    }
+
+    public double ToElementaryUnit()
+    {
+        var grams = Unit.TryGetGrams();
+        if (grams.HasValue)
+        {
+            return grams.Value;
+        }
+
+        var milliliters = Unit.TryGetMilliliters();
+        if (milliliters.HasValue)
+        {
+            return milliliters.Value;
+        }
+
+        throw new QuantityUnitNonConvertibleException(Unit);
     }
 
     public override string ToString()
@@ -176,30 +154,41 @@ public sealed class Quantity : ValueObject
         yield return Unit;
     }
 
-    public override bool Equals(object? q)
+    public override bool Equals(object? other)
     {
-        if (q is null)
+        return other is Quantity quantity && Equals(quantity);
+    }
+
+    public bool Equals(Quantity? quantity)
+    {
+        if (quantity is null)
         {
             return false;
         }
 
-        if (q is not Quantity)
-        {
-            return false;
-        }
-
-        if (ReferenceEquals(this, q))
+        if (ReferenceEquals(this, quantity))
         {
             return true;
         }
 
-        var q1 = (Quantity)q;
-        return milliliters.Equals(q1.milliliters) &&
-               grams.Equals(q1.grams);
+        return Math.Abs(Value - quantity.Value) < ComparisonEpsilon && Unit == quantity.Unit;
     }
 
-    public override int GetHashCode()
+    public bool IsImplicitlyConvertibleTo(QuantityUnit unit) => Unit.IsImplicitlyConvertibleTo(unit);
+    public bool IsConvertibleToWithAdditionalInfo(QuantityUnit unit) => Unit.IsConvertibleToWithAdditionalInfo(unit);
+
+    public override int GetHashCode() => HashCode.Combine(Value, Unit);
+
+    public bool LessThanWithRatio(Quantity quantity, double ratio)
     {
-        throw new NotImplementedException();
+        if (!IsImplicitlyConvertibleTo(quantity.Unit))
+        {
+            throw new QuantityIncomparableException(this, quantity);
+        }
+
+        var elementaryUnit = ToElementaryUnit();
+        var otherElementaryUnit = quantity.ToElementaryUnit();
+
+        return elementaryUnit < otherElementaryUnit * (1 + ratio);
     }
 }

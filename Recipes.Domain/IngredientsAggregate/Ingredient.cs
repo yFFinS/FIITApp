@@ -39,7 +39,7 @@ public class Ingredient : ValueObject
     public Ingredient WithQuantityConvertedTo(QuantityUnit unit)
     {
         // TODO: Implement this
-        return new Ingredient(Product, Quantity.ConvertTo(unit));
+        return new Ingredient(Product, Quantity.ImplicitlyConvertTo(unit));
     }
 
     public override string ToString()

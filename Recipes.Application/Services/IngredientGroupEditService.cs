@@ -67,7 +67,7 @@ public class IngredientGroupEditService : IIngredientGroupEditService
 
     private void ThrowIfNotConvertible(Ingredient ingredient, Ingredient existingIngredient)
     {
-        if (ingredient.Quantity.IsConvertibleTo(existingIngredient.Quantity.Unit))
+        if (ingredient.Quantity.IsConvertibleToWithAdditionalInfo(existingIngredient.Quantity.Unit))
         {
             return;
         }

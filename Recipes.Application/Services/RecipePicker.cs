@@ -17,20 +17,6 @@ public class RecipePicker : IRecipePicker
                     ingredients.TryGetByProductId(ingredient.ProductId) is not null));
     }
 
-    //public IEnumerable<Recipe> PickRecipesByAvailableIngredients(
-    //    IEnumerable<Recipe> recipes,
-    //    IngredientGroup ingredients,
-    //    double margin = 0)
-    //{
-    //    margin = Guard.Against.Negative(margin);
-    //    return recipes
-    //        .Where(recipe =>
-    //            !recipe.Ingredients.Any(recipeIngredient =>
-    //                margin == 0 ? 
-    //                    ByIngredient(ingredients, recipeIngredient) :
-    //                    ByIngredientWithMargin(ingredients, recipeIngredient, margin)));
-    //}
-
     public IEnumerable<Recipe> PickRecipesByAvailableIngredients(
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients)
@@ -41,16 +27,16 @@ public class RecipePicker : IRecipePicker
                         ByIngredient(ingredients, recipeIngredient)));
     }
 
-    public IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithMargin(
+    public IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithRatio(
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients,
-        double margin)
+        double ratio)
     {
-        margin = Guard.Against.Negative(margin);
+        ratio = Guard.Against.Negative(ratio);
         return recipes
             .Where(recipe =>
                 !recipe.Ingredients.Any(recipeIngredient =>
-                        ByIngredientWithMargin(ingredients, recipeIngredient, margin)));
+                        ByIngredientWithRatio(ingredients, recipeIngredient, ratio)));
     }
 
     private static bool ByIngredient(IngredientGroup ingredients, Ingredient recipeIngredient)
@@ -63,14 +49,14 @@ public class RecipePicker : IRecipePicker
         return false;
     }
 
-    private static bool ByIngredientWithMargin(IngredientGroup ingredients, Ingredient recipeIngredient, double margin)
+    private static bool ByIngredientWithRatio(IngredientGroup ingredients, Ingredient recipeIngredient, double ratio)
     {
         var ingredient = ingredients.TryGetByProductId(recipeIngredient.ProductId);
         if (ingredient is not null)
         {
-            return ingredient.Quantity.LessThanWithMargin(
+            return ingredient.Quantity.LessThanWithRatio(
                 recipeIngredient.Quantity,
-                margin);
+                ratio);
         }
         return false;
     }

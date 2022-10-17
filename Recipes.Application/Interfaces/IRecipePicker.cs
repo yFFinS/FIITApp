@@ -13,9 +13,9 @@ public interface IRecipePicker
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients);
 
-    IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithMargin(
+    IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithRatio(
         IEnumerable<Recipe> recipes,
         IngredientGroup ingredients,
-        double margin);
+        double ratio);
 }
 

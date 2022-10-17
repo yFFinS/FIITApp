@@ -2,64 +2,89 @@ using Recipes.Domain.Enums;
 
 namespace Recipes.Domain.Extensions;
 
+public static class QuantityUnitConversionConstants
+{
+    public const double TeaSpoonsToMilliliters = 5.0;
+    public const double DessertSpoonsToMilliliters = 10.0;
+    public const double TableSpoonsToMilliliters = 12.0;
+    public const double DecilitresToMilliliters = 100.0;
+    public const double CupsToMilliliters = 250.0;
+    public const double LitresToMilliliters = 1000.0;
+
+    public const double KilogramsToGrams = 1000.0;
+}
+
 public static class QuantityUnitExtensions
 {
-    public static bool IsConvertibleTo(this QuantityUnit unit, QuantityUnit otherUnit)
+    public static bool IsWeight(this QuantityUnit unit) => unit.TryGetGrams().HasValue;
+
+    public static bool IsVolume(this QuantityUnit unit) => unit.TryGetMilliliters().HasValue;
+
+    public static bool IsImplicitlyConvertibleTo(this QuantityUnit unit, QuantityUnit otherUnit)
     {
         if (unit == otherUnit)
         {
             return true;
         }
 
-        throw new NotImplementedException();
+        return unit.IsWeight() && otherUnit.IsWeight() || unit.IsVolume() && otherUnit.IsVolume();
     }
 
-    public static bool IsConvertible(this QuantityUnit unit) => unit != QuantityUnit.Pieces;
-
-    public static bool GetMilliliters(this QuantityUnit unit, out double milliliters)
+    public static bool IsConvertibleToWithAdditionalInfo(this QuantityUnit unit, QuantityUnit otherUnit)
     {
-        switch (unit)
+        if (unit.IsImplicitlyConvertibleTo(otherUnit))
         {
-            case QuantityUnit.Milliliters:
-                milliliters = 1;
-                return true;
-            case QuantityUnit.TeaSpoons:
-                milliliters = 5;
-                return true;
-            case QuantityUnit.TableSpoons:
-                milliliters = 12;
-                return true;
-            case QuantityUnit.DessertSpoons:
-                milliliters = 10;
-                return true;
-            case QuantityUnit.Cups:
-                milliliters = 250;
-                return true;
-            case QuantityUnit.Decilitres:
-                milliliters = 100;
-                return true;
-            case QuantityUnit.Liters:
-                milliliters = 1000;
-                return true;
-            default:
-                milliliters = 0;
-                return false;
+            return true;
+        }
+
+        return unit.IsWeight() && otherUnit == QuantityUnit.Pieces ||
+               unit == QuantityUnit.Pieces && otherUnit.IsWeight();
+    }
+
+    public static double? TryGetMilliliters(this QuantityUnit unit)
+    {
+        return unit switch
+        {
+            QuantityUnit.Milliliters => 1.0,
+            QuantityUnit.TeaSpoons => QuantityUnitConversionConstants.TeaSpoonsToMilliliters,
+            QuantityUnit.TableSpoons => QuantityUnitConversionConstants.TableSpoonsToMilliliters,
+            QuantityUnit.DessertSpoons => QuantityUnitConversionConstants.DessertSpoonsToMilliliters,
+            QuantityUnit.Cups => QuantityUnitConversionConstants.CupsToMilliliters,
+            QuantityUnit.Decilitres => QuantityUnitConversionConstants.DecilitresToMilliliters,
+            QuantityUnit.Liters => QuantityUnitConversionConstants.LitresToMilliliters,
+            _ => null
         };
     }
 
-    public static bool GetGrams(this QuantityUnit unit, out double grams)
+    public static double? TryGetGrams(this QuantityUnit unit)
     {
-        switch (unit)
+        return unit switch
         {
-            case QuantityUnit.Grams:
-                grams = 1;
-                return true;
-            case QuantityUnit.Kilograms:
-                grams = 1000;
-                return true;
-            default:
-                grams = 0;
-                return false;
+            QuantityUnit.Grams => 1.0,
+            QuantityUnit.Kilograms => QuantityUnitConversionConstants.KilogramsToGrams,
+            _ => null
         };
+    }
+
+    public static double FromGrams(this QuantityUnit unit, double grams)
+    {
+        var conversionFactor = unit.TryGetGrams();
+        if (conversionFactor.HasValue)
+        {
+            return grams / conversionFactor.Value;
+        }
+
+        throw new ArgumentException($"Cannot convert from grams to {unit}");
+    }
+
+    public static double FromMilliliters(this QuantityUnit unit, double milliliters)
+    {
+        var conversionFactor = unit.TryGetMilliliters();
+        if (conversionFactor.HasValue)
+        {
+            return milliliters / conversionFactor.Value;
+        }
+
+        throw new ArgumentException($"Cannot convert from milliliters to {unit}");
     }
 }
