@@ -47,11 +47,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button MinWidth="300" 
-                                Height="200" 
-                                Background="#40000000" 
-                                Margin="5" 
-                                CornerRadius="10"
+                        <Button Classes="recipe"
                                 CommandParameter="{Binding}"
                                 Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
                             <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Title}"/>

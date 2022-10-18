@@ -9,13 +9,11 @@ public class RecipeViewModel : ViewModelBase
 {
     public Recipe Recipe { get; set; }
 
-    public readonly Action BackCommand;
+    public ReactiveCommand<Unit, Unit> BackCommand { get; }
 
     public RecipeViewModel(Recipe recipe, Action back)
     {
         Recipe = recipe;
-        BackCommand = back;
+        BackCommand = ReactiveCommand.Create(back);
     }
-
-    public void Back() => BackCommand();
 }

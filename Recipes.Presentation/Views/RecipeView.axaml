@@ -5,44 +5,76 @@
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.RecipeView">
+    <UserControl.Styles>
+        <StyleInclude Source="/Views/Styles/RecipeViewStyles.axaml"/>
+    </UserControl.Styles>
     <Design.DataContext>
         <viewModels:RecipeViewModel/>
     </Design.DataContext>
     <Panel>
-        <Button Background="#20000000" 
-                Height="50" 
-                Width="50"
-                Margin="5"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Command="{Binding Back}"/>
-        <StackPanel Spacing="10">
-            <TextBlock Text="{Binding Recipe.Title}"
-                       FontSize="40"
-                       FontFamily=""
-                       HorizontalAlignment="Center"/>
-            <ItemsControl Items="{Binding Recipe.Ingredients}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Background="#20ffffff">
-                            <TextBlock Text="{Binding Name}"/>
-                            <Separator/>
-                            <TextBlock Text="{Binding Quantity}"/>
+        <!-- <Button VerticalAlignment="Stretch" -->
+        <!--         Width="100" -->
+        <!--         Background="Blue" -->
+        <!--         Command="{Binding BackCommand}" -->
+        <!--         CommandParameter="" -->
+        <!--         HorizontalAlignment="Left"/> -->
+        <ScrollViewer>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Spacing="10" MaxWidth="1000">
+            <Border Classes="back" Name="Title">
+                <TextBlock Text="{Binding Recipe.Title}"
+                           HorizontalAlignment="Center"/>
+            </Border>
+            <Grid ColumnDefinitions="*, 10, *">
+                <Border Grid.Column="0" Classes="back">
+                    <ItemsControl Items="{Binding Recipe.Ingredients}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Spacing="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border MinWidth="100">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text=": "/>
+                                        <TextBlock Text="{Binding Quantity}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+                <Grid Grid.Column="2" RowDefinitions="*, *, 10, 40" HorizontalAlignment="Stretch">
+                    <Image/>
+                    <Border Grid.Row="1" Classes="back" VerticalAlignment="Bottom">
+                        <TextBlock Text="{Binding Recipe.Description}"
+                                   TextAlignment="End"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                    <Border Grid.Row="3" Classes="back" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Servings: "/>
+                            <TextBlock Text="{Binding Recipe.Servings}"/>
                         </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <TextBlock Text="{Binding Recipe.Servings}"/>
-            <TextBlock Text="{Binding Recipe.Description}"
-                       FontSize="30"
-                       HorizontalAlignment="Left"/>
+                    </Border>
+                </Grid>
+            </Grid>
             <ItemsControl Items="{Binding Recipe.CookingSteps}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="10"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding DescriptionProperty}"/>
+                        <Border Classes="back">
+                            <TextBlock Text="{Binding DescriptionProperty}" TextWrapping="Wrap"/>
+                        </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Panel>
 </UserControl>

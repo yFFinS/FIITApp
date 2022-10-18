@@ -56,7 +56,7 @@ internal static class RecipeFactory
     {
         var result = new Recipe(EntityId.New(), name)
         {
-            Description = $"{i} Description",
+            Description = string.Join(";", Enumerable.Repeat($"{i} Description",20)),
             CookDuration = new TimeSpan(i + 1,0,0,0),
             Servings = (i + 1) * 4
         };
@@ -65,6 +65,10 @@ internal static class RecipeFactory
             result.AddIngredient(ingredient);
         }
         result.AddCookingStep(new CookingStep($"{i % 3}"));
+        for (int j = 0; j < 10; j++)
+        {
+            result.AddCookingStep(new CookingStep(String.Join(" ", Enumerable.Repeat($"{j}", 100))));
+        }
         i++;
         return result;
     }

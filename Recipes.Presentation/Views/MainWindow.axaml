@@ -19,7 +19,7 @@
         </Style>
         <StyleInclude Source="/Views/Styles/TitleBarStyles.axaml"/>
     </Window.Styles>
-    <Panel Background="#D8C595">
+    <Panel Name="Main" Background="#D8C595">
         <Panel Height="35" 
                VerticalAlignment="Top" 
                HorizontalAlignment="Stretch" 
