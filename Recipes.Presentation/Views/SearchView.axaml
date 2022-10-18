@@ -42,7 +42,7 @@
             <ItemsControl ZIndex="100" Items="{Binding Items}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Center"/>
+                        <WrapPanel HorizontalAlignment="Center" MaxWidth="1500"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
@@ -50,7 +50,11 @@
                         <Button Classes="recipe"
                                 CommandParameter="{Binding}"
                                 Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
-                            <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Title}"/>
+                            <TextBlock VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding Title}"
+                                       FontSize="16"
+                                       Foreground="AntiqueWhite"/>
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

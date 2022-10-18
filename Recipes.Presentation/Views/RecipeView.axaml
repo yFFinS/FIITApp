@@ -12,20 +12,20 @@
         <viewModels:RecipeViewModel/>
     </Design.DataContext>
     <Panel>
-        <!-- <Button VerticalAlignment="Stretch" -->
-        <!--         Width="100" -->
-        <!--         Background="Blue" -->
-        <!--         Command="{Binding BackCommand}" -->
-        <!--         CommandParameter="" -->
-        <!--         HorizontalAlignment="Left"/> -->
-        <ScrollViewer>
+        <Button VerticalAlignment="Stretch"
+                ZIndex="1"
+                MinWidth="150"
+                Classes="back"
+                Command="{Binding BackCommand}"
+                HorizontalAlignment="Left"/>
+        <ScrollViewer IsHitTestVisible="False">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Spacing="10" MaxWidth="1000">
-            <Border Classes="back" Name="Title">
+            <Border Classes="bg" Name="Title">
                 <TextBlock Text="{Binding Recipe.Title}"
                            HorizontalAlignment="Center"/>
             </Border>
             <Grid ColumnDefinitions="*, 10, *">
-                <Border Grid.Column="0" Classes="back">
+                <Border Grid.Column="0" Classes="bg">
                     <ItemsControl Items="{Binding Recipe.Ingredients}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -47,12 +47,12 @@
                 </Border>
                 <Grid Grid.Column="2" RowDefinitions="*, *, 10, 40" HorizontalAlignment="Stretch">
                     <Image/>
-                    <Border Grid.Row="1" Classes="back" VerticalAlignment="Bottom">
+                    <Border Grid.Row="1" Classes="bg" VerticalAlignment="Bottom">
                         <TextBlock Text="{Binding Recipe.Description}"
                                    TextAlignment="End"
                                    TextWrapping="Wrap"/>
                     </Border>
-                    <Border Grid.Row="3" Classes="back" HorizontalAlignment="Stretch">
+                    <Border Grid.Row="3" Classes="bg" HorizontalAlignment="Stretch">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                             <TextBlock Text="Servings: "/>
                             <TextBlock Text="{Binding Recipe.Servings}"/>
@@ -68,7 +68,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Classes="back">
+                        <Border Classes="bg">
                             <TextBlock Text="{Binding DescriptionProperty}" TextWrapping="Wrap"/>
                         </Border>
                     </DataTemplate>

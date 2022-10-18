@@ -11,7 +11,7 @@
         TransparencyLevelHint="Blur"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="35">
+        ExtendClientAreaTitleBarHeightHint="-1">
     <Window.Styles>
         <Style Selector="TitleBar Button">
             <Setter Property="Background" Value="#40F4E6C0"/>
@@ -19,7 +19,7 @@
         </Style>
         <StyleInclude Source="/Views/Styles/TitleBarStyles.axaml"/>
     </Window.Styles>
-    <Panel Name="Main" Background="#D8C595">
+    <Panel Name="Main" Background="#D8C595" IsHitTestVisible="False">
         <Panel Height="35" 
                VerticalAlignment="Top" 
                HorizontalAlignment="Stretch" 
