@@ -29,15 +29,15 @@ public sealed class Quantity : ValueObject
         }
 
         var grams = Unit.TryGetGrams();
-        if (grams.HasValue)
+        if (grams.HasValue) 
         {
-            return new Quantity(unit.FromGrams(grams.Value), unit);
+            return new Quantity(unit.FromGrams(grams.Value) * Value, unit);
         }
 
         var milliliters = Unit.TryGetMilliliters();
         if (milliliters.HasValue)
         {
-            return new Quantity(unit.FromMilliliters(milliliters.Value), unit);
+            return new Quantity(unit.FromMilliliters(milliliters.Value) * Value, unit);
         }
 
         throw new QuantityUnitNonConvertibleException(Unit);
@@ -118,13 +118,13 @@ public sealed class Quantity : ValueObject
         var grams = Unit.TryGetGrams();
         if (grams.HasValue)
         {
-            return grams.Value;
+            return grams.Value * Value;
         }
 
         var milliliters = Unit.TryGetMilliliters();
         if (milliliters.HasValue)
         {
-            return milliliters.Value;
+            return milliliters.Value * Value;
         }
 
         throw new QuantityUnitNonConvertibleException(Unit);

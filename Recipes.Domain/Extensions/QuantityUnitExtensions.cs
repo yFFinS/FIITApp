@@ -1,4 +1,5 @@
 using Recipes.Domain.Enums;
+using Recipes.Domain.Exceptions;
 
 namespace Recipes.Domain.Extensions;
 
@@ -74,7 +75,7 @@ public static class QuantityUnitExtensions
             return grams / conversionFactor.Value;
         }
 
-        throw new ArgumentException($"Cannot convert from grams to {unit}");
+        throw new QuantityUnitConversionException(unit, QuantityUnit.Grams);
     }
 
     public static double FromMilliliters(this QuantityUnit unit, double milliliters)
@@ -85,6 +86,6 @@ public static class QuantityUnitExtensions
             return milliliters / conversionFactor.Value;
         }
 
-        throw new ArgumentException($"Cannot convert from milliliters to {unit}");
+        throw new QuantityUnitConversionException(unit, QuantityUnit.Milliliters);
     }
 }

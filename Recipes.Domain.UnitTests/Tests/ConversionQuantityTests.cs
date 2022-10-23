@@ -1,4 +1,5 @@
 // using NUnit.Framework;
+// using NUnit.Framework.Constraints;
 // using Recipes.Domain.Enums;
 // using Recipes.Domain.Interfaces;
 // using Recipes.Domain.Services;
@@ -9,15 +10,6 @@
 // [TestFixture]
 // public class ConversionQuantityTests
 // {
-//     private IQuantityConverter _converter = null!;
-//
-//     [SetUp]
-//     public void SetUp()
-//     {
-//         _converter = new QuantityConverter();
-//         _converter.SetConversionFactor(QuantityUnit.Milliliters, QuantityUnit.TeaSpoons, 5);
-//     }
-//
 //     [TestCase(1, QuantityUnit.Grams, 2, QuantityUnit.Milliliters, 0.5)]
 //     [TestCase(5, QuantityUnit.Grams, 5, QuantityUnit.TeaSpoons, 0.2)]
 //     [TestCase(12, QuantityUnit.Grams, 4, QuantityUnit.TableSpoons, 0.25)]
@@ -43,11 +35,16 @@
 //     [TestCase(0.33, QuantityUnit.Cups, 9, QuantityUnit.Grams, 742.5)]
 //     [TestCase(10.23, QuantityUnit.Decilitres, 0.7, QuantityUnit.Grams, 716.1)]
 //     [TestCase(0.5011, QuantityUnit.Liters, 0.1, QuantityUnit.Grams, 50.11)]
-//     public void Test_Quantity_ConvertWithDensity(double value, QuantityUnit unit, double? density,
+//     public void Test_Quantity_ConvertWithDensity(double value, QuantityUnit unit, double density,
 //         QuantityUnit convertToUnit, double convertedValue)
 //     {
-//         var quantity = new Quantity(value, unit, density);
-//         var convertedQuantity = quantity.ImplicitlyConvertTo(convertToUnit);
+//         var productId = EntityId.NewId();
+//
+//         var converter = new QuantityConverter();
+//         converter.SetConversionFactor(productId, density);
+//
+//         var quantity = new Quantity(value, unit);
+//         
 //
 //         Assert.AreEqual(convertedValue, convertedQuantity.Value);
 //     }
