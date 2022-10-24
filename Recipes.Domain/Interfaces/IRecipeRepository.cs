@@ -5,7 +5,5 @@ namespace Recipes.Domain.Interfaces;
 
 public interface IRecipeRepository
 {
-    Task<List<Recipe>> GetRecipesAsync(IngredientGroup availableIngredientGroup);
-
-    Task<List<Recipe>> GetRecipesAsync(IngredientGroup availableIngredientGroup, int maxResults);
+    Task<List<Recipe>> GetRecipesAsync();
 }

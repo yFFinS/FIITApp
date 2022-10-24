@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services;
+using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.Services;
 

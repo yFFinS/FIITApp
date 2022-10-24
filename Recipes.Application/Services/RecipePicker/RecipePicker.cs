@@ -1,63 +1,77 @@
-﻿using Ardalis.GuardClauses;
+﻿using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
-using Recipes.Domain.IngredientsAggregate;
+using Recipes.Domain.Interfaces;
 
 namespace Recipes.Application.Services.RecipePicker;
 
 public class RecipePicker : IRecipePicker
 {
-    public IEnumerable<Recipe> PickRecipesByIngredients(
-        IEnumerable<Recipe> recipes,
-        IngredientGroup ingredients)
+    private readonly ILogger<RecipePicker> _logger;
+    private readonly IRecipeRepository _recipeRepository;
+
+    public RecipePicker(ILogger<RecipePicker> logger, IRecipeRepository recipeRepository)
     {
-        return recipes
-            .Where(recipe =>
-                !recipe.Ingredients.Any(ingredient =>
-                    ingredients.TryGetByProductId(ingredient.ProductId) is not null));
+        _logger = logger;
+        _recipeRepository = recipeRepository;
     }
 
-    public IEnumerable<Recipe> PickRecipesByAvailableIngredients(
-        IEnumerable<Recipe> recipes,
-        IngredientGroup ingredients)
+    public async Task<List<Recipe>> PickRecipes(RecipeFilter filter)
     {
-        return recipes
-            .Where(recipe =>
-                !recipe.Ingredients.Any(recipeIngredient =>
-                        ByIngredient(ingredients, recipeIngredient)));
+        _logger.LogInformation("Picking recipes for filter {@Filter}", filter);
+
+        var recipes = await _recipeRepository.GetRecipesAsync();
+        var allowedRecipes = recipes
+            .Where(rec => filter.MaxCookDuration is null || rec.CookDuration <= filter.MaxCookDuration)
+            .Where(rec => IsAllProductsAllowed(rec, filter));
+
+        var scoredRecipes = allowedRecipes
+            .Select(rec => new { Recipe = rec, Score = ScoreRecipe(rec, filter) })
+            .OrderByDescending(rec => rec.Score);
+
+        return scoredRecipes.Select(rec => rec.Recipe)
+            .Take(filter.MaxRecipes)
+            .ToList();
     }
 
-    public IEnumerable<Recipe> PickRecipesByAvailableIngredientsWithRatio(
-        IEnumerable<Recipe> recipes,
-        IngredientGroup ingredients,
-        double ratio)
+    private bool IsAllProductsAllowed(Recipe recipe, RecipeFilter filter)
     {
-        ratio = Guard.Against.Negative(ratio);
-        return recipes
-            .Where(recipe =>
-                !recipe.Ingredients.Any(recipeIngredient =>
-                        ByIngredientWithRatio(ingredients, recipeIngredient, ratio)));
+        return recipe.Ingredients.Select(ing => ing.Product).All(filter.IsAllowed);
     }
 
-    private static bool ByIngredient(IngredientGroup ingredients, Ingredient recipeIngredient)
+    private double ScoreRecipe(Recipe recipe, RecipeFilter filter)
     {
-        var ingredient = ingredients.TryGetByProductId(recipeIngredient.ProductId);
-        if (ingredient is not null)
+        const double notEnoughProductsPenalty = -25.0;
+        const double hasProductScore = 10.0;
+        const double allOptionsSatisfiedScore = 100.0;
+
+        var satisfiedOptionsCount = 0;
+
+        var score = 0.0;
+        foreach (var ingredient in recipe.Ingredients)
         {
-            return ingredient.Quantity < recipeIngredient.Quantity;
-        }
-        return false;
-    }
+            var optionForProduct = filter.GetOption(ingredient.Product);
+            if (optionForProduct is null)
+            {
+                continue;
+            }
 
-    private static bool ByIngredientWithRatio(IngredientGroup ingredients, Ingredient recipeIngredient, double ratio)
-    {
-        var ingredient = ingredients.TryGetByProductId(recipeIngredient.ProductId);
-        if (ingredient is not null)
-        {
-            return ingredient.Quantity.LessThanWithRatio(
-                recipeIngredient.Quantity,
-                ratio);
+            if (optionForProduct.Quantity is not null && optionForProduct.Quantity < ingredient.Quantity)
+            {
+                score += notEnoughProductsPenalty;
+            }
+            else
+            {
+                score += hasProductScore;
+                satisfiedOptionsCount++;
+            }
         }
-        return false;
+
+        if (satisfiedOptionsCount == filter.OptionCount)
+        {
+            score += allOptionsSatisfiedScore;
+        }
+
+        return score;
     }
 }
