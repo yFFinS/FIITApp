@@ -3,9 +3,9 @@ using Recipes.Domain.Base;
 
 namespace Recipes.Domain.ValueObjects;
 
-public class EntityId : ValueObject
+public class EntityId : ValueObject<EntityId>
 {
-    public readonly Guid Value;
+    public Guid Value { get; }
 
     public EntityId(string value) : this(Guid.Parse(value))
     {
@@ -20,9 +20,4 @@ public class EntityId : ValueObject
 
 
     public static EntityId NewId() => new(Guid.NewGuid());
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
-    }
 }

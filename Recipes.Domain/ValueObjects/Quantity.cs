@@ -7,7 +7,7 @@ using Recipes.Shared;
 
 namespace Recipes.Domain.ValueObjects;
 
-public sealed class Quantity : ValueObject
+public sealed class Quantity : ValueObject<Quantity>
 {
     public const double ComparisonEpsilon = 1e-8;
 
@@ -17,8 +17,9 @@ public sealed class Quantity : ValueObject
         Unit = Guard.Against.EnumOutOfRange(unit);
     }
 
-    public readonly double Value;
-    public readonly QuantityUnit Unit;
+    public double Value { get; }
+    public QuantityUnit Unit { get; }
+
     public Quantity Empty => new(0, Unit);
 
     public Quantity ImplicitlyConvertTo(QuantityUnit unit)
@@ -29,7 +30,7 @@ public sealed class Quantity : ValueObject
         }
 
         var grams = Unit.TryGetGrams();
-        if (grams.HasValue) 
+        if (grams.HasValue)
         {
             return new Quantity(unit.FromGrams(grams.Value) * Value, unit);
         }
@@ -148,18 +149,7 @@ public sealed class Quantity : ValueObject
         };
     }
 
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Value;
-        yield return Unit;
-    }
-
-    public override bool Equals(object? other)
-    {
-        return other is Quantity quantity && Equals(quantity);
-    }
-
-    public bool Equals(Quantity? quantity)
+    public override bool Equals(Quantity? quantity)
     {
         if (quantity is null)
         {

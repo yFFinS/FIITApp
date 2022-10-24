@@ -6,13 +6,14 @@ using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.IngredientsAggregate;
 
-public class Ingredient : ValueObject
+public class Ingredient : ValueObject<Ingredient>
 {
-    public readonly Product Product;
-    public readonly Quantity Quantity;
+    public Product Product { get; }
+    public Quantity Quantity { get; }
 
-    public EntityId ProductId => Product.Id;
-    public Ingredient Empty => new(Product, Quantity.Empty);
+
+    [EqualityIgnore] public EntityId ProductId => Product.Id;
+    [EqualityIgnore] public Ingredient Empty => new(Product, Quantity.Empty);
 
     public Ingredient(Product product, Quantity quantity)
     {
@@ -28,12 +29,6 @@ public class Ingredient : ValueObject
     public Ingredient WithProduct(Product product)
     {
         return new Ingredient(product, Quantity);
-    }
-
-    protected override IEnumerable<object> GetEqualityComponents()
-    {
-        yield return Product;
-        yield return Quantity;
     }
 
     public Ingredient WithQuantityConvertedTo(QuantityUnit unit)
