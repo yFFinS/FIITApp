@@ -21,9 +21,8 @@ public class ProductBuilder : BaseEntityBuilder<Product, ProductBuilder>
         return this;
     }
 
-    protected override IEnumerable<object?> GetConstructorArguments()
+    public override Product Build()
     {
-        yield return _name;
-        yield return _priceForQuantity;
+        return new Product(Id, _name, _priceForQuantity);
     }
 }

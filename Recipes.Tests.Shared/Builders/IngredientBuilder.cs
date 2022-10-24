@@ -22,9 +22,8 @@ public class IngredientBuilder : AbstractBuilder<Ingredient>
         return this;
     }
 
-    protected override IEnumerable<object?> GetConstructorArguments()
+    public override Ingredient Build()
     {
-        yield return _product;
-        yield return _quantity;
+        return new Ingredient(_product, _quantity);
     }
 }

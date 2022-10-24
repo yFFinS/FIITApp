@@ -5,7 +5,7 @@ using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
 
-public class Recipe : BaseEntity
+public class Recipe : Entity<EntityId>
 {
     private string _title = null!;
     private string? _description;

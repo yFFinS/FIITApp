@@ -3,7 +3,7 @@ using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
 
-namespace Recipes.Application.Services;
+namespace Recipes.Application.Services.RecipePicker;
 
 public class RecipePicker : IRecipePicker
 {
