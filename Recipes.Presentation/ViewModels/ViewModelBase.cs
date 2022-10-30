@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using ReactiveUI;
+﻿using ReactiveUI;
 
 namespace Recipes.Presentation.ViewModels
 {

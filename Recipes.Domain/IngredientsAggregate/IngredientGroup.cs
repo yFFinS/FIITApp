@@ -1,5 +1,5 @@
-using System.Collections;
 using Recipes.Domain.ValueObjects;
+using System.Collections;
 
 namespace Recipes.Domain.IngredientsAggregate;
 
@@ -16,21 +16,21 @@ public class IngredientGroup : IEnumerable<Ingredient>
 
     public IngredientGroup(IEnumerable<Ingredient> ingredients)
     {
-        _ingredients = ingredients.ToDictionary(ingredient => ingredient.Product.Id);
+        _ingredients = ingredients.ToDictionary(ingredient => ingredient.ProductId);
     }
 
     public void Add(Ingredient ingredient)
     {
-        ThrowIfIngredientExists(ingredient.Product.Id);
+        ThrowIfIngredientExists(ingredient.ProductId);
 
-        _ingredients.Add(ingredient.Product.Id, ingredient);
+        _ingredients.Add(ingredient.ProductId, ingredient);
     }
 
     public void Update(Ingredient ingredient)
     {
-        ThrowIfIngredientDoesNotExist(ingredient.Product.Id);
+        ThrowIfIngredientDoesNotExist(ingredient.ProductId);
 
-        _ingredients[ingredient.Product.Id] = ingredient;
+        _ingredients[ingredient.ProductId] = ingredient;
     }
 
     public void RemoveByProductId(EntityId productId)
@@ -40,7 +40,7 @@ public class IngredientGroup : IEnumerable<Ingredient>
         _ingredients.Remove(productId);
     }
 
-    public void Remove(Ingredient ingredient) => RemoveByProductId(ingredient.Product.Id);
+    public void Remove(Ingredient ingredient) => RemoveByProductId(ingredient.ProductId);
 
     public Ingredient GetByProductId(EntityId productId)
     {

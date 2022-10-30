@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
 using NUnit.Framework;
-using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 using Recipes.Tests.Shared.BuilderEntries;
+using System;
+using System.Collections.Generic;
 
 namespace Recipes.Domain.UnitTests.Tests;
 
@@ -68,9 +67,9 @@ public class RecipeTests
     [Test]
     public void Test_AddingIngredients_AddsInCorrectOrder()
     {
-        Ingredient ingredient1 = An.Ingredient.WithProduct(A.Product.WithName("A"));
-        Ingredient ingredient2 = An.Ingredient.WithProduct(A.Product.WithName("B"));
-        Ingredient ingredient3 = An.Ingredient.WithProduct(A.Product.WithName("C"));
+        Ingredient ingredient1 = An.Ingredient.WithProductId(An.EntityId);
+        Ingredient ingredient2 = An.Ingredient.WithProductId(An.EntityId);
+        Ingredient ingredient3 = An.Ingredient.WithProductId(An.EntityId);
 
         Recipe recipe = A.Recipe;
 
@@ -121,10 +120,10 @@ public class RecipeTests
     {
         var id = EntityId.NewId();
 
-        Ingredient ingredient = An.Ingredient.WithProduct(A.Product.WithId(id));
+        Ingredient ingredient = An.Ingredient.WithProductId(id);
         Recipe recipe = A.Recipe.WithIngredient(ingredient);
 
-        Ingredient updatedIngredient = An.Ingredient.WithProduct(A.Product.WithId(id));
+        Ingredient updatedIngredient = An.Ingredient.WithProductId(id);
         recipe.UpdateIngredient(updatedIngredient);
 
         Assert.That(recipe.Ingredients, Has.Exactly(1)

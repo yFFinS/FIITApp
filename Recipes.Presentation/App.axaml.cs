@@ -1,12 +1,11 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Recipes.Infrastructure;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
+using System;
 
 namespace Recipes.Presentation
 {

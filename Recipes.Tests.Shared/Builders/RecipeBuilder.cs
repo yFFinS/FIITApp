@@ -13,14 +13,9 @@ public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
     private IngredientGroup _ingredientGroup = new();
     private CookingTechnic _cookingTechnic = new();
 
-    protected override IEnumerable<object?> GetConstructorArguments()
+    public override Recipe Build()
     {
-        yield return _title;
-        yield return _description;
-        yield return _servings;
-        yield return _cookTime;
-        yield return _ingredientGroup;
-        yield return _cookingTechnic;
+        return new Recipe(Id, _title, _description, _servings, _cookTime, _ingredientGroup, _cookingTechnic);
     }
 
     public RecipeBuilder WithTitle(string title)

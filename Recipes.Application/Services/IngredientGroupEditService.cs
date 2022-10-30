@@ -1,23 +1,25 @@
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Exceptions;
 using Recipes.Application.Interfaces;
-using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.IngredientsAggregate;
+using Recipes.Domain.Interfaces;
 
 namespace Recipes.Application.Services;
 
 public class IngredientGroupEditService : IIngredientGroupEditService
 {
     private readonly ILogger<IngredientGroupEditService> _logger;
+    private readonly IQuantityConverter _quantityConverter;
 
-    public IngredientGroupEditService(ILogger<IngredientGroupEditService> logger)
+    public IngredientGroupEditService(ILogger<IngredientGroupEditService> logger, IQuantityConverter quantityConverter)
     {
         _logger = logger;
+        _quantityConverter = quantityConverter;
     }
 
     public void AddByQuantity(IngredientGroup group, Ingredient ingredient)
     {
-        var existingIngredient = group.TryGetByProductId(ingredient.Product.Id);
+        var existingIngredient = group.TryGetByProductId(ingredient.ProductId);
         if (existingIngredient is null)
         {
             group.Add(ingredient);
@@ -26,9 +28,7 @@ public class IngredientGroupEditService : IIngredientGroupEditService
             return;
         }
 
-        ThrowIfNotConvertible(ingredient, existingIngredient);
-
-        var convertedIngredient = ingredient.WithQuantityConvertedTo(existingIngredient.Quantity.Unit);
+        var convertedIngredient = ConvertedIngredientQuantity(ingredient, existingIngredient);
         var combinedQuantity = existingIngredient.Quantity + convertedIngredient.Quantity;
 
         group.Update(existingIngredient.WithQuantity(combinedQuantity));
@@ -36,9 +36,18 @@ public class IngredientGroupEditService : IIngredientGroupEditService
             existingIngredient, combinedQuantity);
     }
 
+    private Ingredient ConvertedIngredientQuantity(Ingredient ingredient, Ingredient existingIngredient)
+    {
+        ThrowIfNotConvertible(ingredient, existingIngredient);
+        var convertedQuantity =
+            _quantityConverter.Convert(ingredient.Quantity, existingIngredient.Quantity.Unit, ingredient.ProductId);
+        var convertedIngredient = ingredient.WithQuantity(convertedQuantity);
+        return convertedIngredient;
+    }
+
     public Ingredient RemoveByQuantity(IngredientGroup group, Ingredient ingredient)
     {
-        var existingIngredient = group.TryGetByProductId(ingredient.Product.Id);
+        var existingIngredient = group.TryGetByProductId(ingredient.ProductId);
         if (existingIngredient is null)
         {
             group.Add(ingredient);
@@ -49,7 +58,7 @@ public class IngredientGroupEditService : IIngredientGroupEditService
 
         ThrowIfNotConvertible(ingredient, existingIngredient);
 
-        var convertedIngredient = ingredient.WithQuantityConvertedTo(existingIngredient.Quantity.Unit);
+        var convertedIngredient = ConvertedIngredientQuantity(ingredient, existingIngredient);
 
         if (existingIngredient.Quantity <= convertedIngredient.Quantity)
         {
@@ -66,15 +75,16 @@ public class IngredientGroupEditService : IIngredientGroupEditService
         return convertedIngredient.Empty;
     }
 
-    private void ThrowIfNotConvertible(Ingredient ingredient, Ingredient existingIngredient)
+    private void ThrowIfNotConvertible(Ingredient fromIngredient, Ingredient toIngredient)
     {
-        if (ingredient.Quantity.IsConvertibleTo(existingIngredient.Quantity.Unit))
+        if (_quantityConverter.CanConvert(fromIngredient.Quantity.Unit, toIngredient.Quantity.Unit,
+                fromIngredient.ProductId))
         {
             return;
         }
 
-        _logger.LogError("Ingredient {Ingredient} is not compatible to {ExistingIngredient}",
-            ingredient, existingIngredient);
-        throw new IngredientQuantityUnitMismatch(ingredient, existingIngredient);
+        _logger.LogError("Ingredient {FromIngredient} is not compatible to {ToIngredient}",
+            fromIngredient, toIngredient);
+        throw new IngredientQuantityUnitMismatch(fromIngredient, toIngredient);
     }
 }
