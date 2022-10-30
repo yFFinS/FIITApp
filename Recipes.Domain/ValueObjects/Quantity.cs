@@ -165,7 +165,6 @@ public sealed class Quantity : ValueObject<Quantity>
     }
 
     public bool IsImplicitlyConvertibleTo(QuantityUnit unit) => Unit.IsImplicitlyConvertibleTo(unit);
-    public bool IsConvertibleToWithAdditionalInfo(QuantityUnit unit) => Unit.IsConvertibleToWithAdditionalInfo(unit);
 
     public override int GetHashCode() => HashCode.Combine(Value, Unit);
 

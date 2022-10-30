@@ -31,17 +31,6 @@ public static class QuantityUnitExtensions
         return unit.IsWeight() && otherUnit.IsWeight() || unit.IsVolume() && otherUnit.IsVolume();
     }
 
-    public static bool IsConvertibleToWithAdditionalInfo(this QuantityUnit unit, QuantityUnit otherUnit)
-    {
-        if (unit.IsImplicitlyConvertibleTo(otherUnit))
-        {
-            return true;
-        }
-
-        return unit.IsWeight() && otherUnit == QuantityUnit.Pieces ||
-               unit == QuantityUnit.Pieces && otherUnit.IsWeight();
-    }
-
     public static double? TryGetMilliliters(this QuantityUnit unit)
     {
         return unit switch

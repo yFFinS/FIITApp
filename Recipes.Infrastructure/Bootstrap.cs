@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services;
+using Recipes.Application.Services.Preferences;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.Services;
@@ -24,6 +25,9 @@ public static class Bootstrap
         services.AddTransient<IQuantityConverter, QuantityConverter>();
         services.AddTransient<IIngredientGroupEditService, IngredientGroupEditService>();
         services.AddTransient<IShoppingListService, ShoppingListService>();
+        services.AddSingleton<IPreferenceService>(provider =>
+            new PreferenceService(provider.GetService<ILogger<PreferenceService>>()!,
+                "preferences.json"));
 
         return services;
     }

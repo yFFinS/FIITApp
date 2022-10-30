@@ -6,7 +6,7 @@ namespace Recipes.Application.Services.RecipePicker;
 
 public class RecipeFilter
 {
-    private readonly HashSet<Product> _disallowedProducts = new();
+    private readonly HashSet<EntityId> _disallowedProducts = new();
     private readonly Dictionary<EntityId, ProductFilterOption> _productOptions = new();
 
     private int _maxResults = 10;
@@ -24,14 +24,14 @@ public class RecipeFilter
         set => _maxCookDuration = value.HasValue ? Guard.Against.NegativeOrZero(value.Value) : null;
     }
 
-    public void DisallowProduct(Product product)
+    public void DisallowProduct(EntityId productId)
     {
-        _disallowedProducts.Add(product);
+        _disallowedProducts.Add(productId);
     }
 
-    public void AllowProduct(Product product)
+    public void AllowProduct(EntityId productId)
     {
-        _disallowedProducts.Remove(product);
+        _disallowedProducts.Remove(productId);
     }
 
     public void AddOption(ProductFilterOption option)
@@ -44,15 +44,15 @@ public class RecipeFilter
         _productOptions.Remove(option.Product.Id);
     }
 
-    public bool IsAllowed(Product product)
+    public bool IsAllowed(EntityId productId)
     {
-        return !_disallowedProducts.Contains(product);
+        return !_disallowedProducts.Contains(productId);
     }
 
-    public ProductFilterOption? GetOption(Product product)
+    public ProductFilterOption? GetOption(EntityId productId)
     {
-        return _productOptions.TryGetValue(product.Id, out var option) ? option : null;
+        return _productOptions.TryGetValue(productId, out var option) ? option : null;
     }
-    
+
     public int OptionCount => _productOptions.Count;
 }
