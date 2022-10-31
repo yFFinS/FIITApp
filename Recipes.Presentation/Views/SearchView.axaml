@@ -26,16 +26,19 @@
                     Height="40"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center">
-                <TextBox Classes="search"
-                         Background="Transparent"
-                         Watermark="Search recipes"
-                         TextAlignment="Center"
-                         VerticalContentAlignment="Center"
-                         Foreground="Black"
-                         CaretBrush="Black"
-                         FontFamily="Inter"
-                         FontSize="20"
-                         FontStyle="Italic"/>
+                <Panel>
+                    <TextBox Classes="search"
+                             Background="Transparent"
+                             Watermark="Search recipes"
+                             TextAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             Foreground="Black"
+                             CaretBrush="Black"
+                             FontFamily="Inter"
+                             FontSize="20"
+                             FontStyle="Italic"/>
+                    <Button Width="40" VerticalAlignment="Stretch" Command="{Binding SearchCommand}" IsDefault="True"/>
+                </Panel>
             </Border>
         </Grid>
         <ScrollViewer ZIndex="-2">

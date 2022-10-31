@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using ReactiveUI;
+using Recipes.Application.Services.Preferences;
+using Recipes.Application.Services.RecipePicker;
+using Recipes.Domain.Interfaces;
 
 namespace Recipes.Presentation.ViewModels
 {
@@ -18,7 +21,9 @@ namespace Recipes.Presentation.ViewModels
 
         public MainViewModel() : this(NullLogger<MainViewModel>.Instance)
         {
-            Content = new SearchViewModel(new RecipesDataBase().Items, vm => Content = vm);
+            var repo = new RecipeRepository();
+            var picker = new RecipePicker(NullLogger<RecipePicker>.Instance, repo, new PreferenceService(NullLogger<PreferenceService>.Instance, ""));
+            Content = new SearchViewModel(picker, vm => Content = vm);
         }
 
         public MainViewModel(ILogger<MainViewModel> logger)

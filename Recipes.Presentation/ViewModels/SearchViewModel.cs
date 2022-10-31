@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ReactiveUI;
+using Recipes.Application.Interfaces;
+using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.Enums;
+using Recipes.Domain.IngredientsAggregate;
+using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Presentation.ViewModels;
@@ -17,26 +23,45 @@ namespace Recipes.Presentation.ViewModels;
 public class SearchViewModel : ViewModelBase
 {
     private readonly Action<ViewModelBase> _setBaseContent;
-    public SearchViewModel(IEnumerable<Recipe> items, Action<ViewModelBase> setContent)
+    private readonly IRecipePicker _picker;
+    
+    public SearchViewModel(IRecipePicker picker, Action<ViewModelBase> setContent)
     {
-        Items = new ObservableCollection<Recipe>(items);
+        Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
+        _picker = picker;
         _setBaseContent = setContent;
         ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => _setBaseContent(ShowRecipe(recipe)));
+        SearchCommand = ReactiveCommand.Create(Search);
         Dispatcher.UIThread.InvokeAsync(() => { });
     }
 
-    public ObservableCollection<Recipe> Items { get; }
+    public ObservableCollection<Recipe> Items { get; private set; }
     
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
+    public ReactiveCommand<Unit, Unit> SearchCommand { get; }
 
-    public ViewModelBase ShowRecipe(Recipe recipe)
+    private ViewModelBase ShowRecipe(Recipe recipe)
     {
         return new RecipeViewModel(recipe, () => _setBaseContent(this));
     }
+
+    public async void Search()
+    {
+        Items.Clear();
+        foreach (var recipe in await _picker.PickRecipes(new RecipeFilter()))
+        {
+            Items.Add(recipe);
+        }
+    }
 }
 
-internal class RecipesDataBase
+internal class RecipeRepository : IRecipeRepository
 {
+    public Task<List<Recipe>> GetRecipesAsync()
+    {
+        return Task.Run(() => new List<Recipe>(Items));
+    }
+
     public IEnumerable<Recipe> Items
     {
         get
@@ -54,12 +79,10 @@ internal static class RecipeFactory
     private static int i = 0;
     public static Recipe GetRecipe(string name)
     {
-        var result = new Recipe(EntityId.New(), name)
-        {
-            Description = string.Join(";", Enumerable.Repeat($"{i} Description",20)),
-            CookDuration = new TimeSpan(i + 1,0,0,0),
-            Servings = (i + 1) * 4
-        };
+        var result = new Recipe(EntityId.NewId(), name,
+            string.Join(";", Enumerable.Repeat($"{i} Description", 20)),
+            (i + 1) * 4,
+            new TimeSpan(i + 1, 0, 0, 0));
         foreach (var ingredient in GetIngredients(i))
         {
             result.AddIngredient(ingredient);
@@ -77,17 +100,17 @@ internal static class RecipeFactory
     {
         for (var j = 0; j < 10; j++)
         {
-            var ingredient = new Ingredient(EntityId.New(), $"{j} ingr", new Quantity(j + 1, QuantityUnit.Milliliters));
+            var ingredient = new Ingredient(EntityId.NewId(), new Quantity(j + 1, QuantityUnit.Milliliters));
             yield return ingredient;
             if (i > 3 && j == 9)
             {
-                yield return new Ingredient(EntityId.New(), $"{i} ingred", new Quantity(1, QuantityUnit.Milliliters));
+                yield return new Ingredient(EntityId.NewId(), new Quantity(1, QuantityUnit.Milliliters));
             }
         }
 
         if (i == 1)
         {
-            yield return new Ingredient(EntityId.New(), $"{0} ingr", new Quantity(1, QuantityUnit.Milliliters));
+            yield return new Ingredient(EntityId.NewId(), new Quantity(1, QuantityUnit.Milliliters));
         }
     }
 }
