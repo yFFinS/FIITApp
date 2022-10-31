@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Media;
 using Avalonia.Threading;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services.RecipePicker;
@@ -24,31 +20,35 @@ public class SearchViewModel : ViewModelBase
 {
     private readonly Action<ViewModelBase> _setBaseContent;
     private readonly IRecipePicker _picker;
-    
+
     public SearchViewModel(IRecipePicker picker, Action<ViewModelBase> setContent)
     {
         Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
         _picker = picker;
         _setBaseContent = setContent;
         ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => _setBaseContent(ShowRecipe(recipe)));
-        SearchCommand = ReactiveCommand.Create(Search);
+        SearchCommand = ReactiveCommand.Create<string>(Search);
         Dispatcher.UIThread.InvokeAsync(() => { });
     }
 
     public ObservableCollection<Recipe> Items { get; private set; }
     
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
-    public ReactiveCommand<Unit, Unit> SearchCommand { get; }
+    public ReactiveCommand<string, Unit> SearchCommand { get; }
 
     private ViewModelBase ShowRecipe(Recipe recipe)
     {
         return new RecipeViewModel(recipe, () => _setBaseContent(this));
     }
 
-    public async void Search()
+    public async void Search(string name)
     {
+        var filter = new RecipeFilter
+        {
+            SubName = name
+        };
         Items.Clear();
-        foreach (var recipe in await _picker.PickRecipes(new RecipeFilter()))
+        foreach (var recipe in await _picker.PickRecipes(filter))
         {
             Items.Add(recipe);
         }
