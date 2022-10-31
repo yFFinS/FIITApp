@@ -1,23 +1,21 @@
-using System;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Domain.UnitTests.Builders;
+namespace Recipes.Tests.Shared.Builders;
 
-public class RecipeBuilder
+public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
 {
-    private EntityId _id = EntityId.New();
     private string _title = "Test Recipe";
     private string? _description;
     private int _servings = 1;
     private TimeSpan _cookTime = TimeSpan.FromHours(1);
-    private Ingredients _ingredients = new();
+    private IngredientGroup _ingredientGroup = new();
     private CookingTechnic _cookingTechnic = new();
 
-    public RecipeBuilder WithId(EntityId id)
+    public override Recipe Build()
     {
-        _id = id;
-        return this;
+        return new Recipe(Id, _title, _description, _servings, _cookTime, _ingredientGroup, _cookingTechnic);
     }
 
     public RecipeBuilder WithTitle(string title)
@@ -49,15 +47,15 @@ public class RecipeBuilder
         return this;
     }
 
-    public RecipeBuilder WithIngredients(Ingredients ingredients)
+    public RecipeBuilder WithIngredients(IngredientGroup ingredientGroup)
     {
-        _ingredients = ingredients;
+        _ingredientGroup = ingredientGroup;
         return this;
     }
 
     public RecipeBuilder WithIngredient(Ingredient ingredient)
     {
-        _ingredients.Add(ingredient);
+        _ingredientGroup.Add(ingredient);
         return this;
     }
 
@@ -72,22 +70,4 @@ public class RecipeBuilder
         _cookingTechnic.AddStep(cookingStep);
         return this;
     }
-
-    public Recipe Build()
-    {
-        var recipe = new Recipe(_id, _title, _description, _servings, _cookTime);
-        foreach (var ingredient in _ingredients)
-        {
-            recipe.AddIngredient(ingredient);
-        }
-
-        foreach (var step in _cookingTechnic.CookingSteps)
-        {
-            recipe.AddCookingStep(step);
-        }
-
-        return recipe;
-    }
-
-    public static implicit operator Recipe(RecipeBuilder builder) => builder.Build();
 }

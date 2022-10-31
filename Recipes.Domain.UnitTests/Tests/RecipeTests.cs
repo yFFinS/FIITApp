@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Recipes.Domain.Entities.RecipeAggregate;
-using Recipes.Domain.UnitTests.BuilderEntries;
+using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
+using Recipes.Tests.Shared.BuilderEntries;
+using System;
+using System.Collections.Generic;
 
 namespace Recipes.Domain.UnitTests.Tests;
 
@@ -66,9 +67,9 @@ public class RecipeTests
     [Test]
     public void Test_AddingIngredients_AddsInCorrectOrder()
     {
-        Ingredient ingredient1 = An.Ingredient.WithName("1");
-        Ingredient ingredient2 = An.Ingredient.WithName("2");
-        Ingredient ingredient3 = An.Ingredient.WithName("3");
+        Ingredient ingredient1 = An.Ingredient.WithProductId(An.EntityId);
+        Ingredient ingredient2 = An.Ingredient.WithProductId(An.EntityId);
+        Ingredient ingredient3 = An.Ingredient.WithProductId(An.EntityId);
 
         Recipe recipe = A.Recipe;
 
@@ -77,7 +78,7 @@ public class RecipeTests
         recipe.AddIngredient(ingredient3);
 
         var expected = new List<Ingredient> { ingredient1, ingredient2, ingredient3 };
-        Assert.That(recipe.GetIngredients(), Is.EqualTo(expected));
+        Assert.That(recipe.Ingredients, Is.EqualTo(expected));
     }
 
     [Test]
@@ -94,7 +95,7 @@ public class RecipeTests
         recipe.AddCookingStep(cookingStep3);
 
         var expected = new List<CookingStep> { cookingStep1, cookingStep2, cookingStep3 };
-        Assert.That(recipe.GetCookingSteps(), Is.EqualTo(expected));
+        Assert.That(recipe.CookingSteps, Is.EqualTo(expected));
     }
 
     [Test]
@@ -111,38 +112,36 @@ public class RecipeTests
         recipe.InsertCookingStep(0, cookingStep3);
 
         var expected = new List<CookingStep> { cookingStep3, cookingStep1, cookingStep2 };
-        Assert.That(recipe.GetCookingSteps(), Is.EqualTo(expected));
+        Assert.That(recipe.CookingSteps, Is.EqualTo(expected));
     }
 
     [Test]
     public void Test_UpdatingIngredient_UpdatesCorrectly()
     {
-        var id = EntityId.New();
+        var id = EntityId.NewId();
 
-        Ingredient ingredient = An.Ingredient.WithId(id);
+        Ingredient ingredient = An.Ingredient.WithProductId(id);
         Recipe recipe = A.Recipe.WithIngredient(ingredient);
 
-        var updatedIngredient = An.Ingredient
-            .WithId(id)
-            .WithName("Updated");
+        Ingredient updatedIngredient = An.Ingredient.WithProductId(id);
         recipe.UpdateIngredient(updatedIngredient);
 
-        Assert.That(recipe.GetIngredients(), Has.Exactly(1)
-            .With.Property(nameof(Ingredient.Name))
-            .EqualTo("Updated"));
+        Assert.That(recipe.Ingredients, Has.Exactly(1)
+            .With.Property(nameof(Ingredient.ProductId))
+            .EqualTo(updatedIngredient.ProductId));
     }
 
     [Test]
     public void Test_EmptyRecipe_HasEmptyCookingSteps()
     {
         Recipe recipe = A.Recipe;
-        Assert.That(recipe.GetCookingSteps(), Is.Empty);
+        Assert.That(recipe.CookingSteps, Is.Empty);
     }
 
     [Test]
     public void Test_EmptyRecipe_HasEmptyIngredients()
     {
         Recipe recipe = A.Recipe;
-        Assert.That(recipe.GetIngredients(), Is.Empty);
+        Assert.That(recipe.Ingredients, Is.Empty);
     }
 }

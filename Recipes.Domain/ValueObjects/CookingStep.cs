@@ -1,10 +1,11 @@
 using Ardalis.GuardClauses;
+using Recipes.Domain.Base;
 
 namespace Recipes.Domain.ValueObjects;
 
-public readonly struct CookingStep
+public class CookingStep : ValueObject<CookingStep>
 {
-    public readonly string Description;
+    public string Description { get; }
 
     public string DescriptionProperty => Description;
 
