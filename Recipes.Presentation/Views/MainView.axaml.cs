@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Recipes.Presentation.ViewModels;
 
 namespace Recipes.Presentation.Views

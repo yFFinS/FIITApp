@@ -17,8 +17,6 @@ public class RecipeFilter
         get => _maxResults;
         set => _maxResults = Guard.Against.NegativeOrZero(value);
     }
-    
-    public string SubName { get; set; }
 
     public TimeSpan? MaxCookDuration
     {

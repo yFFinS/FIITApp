@@ -2,23 +2,22 @@
 using System.Reactive;
 using ReactiveUI;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
 
 public class RecipeViewModel : ViewModelBase
 {
     public Recipe Recipe { get; set; }
-
     public ReactiveCommand<Unit, Unit> BackCommand { get; }
+    
 
-    private readonly Action _back;
-
-    public RecipeViewModel(Recipe recipe, Action back)
+    public RecipeViewModel(Recipe recipe, IViewContainer container, ViewModelBase parent)
     {
         Recipe = recipe;
-        BackCommand = ReactiveCommand.Create(back);
-        _back = back;
+        BackCommand = ReactiveCommand.Create(() =>
+        {
+            container.Content = parent;
+        });
     }
-    
-    public void Back() => _back();
 }

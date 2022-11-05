@@ -13,20 +13,19 @@ using Recipes.Domain.Enums;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
+using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
 
 public class SearchViewModel : ViewModelBase
 {
-    private readonly Action<ViewModelBase> _setBaseContent;
     private readonly IRecipePicker _picker;
 
-    public SearchViewModel(IRecipePicker picker, Action<ViewModelBase> setContent)
+    public SearchViewModel(IRecipePicker picker, IViewContainer container)
     {
         Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
         _picker = picker;
-        _setBaseContent = setContent;
-        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => _setBaseContent(ShowRecipe(recipe)));
+        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => container.Content = ShowRecipe(recipe, container));
         SearchCommand = ReactiveCommand.Create<string>(Search);
         Dispatcher.UIThread.InvokeAsync(() => { });
     }
@@ -36,16 +35,16 @@ public class SearchViewModel : ViewModelBase
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
 
-    private ViewModelBase ShowRecipe(Recipe recipe)
+    private ViewModelBase ShowRecipe(Recipe recipe, IViewContainer container)
     {
-        return new RecipeViewModel(recipe, () => _setBaseContent(this));
+        return new RecipeViewModel(recipe, container, this);
     }
 
-    public async void Search(string name)
+    public async void Search(string? name)
     {
-        var filter = new RecipeFilter
+        var filter = new RecipeFilter()
         {
-            SubName = name
+            MaxRecipes = 24
         };
         Items.Clear();
         foreach (var recipe in await _picker.PickRecipes(filter))

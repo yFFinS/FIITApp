@@ -12,6 +12,7 @@
         <entry key="Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Views/RecipeView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Views/SearchView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/SelectionView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Views/Styles/RecipeViewStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Views/Styles/SearchBarStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Views/Styles/TitleBarStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />

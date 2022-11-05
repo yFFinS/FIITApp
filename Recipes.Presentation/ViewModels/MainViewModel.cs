@@ -5,10 +5,11 @@ using ReactiveUI;
 using Recipes.Application.Services.Preferences;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Interfaces;
+using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase, IViewContainer
     {
         private readonly ILogger<MainViewModel> _logger;
         private ViewModelBase _content;
@@ -16,15 +17,11 @@ namespace Recipes.Presentation.ViewModels
         public ViewModelBase Content
         {
             get => _content;
-            private set => this.RaiseAndSetIfChanged(ref _content, value);
+            set => this.RaiseAndSetIfChanged(ref _content, value);
         }
 
         public MainViewModel() : this(NullLogger<MainViewModel>.Instance)
-        {
-            var repo = new RecipeRepository();
-            var picker = new RecipePicker(NullLogger<RecipePicker>.Instance, repo, new PreferenceService(NullLogger<PreferenceService>.Instance, ""));
-            Content = new SearchViewModel(picker, vm => Content = vm);
-        }
+        { }
 
         public MainViewModel(ILogger<MainViewModel> logger)
         {

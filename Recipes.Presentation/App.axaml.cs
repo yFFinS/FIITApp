@@ -6,6 +6,7 @@ using Recipes.Infrastructure;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
+using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation
 {
@@ -18,17 +19,20 @@ namespace Recipes.Presentation
         }
     }
 
+    
     public partial class App : Avalonia.Application
     {
         public override void Initialize()
         {
             var services = Bootstrap.ConfigureServices();
 
-            services.AddTransient<MainViewModel>();
-            services.AddSingleton(x => new MainWindow()
+            services.AddSingleton<IViewContainer, MainViewModel>(x => new MainViewModel()
             {
-                DataContext = x.GetRequiredService<MainViewModel>()
+                Content = x.GetRequiredService<SelectionViewModel>()
             });
+            services.AddSingleton<SelectionViewModel>();
+            services.AddSingleton<SearchViewModel>();
+            services.AddSingleton(x => new MainWindow());
             services.AddSingleton(x => new MainView()
             {
                 DataContext = x.GetRequiredService<MainViewModel>()
