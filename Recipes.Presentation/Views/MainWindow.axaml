@@ -36,9 +36,9 @@
                 <Button Classes="title-btn close" Click="CloseBtn_OnClick"/>
             </StackPanel>
         </Panel>
-        <Panel Margin="5 35 5 5"
+        <Border Name="View" Margin="5 35 5 5"
                Background="#E8D9B4">
             <views:MainView/>
-        </Panel>
+        </Border>
     </Panel>
 </Window>

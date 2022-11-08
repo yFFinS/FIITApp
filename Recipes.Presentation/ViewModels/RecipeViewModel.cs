@@ -12,12 +12,12 @@ public class RecipeViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> BackCommand { get; }
     
 
-    public RecipeViewModel(Recipe recipe, IViewContainer container, ViewModelBase parent)
+    public RecipeViewModel(Recipe recipe, Lazy<IViewContainer> container, ViewModelBase parent)
     {
         Recipe = recipe;
         BackCommand = ReactiveCommand.Create(() =>
         {
-            container.Content = parent;
+            container.Value.Content = parent;
         });
     }
 }

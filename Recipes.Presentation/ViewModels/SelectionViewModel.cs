@@ -13,12 +13,12 @@ public class SelectionViewModel : ViewModelBase
 {
     private readonly SearchViewModel _standardSearch;
     
-    public SelectionViewModel(IViewContainer container, SearchViewModel standardSearch)
+    public SelectionViewModel(Lazy<IViewContainer> container, SearchViewModel standardSearch)
     {
         _standardSearch = standardSearch;
         ShowStandardSearch = ReactiveCommand.Create(() =>
         {
-            container.Content = _standardSearch;
+            container.Value.Content = _standardSearch;
         });
     }
 

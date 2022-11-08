@@ -7,10 +7,12 @@ namespace Recipes.Presentation.Views
     public partial class MainWindow : Window
     {
         private Panel MainPanel;
+        internal Border ViewBorder;
         public MainWindow()
         {
             InitializeComponent();
             MainPanel = this.FindControl<Panel>("Main")!;
+            ViewBorder = this.FindControl<Border>("View")!;
         }
 
         protected override void HandleWindowStateChanged(WindowState state)
