@@ -6,6 +6,7 @@ using Recipes.Infrastructure;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
+using Recipes.Application.Interfaces;
 using Recipes.Domain.Interfaces;
 using Recipes.Presentation.Interfaces;
 
@@ -34,6 +35,7 @@ namespace Recipes.Presentation
             services.AddSingleton(x => new Lazy<IViewContainer>(x.GetRequiredService<IViewContainer>));
             //todo
             services.AddSingleton<IRecipeRepository, RecipeRepository>();
+            services.AddSingleton<IProductRepository>(x => null);
             services.AddSingleton<SelectionViewModel>();
             services.AddSingleton<SearchViewModel>();
             services.AddSingleton(x => new MainWindow());

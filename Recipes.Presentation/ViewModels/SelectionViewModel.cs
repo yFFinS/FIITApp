@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging.Abstractions;
 using ReactiveUI;
+using Recipes.Application.Interfaces;
 using Recipes.Application.Services.Preferences;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.ProductAggregate;
@@ -19,9 +20,11 @@ public class SelectionViewModel : ViewModelBase
     
     public ObservableCollection<Product> Products { get; private set; }
 
-    public SelectionViewModel(Lazy<IViewContainer> container, SearchViewModel standardSearch)
+    public SelectionViewModel(Lazy<IViewContainer> container, SearchViewModel standardSearch,
+        IProductRepository productRepository)
     {
         _standardSearch = standardSearch;
+        SearchCommand = ReactiveCommand.Create<string>(name => Search(name, productRepository));
         ShowStandardSearch = ReactiveCommand.Create(() =>
         {
             container.Value.Content = _standardSearch;
@@ -31,4 +34,15 @@ public class SelectionViewModel : ViewModelBase
     }
 
     public ReactiveCommand<Unit, Unit> ShowStandardSearch { get; }
+    
+    public ReactiveCommand<string, Unit> SearchCommand { get; }
+
+    private async void Search(string name, IProductRepository repository)
+    {
+        Products.Clear();
+        foreach (var product in await repository.GetAllProductsAsync())
+        {
+            Products.Add(product);
+        }
+    }
 }
