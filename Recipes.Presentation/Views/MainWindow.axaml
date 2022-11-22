@@ -17,7 +17,7 @@
             <Setter Property="Background" Value="#40F4E6C0"/>
             <Setter Property="Foreground" Value="#000000"/>
         </Style>
-        <StyleInclude Source="/Views/Styles/TitleBarStyles.axaml"/>
+        <StyleInclude Source="/Styles/TitleBarStyles.axaml"/>
     </Window.Styles>
     <Panel Name="Main" Background="#D8C595" IsHitTestVisible="False">
         <Panel Height="35" 

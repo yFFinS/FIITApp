@@ -6,7 +6,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.RecipeView">
     <UserControl.Styles>
-        <StyleInclude Source="/Views/Styles/RecipeViewStyles.axaml"/>
+        <StyleInclude Source="/Styles/RecipeViewStyles.axaml"/>
     </UserControl.Styles>
     <Design.DataContext>
         <viewModels:RecipeViewModel/>

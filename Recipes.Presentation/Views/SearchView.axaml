@@ -5,12 +5,13 @@
              xmlns:presentation="clr-namespace:Recipes.Presentation"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.SearchView"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
     <UserControl.Styles>
-        <StyleInclude Source="/Views/Styles/SearchBarStyles.axaml"/>
+        <StyleInclude Source="/Styles/SearchBarStyles.axaml"/>
     </UserControl.Styles>
     <Panel>
         <Grid Height="60" VerticalAlignment="Top">
@@ -19,32 +20,8 @@
                 <ColumnDefinition Width="3*" MaxWidth="800"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Border Grid.Column="1" Grid.Row="0" 
-                    CornerRadius="20"
-                    Background="#F4EAD0"
-                    ZIndex="10"
-                    Height="40"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center">
-                <Panel>
-                    <TextBox Name="SearchBar"
-                             Classes="search"
-                             Background="Transparent"
-                             Watermark="Search recipes"
-                             TextAlignment="Center"
-                             VerticalContentAlignment="Center"
-                             Foreground="Black"
-                             CaretBrush="Black"
-                             FontFamily="Inter"
-                             FontSize="20"
-                             FontStyle="Italic"/>
-                    <Button Width="40" 
-                            VerticalAlignment="Stretch" 
-                            Command="{Binding SearchCommand}"
-                            CommandParameter="{Binding #SearchBar.Text}"
-                            IsDefault="True"/>
-                </Panel>
-            </Border>
+            <controls:SearchBar Grid.Column="1" Grid.Row="0" />
+            
         </Grid>
         <ScrollViewer ZIndex="-2">
             <ItemsControl ZIndex="100" Items="{Binding Items}">

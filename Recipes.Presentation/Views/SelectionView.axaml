@@ -2,57 +2,55 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.SelectionView">
     <UserControl.Styles>
-        <StyleInclude Source="/Views/Styles/SelectonViewStyles.axaml"/>
+        <StyleInclude Source="/Styles/SelectonViewStyles.axaml" />
     </UserControl.Styles>
     <Panel HorizontalAlignment="Stretch"
            VerticalAlignment="Stretch">
-        <Button Classes="border"
+        <Button Classes="item"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Command="{Binding ShowStandardSearch}">
             Standard Search
         </Button>
-        <Grid RowDefinitions="50, 15, 40, 15, 200" 
-              VerticalAlignment="Center"
+        <Grid RowDefinitions="50, 15, 40, 15, *"
+              VerticalAlignment="Stretch"
               HorizontalAlignment="Center"
-              Width="500">
-            <Label Classes="item" 
+              Width="800">
+            <Label Classes="item"
                    Grid.Row="0"
                    CornerRadius="10">
                 <TextBlock Text="Какие ингредиенты у вас есть?"
                            TextAlignment="Center"
                            VerticalAlignment="Center"
-                           FontSize="20"/>
+                           FontSize="20" />
             </Label>
-            <Grid Grid.Row="2" ColumnDefinitions="*, 5, 40" Height="40">
-                <Border Classes="item" Grid.Column="0" CornerRadius="20"/>
-                <Border Classes="item" Grid.Column="2" CornerRadius="20"/>
-            </Grid>
-            <ScrollViewer Grid.Row="4">
+            <controls:SearchBar Grid.Row="2" />
+            <ScrollViewer Grid.Row="4" VerticalAlignment="Stretch">
                 <ScrollViewer.OpacityMask>
-                    <LinearGradientBrush StartPoint="0, 0"
-                                         EndPoint="0, 200">
+                    <LinearGradientBrush StartPoint="0%, 0%"
+                                         EndPoint="0%, 100%">
                         <LinearGradientBrush.GradientStops>
-                            <GradientStop Offset="0" Color="Black"/>
-                            <GradientStop Offset="0.5" Color="Black"/>
-                            <GradientStop Offset="1" Color="Transparent"/>
+                            <GradientStop Offset="0" Color="Black" />
+                            <GradientStop Offset="0.9" Color="Black" />
+                            <GradientStop Offset="1" Color="Transparent" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
                 </ScrollViewer.OpacityMask>
                 <ItemsControl Grid.Row="4" Items="1234567890">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Spacing="10" Orientation="Vertical"/>
+                            <WrapPanel HorizontalAlignment="Center" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Classes="item" Height="40" HorizontalAlignment="Stretch">
-                                <TextBlock Text="{Binding}"/>
-                            </Border>
+                            <ToggleButton Classes="Card" Height="200" Width="180" Margin="5">
+                                <TextBlock Text="{Binding}" />
+                            </ToggleButton>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
