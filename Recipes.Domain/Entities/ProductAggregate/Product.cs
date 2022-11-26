@@ -7,7 +7,6 @@ namespace Recipes.Domain.Entities.ProductAggregate;
 public sealed class Product : Entity<EntityId>
 {
     private string _name = null!;
-    private PriceForQuantity _priceForQuantity = null!;
 
     public string Name
     {
@@ -15,15 +14,11 @@ public sealed class Product : Entity<EntityId>
         set => _name = Guard.Against.NullOrWhiteSpace(value);
     }
 
-    public PriceForQuantity PriceForQuantity
-    {
-        get => _priceForQuantity;
-        set => _priceForQuantity = Guard.Against.Null(value);
-    }
+    public string? Description { get; set; }
+    public Uri? ImageUrl { get; set; }
 
-    public Product(EntityId id, string name, PriceForQuantity priceForQuantity) : base(id)
+    public Product(EntityId id, string name) : base(id)
     {
         Name = name;
-        PriceForQuantity = priceForQuantity;
     }
 }

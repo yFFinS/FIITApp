@@ -1,5 +1,6 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
+using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
@@ -11,6 +12,7 @@ public class Recipe : Entity<EntityId>
     private string? _description;
     private int _servings;
     private TimeSpan _cookingTime;
+    private EnergyValue _energyValue;
 
     public string Title
     {
@@ -36,6 +38,12 @@ public class Recipe : Entity<EntityId>
         private set => _cookingTime = Guard.Against.NegativeOrZero(value);
     }
 
+    public EnergyValue EnergyValue
+    {
+        get => _energyValue;
+        private set => _energyValue = Guard.Against.Null(value);
+    }
+
     private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
 
@@ -55,9 +63,10 @@ public class Recipe : Entity<EntityId>
     }
 
     public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
-        IngredientGroup ingredientGroup, CookingTechnic cookingTechnic) : this(id, title, description, servings,
-        cookDuration)
+        EnergyValue energyValue, IngredientGroup ingredientGroup, CookingTechnic cookingTechnic)
+        : this(id, title, description, servings, cookDuration)
     {
+        _energyValue = energyValue;
         _ingredientGroup = ingredientGroup;
         _cookingTechnic = cookingTechnic;
     }
@@ -120,6 +129,11 @@ public class Recipe : Entity<EntityId>
     public void UpdateCookDuration(TimeSpan cookDuration)
     {
         CookDuration = cookDuration;
+    }
+
+    public void UpdateEnergyValue(EnergyValue energyValue)
+    {
+        _energyValue = energyValue;
     }
 
     public IReadOnlyCollection<CookingStep> CookingSteps => _cookingTechnic.CookingSteps;
