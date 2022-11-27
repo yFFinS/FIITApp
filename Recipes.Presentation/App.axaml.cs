@@ -35,7 +35,7 @@ namespace Recipes.Presentation
             services.AddSingleton<IViewContainer, MainViewModel>();
             services.AddSingleton(x => new Lazy<IViewContainer>(x.GetRequiredService<IViewContainer>));
             //todo
-            services.AddSingleton<IRecipeRepository, RecipeRepository>();
+            services.AddSingleton<IRecipeRepository>(x => null);
             services.AddSingleton<IProductRepository>(x => null);
             services.AddSingleton<IImageLoader>(x => null);
             services.AddSingleton<ProductSearchViewModel>();

@@ -47,11 +47,7 @@ public class ProductSearchViewModel : ViewModelBase
     private void ShowRecipes(Lazy<IViewContainer> container, IImageLoader loader)
     {
         //todo findrecipes by products
-        var recipes = new List<Recipe>
-        {
-            new(EntityId.NewId(), "Apple"),
-            new(EntityId.NewId(), "Apple")
-        };
+        var recipes = new List<Recipe>();
         container.Value.Content = new RecipeListViewModel(recipes, container, loader);
     }
 }
