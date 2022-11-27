@@ -18,15 +18,14 @@ public sealed class Product : Entity<EntityId>
 
     public string? Description { get; set; }
 
-    [XmlIgnore]
-    public Uri? ImageUrl { get; set; }
+    [XmlIgnore] public Uri? ImageUrl { get; set; }
 
     [XmlAttribute("uri")]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public string? ImageUrlString
     {
-        get { return ImageUrl?.ToString(); }
-        set { ImageUrl = value == null ? null : new Uri(value); }
+        get => ImageUrl?.ToString();
+        set => ImageUrl = value == null ? null : new Uri(value);
     }
 
     public Product(EntityId id, string name) : base(id)
@@ -34,5 +33,7 @@ public sealed class Product : Entity<EntityId>
         Name = name;
     }
 
-    private Product() : base() { }
+    private Product()
+    {
+    }
 }

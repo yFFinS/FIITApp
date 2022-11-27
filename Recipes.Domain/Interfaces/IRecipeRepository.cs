@@ -6,7 +6,7 @@ namespace Recipes.Domain.Interfaces;
 
 public interface IRecipeRepository
 {
-    Task<List<Recipe>> GetRecipesAsync();
+    Task<List<Recipe>> GetAllRecipesAsync();
     Task<Recipe?> GetRecipeByIdAsync(EntityId recipeId);
     Task<Recipe?> GetRecipeByNameAsync(string recipeName);
     Task AddRecipesAsync(IEnumerable<Recipe> recipes);

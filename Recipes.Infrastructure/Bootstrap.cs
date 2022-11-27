@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Avalonia.Media;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services;
@@ -28,6 +29,11 @@ public static class Bootstrap
         services.AddSingleton<IPreferenceService>(provider =>
             new PreferenceService(provider.GetService<ILogger<PreferenceService>>()!,
                 "preferences.json"));
+
+        services.AddSingleton<IProductRepository, ProductRepository>();
+        services.AddSingleton<IRecipeRepository, RecipeRepository>();
+        services.AddSingleton<IImageLoader>(sp =>
+            new CachingImageLoader(sp.GetService<ILogger<CachingImageLoader>>()!, cacheSize: 1024));
 
         return services;
     }

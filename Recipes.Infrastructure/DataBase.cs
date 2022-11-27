@@ -21,6 +21,7 @@ namespace Recipes.Infrastructure
             {
                 rootPath = rootPath[..(rootPath.Length - 2)];
             }
+
             return string.Join(slash, rootPath) + slash;
         }
 
@@ -39,14 +40,20 @@ namespace Recipes.Infrastructure
             xmlSerializer.Serialize(fs, products);
         }
 
-        private static List<Product>? GetAllProducts()
+        public static List<Product> GetAllProducts()
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Product>));
 
             string path = GetPath();
+            var productsPath = path + "Products.xml";
 
-            using FileStream fs = new(path + "Products.xml", FileMode.OpenOrCreate);
-            return xmlSerializer.Deserialize(fs) as List<Product>;
+            if (!File.Exists(productsPath))
+            {
+                return new List<Product>();
+            }
+
+            using var stream = new FileStream(productsPath, FileMode.Open);
+            return (List<Product>)xmlSerializer.Deserialize(stream)!;
         }
 
         public static void InsertRecipe(Recipe obj)
@@ -64,14 +71,20 @@ namespace Recipes.Infrastructure
             xmlSerializer.Serialize(fs, recipes);
         }
 
-        private static List<Recipe>? GetAllRecipes()
+        public static List<Recipe> GetAllRecipes()
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Recipe>));
 
             string path = GetPath();
+            var recipesPath = path + "Recipes.xml";
 
-            using FileStream fs = new(path + "Recipes.xml", FileMode.OpenOrCreate);
-            return xmlSerializer.Deserialize(fs) as List<Recipe>;
+            if (!File.Exists(recipesPath))
+            {
+                return new List<Recipe>();
+            }
+
+            using var stream = new FileStream(recipesPath, FileMode.Open);
+            return (List<Recipe>)xmlSerializer.Deserialize(stream)!;
         }
     }
 }

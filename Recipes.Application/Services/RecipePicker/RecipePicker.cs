@@ -24,7 +24,7 @@ public class RecipePicker : IRecipePicker
     {
         _logger.LogInformation("Picking recipes for filter {@Filter}", filter);
 
-        var recipes = await _recipeRepository.GetRecipesAsync();
+        var recipes = await _recipeRepository.GetAllRecipesAsync();
         var allowedRecipes = recipes
             .Where(rec => filter.MaxCookDuration is null || rec.CookDuration <= filter.MaxCookDuration)
             .Where(rec => IsAllProductsAllowed(rec, filter));
