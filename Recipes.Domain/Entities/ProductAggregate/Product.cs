@@ -1,6 +1,8 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
 using Recipes.Domain.ValueObjects;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Recipes.Domain.Entities.ProductAggregate;
 
@@ -15,10 +17,22 @@ public sealed class Product : Entity<EntityId>
     }
 
     public string? Description { get; set; }
+
+    [XmlIgnore]
     public Uri? ImageUrl { get; set; }
+
+    [XmlAttribute("uri")]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    public string? ImageUrlString
+    {
+        get { return ImageUrl?.ToString(); }
+        set { ImageUrl = value == null ? null : new Uri(value); }
+    }
 
     public Product(EntityId id, string name) : base(id)
     {
         Name = name;
     }
+
+    private Product() : base() { }
 }
