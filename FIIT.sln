@@ -27,12 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.Tests.Shared", "Rec
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Recipes.DatabaseEditor", "Recipes.DatabaseEditor\Recipes.DatabaseEditor.csproj", "{0174594F-A68C-4F2D-834F-ACA5FC5C9188}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B9B74F2A-3B09-481E-B313-346EBACBA835}"
-	ProjectSection(SolutionItems) = preProject
-		Products.xml = Products.xml
-		Recipes.xml = Recipes.xml
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
