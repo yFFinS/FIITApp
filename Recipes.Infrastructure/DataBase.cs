@@ -13,17 +13,6 @@ namespace Recipes.Infrastructure
 {
     public static class DataBase
     {
-        private static string GetPath()
-        {
-            var slash = Path.GetFullPath("/")[2..];
-            var rootPath = Environment.CurrentDirectory.Split(slash);
-            while (rootPath[rootPath.Length - 1] != "FIITApp")
-            {
-                rootPath = rootPath[..(rootPath.Length - 2)];
-            }
-            return string.Join(slash, rootPath) + slash;
-        }
-
         public static void InsertProduct(Product obj)
         {
             var products = GetAllProducts();
@@ -33,9 +22,7 @@ namespace Recipes.Infrastructure
 
             var xmlSerializer = new XmlSerializer(products.GetType());
 
-            string path = GetPath();
-
-            using FileStream fs = new(path + "Products.xml", FileMode.OpenOrCreate);
+            using FileStream fs = new("Products.xml", FileMode.OpenOrCreate);
             xmlSerializer.Serialize(fs, products);
         }
 
@@ -43,9 +30,7 @@ namespace Recipes.Infrastructure
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Product>));
 
-            string path = GetPath();
-
-            using FileStream fs = new(path + "Products.xml", FileMode.OpenOrCreate);
+            using FileStream fs = new("Products.xml", FileMode.OpenOrCreate);
             return xmlSerializer.Deserialize(fs) as List<Product>;
         }
 
@@ -58,9 +43,7 @@ namespace Recipes.Infrastructure
 
             var xmlSerializer = new XmlSerializer(recipes.GetType());
 
-            string path = GetPath();
-
-            using FileStream fs = new(path + "Recipes.xml", FileMode.OpenOrCreate);
+            using FileStream fs = new("Recipes.xml", FileMode.OpenOrCreate);
             xmlSerializer.Serialize(fs, recipes);
         }
 
@@ -68,9 +51,7 @@ namespace Recipes.Infrastructure
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Recipe>));
 
-            string path = GetPath();
-
-            using FileStream fs = new(path + "Recipes.xml", FileMode.OpenOrCreate);
+            using FileStream fs = new("Recipes.xml", FileMode.OpenOrCreate);
             return xmlSerializer.Deserialize(fs) as List<Recipe>;
         }
     }
