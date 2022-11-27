@@ -12,7 +12,7 @@ public class Recipe : Entity<EntityId>
     private string? _description;
     private int _servings;
     private TimeSpan _cookingTime;
-    private EnergyValue _energyValue;
+    private EnergyValue _energyValue = null!;
 
     public string Title
     {
@@ -44,18 +44,22 @@ public class Recipe : Entity<EntityId>
         private set => _energyValue = Guard.Against.Null(value);
     }
 
+    public Uri? ImageUrl { get; set; }
+
     private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
 
 
-    public Recipe(EntityId id, string title) : base(id)
+    public Recipe(EntityId id, string title, EnergyValue energyValue) : base(id)
     {
         Title = title;
+        EnergyValue = energyValue;
         _ingredientGroup = new IngredientGroup();
         _cookingTechnic = new CookingTechnic();
     }
 
-    public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration) : this(id, title)
+    public Recipe(EntityId id, string title, string? description, int servings,
+        TimeSpan cookDuration, EnergyValue energyValue) : this(id, title, energyValue)
     {
         Description = description;
         Servings = servings;
@@ -64,9 +68,8 @@ public class Recipe : Entity<EntityId>
 
     public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
         EnergyValue energyValue, IngredientGroup ingredientGroup, CookingTechnic cookingTechnic)
-        : this(id, title, description, servings, cookDuration)
+        : this(id, title, description, servings, cookDuration, energyValue)
     {
-        _energyValue = energyValue;
         _ingredientGroup = ingredientGroup;
         _cookingTechnic = cookingTechnic;
     }

@@ -10,6 +10,11 @@ namespace Recipes.Domain.ValueObjects;
 
 public sealed class Quantity : ValueObject<Quantity>
 {
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is Quantity other && Equals(other);
+    }
+
     public const double ComparisonEpsilon = 1e-8;
 
     public Quantity(double value, QuantityUnit unit)
@@ -210,12 +215,9 @@ public sealed class Quantity : ValueObject<Quantity>
             return null;
         }
 
-        if (!double.TryParse(split[0].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture,
-                out var amount))
-        {
-            return null;
-        }
-
-        return new Quantity(amount, unit);
+        return !double.TryParse(split[0].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture,
+            out var amount)
+            ? null
+            : new Quantity(amount, unit);
     }
 }
