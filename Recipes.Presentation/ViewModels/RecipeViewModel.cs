@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using ReactiveUI;
+using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Presentation.Interfaces;
 
@@ -12,7 +13,7 @@ public class RecipeViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> BackCommand { get; }
     
 
-    public RecipeViewModel(Recipe recipe, Lazy<IViewContainer> container, ViewModelBase parent)
+    public RecipeViewModel(Recipe recipe, Lazy<IViewContainer> container, IImageLoader imageLoader, ViewModelBase parent)
     {
         Recipe = recipe;
         BackCommand = ReactiveCommand.Create(() =>

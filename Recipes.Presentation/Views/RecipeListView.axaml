@@ -1,0 +1,40 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Recipes.Presentation.Views.RecipeListView">
+    <Design.DataContext>
+        <viewModels:RecipeListViewModel/>
+    </Design.DataContext>
+    <ScrollViewer Margin="200 0"
+                  HorizontalScrollBarVisibility="Visible"
+                  VerticalScrollBarVisibility="Disabled">
+        <ItemsControl Items="{Binding Recipes}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="20"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border CornerRadius="20"
+                            Background="#0fffffff"
+                            Width="1000"
+                            VerticalAlignment="Stretch"
+                            Margin="20">
+                        <Panel>
+                            <Image Source="{Binding 
+                            Converter={StaticResource RecipeToImageConverter},
+                            ConverterParameter={Binding $parent[ItemsControl].DataContext.ImageLoader}}"/>
+                            <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
+                                <TextBlock Text="{Binding Title}"/>
+                            </Button>
+                        </Panel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

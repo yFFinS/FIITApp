@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Recipes.Presentation.Views;
 
-public partial class SelectionView : UserControl
+public partial class RecipeListView : UserControl
 {
-    public SelectionView()
+    public RecipeListView()
     {
         InitializeComponent();
     }

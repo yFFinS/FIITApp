@@ -7,7 +7,7 @@
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Recipes.Presentation.Views.SearchView"
+             x:Class="Recipes.Presentation.Views.RecipeSearchView"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
     <UserControl.Styles>

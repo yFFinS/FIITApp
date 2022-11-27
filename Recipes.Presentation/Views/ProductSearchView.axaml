@@ -1,20 +1,25 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
+﻿
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
+             xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Recipes.Presentation.Views.SelectionView">
+             x:Class="Recipes.Presentation.Views.ProductSearchView">
     <UserControl.Styles>
-        <StyleInclude Source="/Styles/SelectonViewStyles.axaml" />
+        <StyleInclude Source="/Styles/ProductSearchViewStyles.axaml" />
     </UserControl.Styles>
+    <Design.DataContext>
+        <viewModels:ProductSearchViewModel/>
+    </Design.DataContext>
     <Panel HorizontalAlignment="Stretch"
            VerticalAlignment="Stretch">
         <Button Classes="item"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Command="{Binding ShowStandardSearch}">
-            Standard Search
+                Command="{Binding ShowRecipesCommand}">
+            Find
         </Button>
         <Grid RowDefinitions="50, 15, 40, 15, *"
               VerticalAlignment="Stretch"
@@ -40,7 +45,7 @@
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
                 </ScrollViewer.OpacityMask>
-                <ItemsControl Grid.Row="4" Items="1234567890">
+                <ItemsControl Grid.Row="4" Items="{Binding Products}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel HorizontalAlignment="Center" />

@@ -17,15 +17,16 @@ using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
 
-public class SearchViewModel : ViewModelBase
+public class RecipeSearchViewModel : ViewModelBase
 {
     private readonly IRecipePicker _picker;
 
-    public SearchViewModel(IRecipePicker picker, Lazy<IViewContainer> container)
+    public RecipeSearchViewModel(Lazy<IViewContainer> container, IImageLoader imageLoader, IRecipePicker picker)
     {
         Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
         _picker = picker;
-        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => container.Value.Content = ShowRecipe(recipe, container));
+        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe =>
+            container.Value.Content = ShowRecipe(recipe, container, imageLoader));
         SearchCommand = ReactiveCommand.Create<string>(Search);
         Dispatcher.UIThread.InvokeAsync(() => { });
     }
@@ -35,9 +36,9 @@ public class SearchViewModel : ViewModelBase
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
 
-    private ViewModelBase ShowRecipe(Recipe recipe, Lazy<IViewContainer> container)
+    private ViewModelBase ShowRecipe(Recipe recipe, Lazy<IViewContainer> container, IImageLoader loader)
     {
-        return new RecipeViewModel(recipe, container, this);
+        return new RecipeViewModel(recipe, container, loader, this);
     }
 
     public async void Search(string? name)

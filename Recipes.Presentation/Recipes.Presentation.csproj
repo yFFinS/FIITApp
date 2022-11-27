@@ -31,7 +31,6 @@
     <ItemGroup>
       <AdditionalFiles Include="Styles\RecipeViewStyles.axaml" />
       <AdditionalFiles Include="Styles\SearchBarStyles.axaml" />
-      <AdditionalFiles Include="Styles\SelectonViewStyles.axaml" />
       <AdditionalFiles Include="Styles\TitleBarStyles.axaml" />
     </ItemGroup>
     <ItemGroup>

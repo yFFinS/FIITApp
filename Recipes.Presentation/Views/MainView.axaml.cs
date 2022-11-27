@@ -9,7 +9,7 @@ namespace Recipes.Presentation.Views
     {
         public MainView()
         {
-            DataContext = new MainViewModel();
+            // DataContext = new MainViewModel();
             InitializeComponent();
         }
     }

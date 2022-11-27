@@ -9,9 +9,27 @@
              Foreground="Black"
              Background="Transparent"
              VerticalAlignment="Stretch"
-             HorizontalAlignment="Stretch"
-             Content="{Binding Content}">
+             HorizontalAlignment="Stretch">
     <Design.DataContext>
         <viewModels:MainViewModel/>
     </Design.DataContext>
+    <Panel>
+        <ContentControl Content="{Binding Content}"/>
+        <ItemsControl Items="{Binding MenuItems}"
+                 Width="200"
+                 HorizontalAlignment="Left"
+                 Background="Transparent">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Height="40"
+                            Command="{Binding $parent[ItemsControl].DataContext.ChangeView}"
+                            CommandParameter="{Binding Page}">
+                        <TextBlock Text="{Binding Title}"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Panel>
 </UserControl>

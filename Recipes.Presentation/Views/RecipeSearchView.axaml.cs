@@ -7,9 +7,9 @@ using Recipes.Presentation.ViewModels;
 
 namespace Recipes.Presentation.Views;
 
-public partial class SearchView : UserControl
+public partial class RecipeSearchView : UserControl
 {
-    public SearchView()
+    public RecipeSearchView()
     {
         InitializeComponent();
         // DataContext = new SearchViewModel(new RecipesDataBase().Items);
