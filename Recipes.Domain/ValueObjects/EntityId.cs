@@ -1,3 +1,4 @@
+using System.Xml.Serialization;
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
 
@@ -5,7 +6,7 @@ namespace Recipes.Domain.ValueObjects;
 
 public class EntityId : ValueObject<EntityId>
 {
-    public Guid Value { get; }
+    [XmlAttribute("value")] public Guid Value { get; }
 
     public EntityId(string value) : this(Guid.Parse(value))
     {
@@ -20,4 +21,8 @@ public class EntityId : ValueObject<EntityId>
 
 
     public static EntityId NewId() => new(Guid.NewGuid());
+
+    private EntityId()
+    {
+    }
 }

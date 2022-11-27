@@ -61,7 +61,16 @@ public sealed class AddRecipeCommand : Command
     private Recipe? TryLoadRecipeFromFile(string filePath)
     {
         var text = File.ReadAllText(filePath);
-        var recipe = _recipeParser.TryParseRecipe(text);
+        Recipe? recipe = null;
+
+        try
+        {
+            recipe = _recipeParser.TryParseRecipe(text);
+        }
+        catch (RecipeParsingException e)
+        {
+            _output.WriteLine($"Не удалось загрузить рецепт {filePath}: {e.Message}");
+        }
 
         if (recipe is not null)
         {
