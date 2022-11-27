@@ -1,5 +1,6 @@
 ﻿using System;
 using Avalonia;
+using Avalonia.ReactiveUI;
 
 namespace Recipes.Presentation.Desktop
 {
@@ -13,10 +14,12 @@ namespace Recipes.Presentation.Desktop
             => BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
 
-        // Avalonia configuration, don't remove; also used by visual designer.
+
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
-                .LogToTrace();
+                .LogToTrace()
+                .UseReactiveUI();
+        // Avalonia configuration, don't remove; also used by visual designer.
     }
 }

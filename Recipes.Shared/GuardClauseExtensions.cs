@@ -9,7 +9,7 @@ public static class GuardClauseExtensions
         double input, [InvokerParameterName] string? parameterName = null)
     {
         input = guardClause.Negative(input, parameterName);
-        
+
         if (double.IsNaN(input))
         {
             throw new ArgumentException("Value cannot be NaN.", parameterName);

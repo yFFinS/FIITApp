@@ -14,4 +14,8 @@
       <ProjectReference Include="..\Recipes.Shared\Recipes.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Entities\PreferencesAggregate" />
+    </ItemGroup>
+
 </Project>

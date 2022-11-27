@@ -5,7 +5,7 @@ using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Entities.ShoppingListAggregate;
 
-public class ShoppingList : BaseEntity
+public class ShoppingList : Entity<EntityId>
 {
     private readonly Dictionary<EntityId, Recipe> _recipes;
     private readonly IngredientGroup _ingredientGroup;

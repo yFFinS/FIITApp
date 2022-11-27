@@ -1,53 +1,76 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
+using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
 
-public class Recipe : BaseEntity
+public class Recipe : Entity<EntityId>
 {
     private string _title = null!;
     private string? _description;
     private int _servings;
     private TimeSpan _cookingTime;
+    private EnergyValue _energyValue = null!;
 
     public string Title
     {
         get => _title;
-        private set => _title = Guard.Against.Null(value);
+        set => _title = Guard.Against.Null(value);
     }
 
     public string? Description
     {
         get => _description;
-        private set => _description = value;
+        set => _description = value;
     }
 
     public int Servings
     {
         get => _servings;
-        private set => _servings = Guard.Against.NegativeOrZero(value);
+        set => _servings = Guard.Against.NegativeOrZero(value);
     }
 
     public TimeSpan CookDuration
     {
         get => _cookingTime;
-        private set => _cookingTime = Guard.Against.NegativeOrZero(value);
+        set => _cookingTime = Guard.Against.NegativeOrZero(value);
+    }
+
+    public EnergyValue EnergyValue
+    {
+        get => _energyValue;
+        set => _energyValue = Guard.Against.Null(value);
+    }
+
+    [XmlIgnore]
+    public Uri? ImageUrl { get; set; }
+
+    [XmlAttribute("uri")]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    public string? ImageUrlString
+    {
+        get { return ImageUrl?.ToString(); }
+        set { ImageUrl = value == null ? null : new Uri(value); }
     }
 
     private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
 
 
-    public Recipe(EntityId id, string title) : base(id)
+    public Recipe(EntityId id, string title, EnergyValue energyValue) : base(id)
     {
         Title = title;
+        EnergyValue = energyValue;
         _ingredientGroup = new IngredientGroup();
         _cookingTechnic = new CookingTechnic();
     }
 
-    public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration) : this(id, title)
+    public Recipe(EntityId id, string title, string? description, int servings,
+        TimeSpan cookDuration, EnergyValue energyValue) : this(id, title, energyValue)
     {
         Description = description;
         Servings = servings;
@@ -55,8 +78,8 @@ public class Recipe : BaseEntity
     }
 
     public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
-        IngredientGroup ingredientGroup, CookingTechnic cookingTechnic) : this(id, title, description, servings,
-        cookDuration)
+        EnergyValue energyValue, IngredientGroup ingredientGroup, CookingTechnic cookingTechnic)
+        : this(id, title, description, servings, cookDuration, energyValue)
     {
         _ingredientGroup = ingredientGroup;
         _cookingTechnic = cookingTechnic;
@@ -91,14 +114,14 @@ public class Recipe : BaseEntity
     public void AddIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        
+
         _ingredientGroup.Add(ingredient);
     }
 
     public void RemoveIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
-        
+
         _ingredientGroup.Remove(ingredient);
     }
 
@@ -122,6 +145,13 @@ public class Recipe : BaseEntity
         CookDuration = cookDuration;
     }
 
+    public void UpdateEnergyValue(EnergyValue energyValue)
+    {
+        _energyValue = energyValue;
+    }
+
     public IReadOnlyCollection<CookingStep> CookingSteps => _cookingTechnic.CookingSteps;
     public IReadOnlyCollection<Ingredient> Ingredients => _ingredientGroup.AsReadOnlyCollection();
+
+    private Recipe() : base() { }
 }

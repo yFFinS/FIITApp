@@ -3,11 +3,25 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="Recipes.Presentation/App.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Recipes.Presentation/App.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Recipes.Presentation/Views/MainView.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Styles/ProductSearchViewStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Styles/SearchBarStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/UI/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.csproj" />
-        <entry key="Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.csproj" />
+        <entry key="Recipes.Presentation/Views/MainView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/ProductSearchView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/RecipeListView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/RecipeSearchView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/RecipeView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/SearchView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/SelectionView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/Styles/RecipeViewStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/Styles/SearchBarStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/Styles/SelectonViewStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Views/Styles/TitleBarStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
       </map>
     </option>
   </component>

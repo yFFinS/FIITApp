@@ -1,39 +1,39 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
 using Recipes.Domain.ValueObjects;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Recipes.Domain.Entities.ProductAggregate;
 
-public sealed class Product : BaseEntity
+public sealed class Product : Entity<EntityId>
 {
     private string _name = null!;
-    private PriceForQuantity _priceForQuantity = null!;
 
     public string Name
     {
         get => _name;
-        private set => _name = Guard.Against.NullOrWhiteSpace(value);
+        set => _name = Guard.Against.NullOrWhiteSpace(value);
     }
 
-    public PriceForQuantity PriceForQuantity
+    public string? Description { get; set; }
+
+    [XmlIgnore] public Uri? ImageUrl { get; set; }
+
+    [XmlAttribute("uri")]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    public string? ImageUrlString
     {
-        get => _priceForQuantity;
-        private set => _priceForQuantity = Guard.Against.Null(value);
+        get => ImageUrl?.ToString();
+        set => ImageUrl = value == null ? null : new Uri(value);
     }
 
-    public Product(EntityId id, string name, PriceForQuantity priceForQuantity) : base(id)
+    public Product(EntityId id, string name) : base(id)
     {
         Name = name;
-        PriceForQuantity = priceForQuantity;
     }
 
-    public void UpdateName(string name)
+    private Product()
     {
-        Name = name;
-    }
-
-    public void UpdatePriceForQuantity(PriceForQuantity priceForQuantity)
-    {
-        PriceForQuantity = priceForQuantity;
     }
 }

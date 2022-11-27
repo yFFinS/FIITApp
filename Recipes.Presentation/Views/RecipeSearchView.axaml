@@ -1,0 +1,49 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:presentation="clr-namespace:Recipes.Presentation"
+             xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Recipes.Presentation.Views.RecipeSearchView"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/SearchBarStyles.axaml"/>
+    </UserControl.Styles>
+    <Panel>
+        <Grid Height="60" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*" MaxWidth="800"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <controls:SearchBar Grid.Column="1" Grid.Row="0" />
+            
+        </Grid>
+        <ScrollViewer ZIndex="-2">
+            <ItemsControl ZIndex="100" Items="{Binding Items}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Center" MaxWidth="1500"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Classes="recipe"
+                                CommandParameter="{Binding}"
+                                Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
+                            <TextBlock VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding Title}"
+                                       FontSize="16"
+                                       Foreground="AntiqueWhite"/>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Panel>
+</UserControl>
