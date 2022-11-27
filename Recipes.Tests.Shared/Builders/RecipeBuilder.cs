@@ -10,12 +10,14 @@ public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
     private string? _description;
     private int _servings = 1;
     private TimeSpan _cookTime = TimeSpan.FromHours(1);
+    private EnergyValue _energyValue = new(100, 90, 80, 70);
     private IngredientGroup _ingredientGroup = new();
     private CookingTechnic _cookingTechnic = new();
 
     public override Recipe Build()
     {
-        return new Recipe(Id, _title, _description, _servings, _cookTime, _ingredientGroup, _cookingTechnic);
+        return new Recipe(Id, _title, _description, _servings, _cookTime, _energyValue, _ingredientGroup,
+            _cookingTechnic);
     }
 
     public RecipeBuilder WithTitle(string title)
@@ -30,11 +32,6 @@ public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
         return this;
     }
 
-    public RecipeBuilder WithoutDescription()
-    {
-        return WithDescription(null);
-    }
-
     public RecipeBuilder WithServings(int servings)
     {
         _servings = servings;
@@ -44,6 +41,12 @@ public class RecipeBuilder : BaseEntityBuilder<Recipe, RecipeBuilder>
     public RecipeBuilder WithCookingTime(TimeSpan cookingTime)
     {
         _cookTime = cookingTime;
+        return this;
+    }
+
+    public RecipeBuilder WithEnergyValue(EnergyValue energyValue)
+    {
+        _energyValue = energyValue;
         return this;
     }
 

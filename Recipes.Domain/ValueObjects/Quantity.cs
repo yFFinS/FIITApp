@@ -1,3 +1,4 @@
+using System.Globalization;
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
 using Recipes.Domain.Enums;
@@ -9,6 +10,11 @@ namespace Recipes.Domain.ValueObjects;
 
 public sealed class Quantity : ValueObject<Quantity>
 {
+    public override bool Equals(object? obj)
+    {
+        return ReferenceEquals(this, obj) || obj is Quantity other && Equals(other);
+    }
+
     public const double ComparisonEpsilon = 1e-8;
 
     public Quantity(double value, QuantityUnit unit)
@@ -179,5 +185,39 @@ public sealed class Quantity : ValueObject<Quantity>
         var otherElementaryUnit = quantity.ToElementaryUnit();
 
         return elementaryUnit < otherElementaryUnit * (1 + ratio);
+    }
+
+    public static Quantity? TryParse(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        var split = value.Split();
+        var unit = split[1].Trim() switch
+        {
+            "г" => QuantityUnit.Grams,
+            "мл" => QuantityUnit.Milliliters,
+            "шт" => QuantityUnit.Pieces,
+            "ч.л" => QuantityUnit.TeaSpoons,
+            "ст.л" => QuantityUnit.TableSpoons,
+            "дс.л" => QuantityUnit.DessertSpoons,
+            "ст" => QuantityUnit.Cups,
+            "кг" => QuantityUnit.Kilograms,
+            "дл" => QuantityUnit.Decilitres,
+            "л" => QuantityUnit.Liters,
+            _ => (QuantityUnit)(-1)
+        };
+
+        if (unit == (QuantityUnit)(-1))
+        {
+            return null;
+        }
+
+        return !double.TryParse(split[0].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture,
+            out var amount)
+            ? null
+            : new Quantity(amount, unit);
     }
 }
