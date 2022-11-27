@@ -12,9 +12,10 @@ namespace Recipes.Presentation.Desktop
         [STAThread]
         public static void Main(string[] args)
         {
-            var lol = Environment.CurrentDirectory;
+            var exit = BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+            Environment.Exit(exit);
         }
-
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
