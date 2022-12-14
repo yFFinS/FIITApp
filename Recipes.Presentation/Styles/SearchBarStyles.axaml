@@ -1,8 +1,9 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Recipes.Presentation.Controls">
     <Design.PreviewWith>
         <Border Padding="20">
-            <!-- Add Controls for Previewer Here -->
+            <controls:SearchBar/>
         </Border>
     </Design.PreviewWith>
 
@@ -20,8 +21,8 @@
                                        TextAlignment="{TemplateBinding TextAlignment}"
                                        TextWrapping="{TemplateBinding TextWrapping}"
                                        IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"/>
                             <TextPresenter Name="PART_TextPresenter"
                                            Text="{TemplateBinding Text, Mode=TwoWay}"
                                            CaretIndex="{TemplateBinding CaretIndex}"
@@ -33,8 +34,8 @@
                                            SelectionBrush="{TemplateBinding SelectionBrush}"
                                            SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
                                            CaretBrush="{TemplateBinding CaretBrush}"
-                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"/>
                         </Panel>
                     </Border>
                 </ControlTemplate>

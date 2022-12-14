@@ -1,0 +1,44 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20" Background="{DynamicResource AppBackground}">
+            <StackPanel Spacing="10">
+                <Button Width="100" Height="100" Content="A" />
+                <TextBlock Text="Abc"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Panel>
+                        <Border Name="Base" 
+                                Width="{TemplateBinding Width}" 
+                                Height="{TemplateBinding Height}" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="{TemplateBinding CornerRadius}"/>
+                        <Border Name="Hover" 
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}" 
+                                Background="Transparent" 
+                                CornerRadius="{TemplateBinding CornerRadius}"/>
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          Padding="8"/>
+                    </Panel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="Button:pointerover/template/Border#Hover">
+        <Setter Property="Background" Value="{DynamicResource ButtonHover}"/>
+    </Style>
+    
+    
+    <Style Selector="TextBlock">
+        <Setter Property="FontFamily" Value="Serif"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextForeground}"/>
+    </Style>
+</Styles>

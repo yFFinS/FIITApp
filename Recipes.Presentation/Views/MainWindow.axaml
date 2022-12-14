@@ -1,6 +1,5 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Recipes.Presentation.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:Recipes.Presentation.Views"
@@ -19,25 +18,19 @@
         </Style>
         <StyleInclude Source="/Styles/TitleBarStyles.axaml"/>
     </Window.Styles>
-    <Panel Name="Main" Background="#D8C595" IsHitTestVisible="False">
+    <Panel Name="Main" Background="{DynamicResource AppBackground}" IsHitTestVisible="False">
         <Panel Height="35" 
                VerticalAlignment="Top" 
                HorizontalAlignment="Stretch" 
                IsHitTestVisible="False" 
-               Background="#D8C595">
+               Background="{DynamicResource AppTitleBarBackground}">
             <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
-                <StackPanel.Styles>
-                    <Style Selector="Button">
-                        <Setter Property="Background" Value="#D8C595"></Setter>
-                    </Style>
-                </StackPanel.Styles>
                 <Button Classes="title-btn" Click="MinimizeBtn_OnClick"/>
                 <Button Classes="title-btn" Click="MaximizeBtn_OnClick"/>
                 <Button Classes="title-btn close" Click="CloseBtn_OnClick"/>
             </StackPanel>
         </Panel>
-        <Border Name="View" Margin="5 35 5 5"
-               Background="#E8D9B4">
+        <Border Name="View" Margin="5 35 5 5">
             <views:MainView/>
         </Border>
     </Panel>

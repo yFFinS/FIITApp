@@ -4,11 +4,16 @@
     <option name="projectPerEditor">
       <map>
         <entry key="Recipes.Presentation/App.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Controls/SearchBar.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Recipes.Presentation/App.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Recipes.Presentation/Views/MainView.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Resources/Colors.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Styles/ControlStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Styles/MainViewStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Styles/ProductSearchViewStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Styles/SearchBarStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Styles/TitleBarStyles.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/UI/MainWindow.axaml" value="Recipes.Presentation/Recipes.Presentation.csproj" />
         <entry key="Recipes.Presentation/Views/MainView.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Views/MainWindow.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />

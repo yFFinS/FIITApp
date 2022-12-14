@@ -12,7 +12,7 @@
                 <ControlTemplate>
                     <Panel>
                         <Border Name="Hover" Width="35" Height="35" Background="#00000000" ZIndex="1" CornerRadius="5"/>
-                        <Border Name="Base" Width="35" Height="35" Background="{TemplateBinding Background}" CornerRadius="5"/>
+                        <Border Name="Base" Width="35" Height="35" Background="#D8C595" CornerRadius="5"/>
                     </Panel>
                 </ControlTemplate>
             </Setter.Value>

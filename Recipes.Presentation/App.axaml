@@ -3,7 +3,12 @@
              xmlns:local="using:Recipes.Presentation"
              x:Class="Recipes.Presentation.App">
     <Application.Resources>
-        <local:RecipeToImageConverter x:Key="RecipeToImageConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Resources/Colors.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:RecipeToImageConverter x:Key="RecipeToImageConverter" />
+        </ResourceDictionary>
     </Application.Resources>
     <Application.DataTemplates>
         <local:ViewLocator/>
@@ -11,5 +16,6 @@
 
     <Application.Styles>
         <FluentTheme Mode="Dark"/>
+        <StyleInclude Source="/Styles/ControlStyles.axaml"></StyleInclude>
     </Application.Styles>
 </Application>

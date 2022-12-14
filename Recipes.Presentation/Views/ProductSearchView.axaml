@@ -1,5 +1,4 @@
-﻿
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -53,7 +52,12 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <ToggleButton Classes="Card" Height="200" Width="180" Margin="5">
+                            <ToggleButton Classes="Card" 
+                                          Height="200" 
+                                          Width="180" 
+                                          Margin="5"
+                                          Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
+                                          CommandParameter="{Binding}">
                                 <TextBlock Text="{Binding}" />
                             </ToggleButton>
                         </DataTemplate>

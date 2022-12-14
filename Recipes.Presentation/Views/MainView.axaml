@@ -3,25 +3,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
-             xmlns:views="clr-namespace:Recipes.Presentation.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="Recipes.Presentation.Views.MainView"
-             Foreground="Black"
-             Background="Transparent"
              VerticalAlignment="Stretch"
              HorizontalAlignment="Stretch">
     <Design.DataContext>
         <viewModels:MainViewModel/>
     </Design.DataContext>
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/MainViewStyles.axaml"></StyleInclude>
+    </UserControl.Styles>
     <Panel>
         <ContentControl Content="{Binding Content}"/>
-        <ItemsControl Items="{Binding MenuItems}"
-                 Width="200"
-                 HorizontalAlignment="Left"
-                 Background="Transparent">
+        <ItemsControl Items="{Binding MenuItems}" 
+                      Width="200"
+                      HorizontalAlignment="Left"
+                      Classes="menu">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Height="40"
+                    <Button Classes="menu-item"
                             Command="{Binding $parent[ItemsControl].DataContext.ChangeView}"
                             CommandParameter="{Binding Page}">
                         <TextBlock Text="{Binding Title}"
