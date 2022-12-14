@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
@@ -7,21 +8,14 @@ namespace Recipes.DatabaseEditor;
 
 public class RecipeParsingException : Exception
 {
-    public RecipeParsingException(string message) : base(message)
+    protected RecipeParsingException(string message) : base(message)
     {
     }
 }
 
-public class IngredientsMissingException : Exception
+public class QuantityParsingException : RecipeParsingException
 {
-    public IngredientsMissingException() : base("Ingredients are missing")
-    {
-    }
-}
-
-public class CookingTechniqueMissingException : Exception
-{
-    public CookingTechniqueMissingException() : base("Cooking technique is missing")
+    public QuantityParsingException(string quantity) : base($"Could not parse quantity: {quantity}")
     {
     }
 }
@@ -35,10 +29,12 @@ public class ProductMissingException : RecipeParsingException
 
 public class RecipeParser
 {
+    private readonly ILogger<RecipeParser> _logger;
     private readonly IProductRepository _productRepository;
 
-    public RecipeParser(IProductRepository productRepository)
+    public RecipeParser(ILogger<RecipeParser> logger, IProductRepository productRepository)
     {
+        _logger = logger;
         _productRepository = productRepository;
     }
 
@@ -55,14 +51,14 @@ public class RecipeParser
 
     private Ingredient ParseIngredient(string line)
     {
-        var index = line.IndexOf('-');
-        var name = line[..index].Trim();
-        var amount = line[(index + 1)..].Trim();
+        var split = line.Split(" - ");
+        var name = split[0].Trim();
+        var amount = split[1].Trim();
 
         var quantity = Quantity.TryParse(amount);
         if (quantity is null)
         {
-            throw new Exception($"Invalid quantity: {amount}");
+            throw new QuantityParsingException(amount);
         }
 
         var product = _productRepository.GetProductByNameAsync(name).Result;
@@ -86,44 +82,52 @@ public class RecipeParser
     {
         var lines = text.Split(Environment.NewLine);
         var title = lines[0];
-        var description = (string?)null;
 
-        var servings = int.Parse(ParseValue(lines[1]));
-        var cookingTime = TimeSpan.Parse(ParseValue(lines[2]));
-        var calories = int.Parse(ParseValue(lines[3]));
-        var proteins = int.Parse(ParseValue(lines[4]));
-        var fats = int.Parse(ParseValue(lines[5]));
-        var carbohydrates = int.Parse(ParseValue(lines[6]));
+
+        int servings, calories, proteins, fats, carbohydrates;
+        string? imageUrl;
+        string? description;
+        TimeSpan cookingTime;
+
+        try
+        {
+            imageUrl = ParseValue(lines[1]);
+            servings = int.Parse(ParseValue(lines[2]));
+            cookingTime = TimeSpan.FromSeconds(int.Parse(ParseValue(lines[3])));
+            calories = int.Parse(ParseValue(lines[4]));
+            proteins = int.Parse(ParseValue(lines[5]));
+            fats = int.Parse(ParseValue(lines[6]));
+            carbohydrates = int.Parse(ParseValue(lines[7]));
+            description = ParseValue(lines[8]);
+            description = string.IsNullOrWhiteSpace(description) ? null : description;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to parse recipe");
+            return null;
+        }
 
         var energyValue = new EnergyValue(calories, proteins, fats, carbohydrates);
 
-        var ingredientsStartIndex = lines.Select((line, idx) => (line, idx))
-            .First(x => x.line == "Ингредиенты:").idx + 1;
 
         var ingredients = new List<Ingredient>();
 
-        while (IsIngredient(lines[ingredientsStartIndex]))
+        var ingredientsIndex = 10;
+        while (IsIngredient(lines[ingredientsIndex]))
         {
-            ingredients.Add(ParseIngredient(lines[ingredientsStartIndex]));
-            ingredientsStartIndex++;
+            ingredients.Add(ParseIngredient(lines[ingredientsIndex]));
+            ingredientsIndex++;
         }
 
-        if (ingredients.Count == 0)
-        {
-            throw new IngredientsMissingException();
-        }
-
-        var cookingTechniqueStartIndex = ingredientsStartIndex + 1;
+        var cookingTechniqueStartIndex = ingredientsIndex + 1;
         var cookingSteps = lines.Skip(cookingTechniqueStartIndex)
             .Select(ParseCookingStep)
             .ToList();
 
-        if (cookingSteps.Count == 0)
-        {
-            throw new CookingTechniqueMissingException();
-        }
-
         return new Recipe(EntityId.NewId(), title, description, servings, cookingTime, energyValue,
-            new IngredientGroup(ingredients), new CookingTechnic(cookingSteps));
+            new IngredientGroup(ingredients), new CookingTechnic(cookingSteps))
+        {
+            ImageUrl = new Uri(imageUrl)
+        };
     }
 }

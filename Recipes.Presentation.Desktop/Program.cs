@@ -11,9 +11,11 @@ namespace Recipes.Presentation.Desktop
         // yet and stuff might break.
         [STAThread]
         public static void Main(string[] args)
-            => BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
-
+        {
+            var exit = BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+            Environment.Exit(exit);
+        }
 
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()

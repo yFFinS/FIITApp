@@ -10,4 +10,6 @@ public abstract class Entity<TId>
     {
         Id = id;
     }
+
+    protected Entity() { }
 }

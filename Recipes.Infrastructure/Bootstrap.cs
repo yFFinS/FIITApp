@@ -29,6 +29,11 @@ public static class Bootstrap
             new PreferenceService(provider.GetService<ILogger<PreferenceService>>()!,
                 "preferences.json"));
 
+        services.AddSingleton<IProductRepository, ProductRepository>();
+        services.AddSingleton<IRecipeRepository, RecipeRepository>();
+        services.AddSingleton<IImageLoader>(sp =>
+            new CachingImageLoader(sp.GetService<ILogger<CachingImageLoader>>()!, cacheSize: 1024));
+
         return services;
     }
 }

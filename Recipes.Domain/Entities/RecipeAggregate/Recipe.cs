@@ -3,6 +3,8 @@ using Recipes.Domain.Base;
 using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace Recipes.Domain.Entities.RecipeAggregate;
 
@@ -17,34 +19,43 @@ public class Recipe : Entity<EntityId>
     public string Title
     {
         get => _title;
-        private set => _title = Guard.Against.Null(value);
+        set => _title = Guard.Against.Null(value);
     }
 
     public string? Description
     {
         get => _description;
-        private set => _description = value;
+        set => _description = value;
     }
 
     public int Servings
     {
         get => _servings;
-        private set => _servings = Guard.Against.NegativeOrZero(value);
+        set => _servings = Guard.Against.NegativeOrZero(value);
     }
 
     public TimeSpan CookDuration
     {
         get => _cookingTime;
-        private set => _cookingTime = Guard.Against.NegativeOrZero(value);
+        set => _cookingTime = Guard.Against.NegativeOrZero(value);
     }
 
     public EnergyValue EnergyValue
     {
         get => _energyValue;
-        private set => _energyValue = Guard.Against.Null(value);
+        set => _energyValue = Guard.Against.Null(value);
     }
 
+    [XmlIgnore]
     public Uri? ImageUrl { get; set; }
+
+    [XmlAttribute("uri")]
+    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
+    public string? ImageUrlString
+    {
+        get { return ImageUrl?.ToString(); }
+        set { ImageUrl = value == null ? null : new Uri(value); }
+    }
 
     private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
@@ -141,4 +152,6 @@ public class Recipe : Entity<EntityId>
 
     public IReadOnlyCollection<CookingStep> CookingSteps => _cookingTechnic.CookingSteps;
     public IReadOnlyCollection<Ingredient> Ingredients => _ingredientGroup.AsReadOnlyCollection();
+
+    private Recipe() : base() { }
 }

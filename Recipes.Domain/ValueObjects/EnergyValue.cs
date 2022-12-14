@@ -18,4 +18,6 @@ public sealed class EnergyValue : ValueObject<EnergyValue>
         Fats = Guard.Against.NegativeOrInvalid(fats);
         Carbohydrates = Guard.Against.NegativeOrInvalid(carbohydrates);
     }
+
+    private EnergyValue() { }
 }
