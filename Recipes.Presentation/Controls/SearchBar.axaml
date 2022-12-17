@@ -3,12 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Recipes.Presentation.Controls.SearchBar">
+             x:Class="Recipes.Presentation.Controls.SearchBar"
+             Height="40">
     <UserControl.Styles>
         <StyleInclude Source="/Styles/SearchBarStyles.axaml"/>
     </UserControl.Styles>
     <Border CornerRadius="20"
-            Background="#F4EAD0"
+            Background="{DynamicResource AccentBackground}"
             ZIndex="10"
             Height="40"
             HorizontalAlignment="Stretch"
@@ -16,20 +17,14 @@
         <Panel>
             <TextBox Name="TextField"
                      Classes="search"
-                     Background="Transparent"
-                     Watermark="Search recipes"
-                     TextAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     Foreground="Black"
-                     CaretBrush="Black"
-                     FontFamily="Inter"
-                     FontSize="20"
-                     FontStyle="Italic" />
-            <Button Width="40"
+                     Watermark="Search"
+                     CornerRadius="20"/>
+            <Button Classes="search"
+                    Width="40"
                     VerticalAlignment="Stretch"
                     Command="{Binding SearchCommand}"
                     CommandParameter="{Binding #TextField.Text}"
-                    IsDefault="True" />
+                    IsDefault="True"/>
         </Panel>
     </Border>
 </UserControl>

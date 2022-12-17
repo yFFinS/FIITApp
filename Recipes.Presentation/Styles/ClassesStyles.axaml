@@ -1,0 +1,22 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20" Background="{DynamicResource AppBackground}">
+            <StackPanel Spacing="10">
+                <Border Classes="accent" 
+                        Width="100"
+                        Height="40"/>
+                <Panel Classes="accent"
+                       Width="100"
+                       Height="40"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Border.accent">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+    </Style>
+    <Style Selector="Panel.accent">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+    </Style>
+</Styles>

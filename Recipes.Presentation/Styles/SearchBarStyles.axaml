@@ -2,64 +2,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="clr-namespace:Recipes.Presentation.Controls">
     <Design.PreviewWith>
-        <Border Padding="20">
-            <controls:SearchBar/>
+        <Border Padding="20" Background="{DynamicResource AppBackground}">
+            <StackPanel Spacing="10">
+                <controls:SearchBar Height="40"
+                                    Width="250"/>
+                <TextBox Watermark="abceqwedw"/>
+            </StackPanel>
+
         </Border>
     </Design.PreviewWith>
-
+    
     <Style Selector="TextBox.search">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Border Width="{TemplateBinding Width}"
-                            Height="{TemplateBinding Height}"
-                            CornerRadius="20">
-                        <Panel>
-                            <TextBlock Name="PART_Watermark"
-                                       Opacity="0.5"
-                                       Text="{TemplateBinding Watermark}"
-                                       TextAlignment="{TemplateBinding TextAlignment}"
-                                       TextWrapping="{TemplateBinding TextWrapping}"
-                                       IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                       HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Stretch"/>
-                            <TextPresenter Name="PART_TextPresenter"
-                                           Text="{TemplateBinding Text, Mode=TwoWay}"
-                                           CaretIndex="{TemplateBinding CaretIndex}"
-                                           SelectionStart="{TemplateBinding SelectionStart}"
-                                           SelectionEnd="{TemplateBinding SelectionEnd}"
-                                           TextAlignment="{TemplateBinding TextAlignment}"
-                                           TextWrapping="{TemplateBinding TextWrapping}"
-                                           LineHeight="{TemplateBinding LineHeight}"
-                                           SelectionBrush="{TemplateBinding SelectionBrush}"
-                                           SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-                                           CaretBrush="{TemplateBinding CaretBrush}"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch"/>
-                        </Panel>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Bottom"/>
     </Style>
     
-    <Style Selector="TextBox:pointerover.search/template/Border">
-        <Setter Property="Background" Value="#20ffffff"/>
+    <Style Selector="TextBox:pointerover.search/template/Border#Hover">
+        <Setter Property="Background" Value="{DynamicResource ButtonHover}"/>
     </Style>
     
     <Style Selector="TextBox.search/template/TextBlock">
-        <Setter Property="Foreground" Value="{TemplateBinding Foreground}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource TextForeground}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
     
-    <Style Selector="Button.recipe">
-        <Setter Property="MinWidth" Value="300"/>
-        <Setter Property="Height" Value="200"/>
-        <Setter Property="Background" Value="#60000000"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="CornerRadius" Value="10"/>
-    </Style>
-    
-    <Style Selector="Button.recipe:pointerover/template/ContentPresenter">
-        <Setter Property="Background" Value="#80101010"/>
+    <Style Selector="TextBox.search/template/TextPresenter">
+        <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 </Styles>

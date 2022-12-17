@@ -1,0 +1,80 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Recipes.Presentation.Views.RecipeEditorView">
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/RecipeViewStyles.axaml"/>
+    </UserControl.Styles>
+    <Design.DataContext>
+        <viewModels:RecipeEditorViewModel/>
+    </Design.DataContext>
+    <Panel Width="1000">
+        <ScrollViewer IsHitTestVisible="False">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10" MaxWidth="1000">
+            <Border Classes="accent" Name="Title" MaxWidth="600">
+                <TextBox Watermark="Title"
+                         Text="{Binding Title, Mode=TwoWay}"
+                         TextAlignment="Center"
+                         HorizontalAlignment="Stretch"
+                         CornerRadius="5"/>
+            </Border>
+            <Grid HorizontalAlignment="Stretch"
+                  ColumnDefinitions="*, 10, 2*">
+                <Border Grid.Column="0" Classes="accent" HorizontalAlignment="Stretch">
+                    <ItemsControl Items="{Binding Ingredients}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Spacing="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border MinWidth="100">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding ProductId}"/>
+                                        <TextBlock Text=": "/>
+                                        <TextBlock Text="{Binding Quantity}"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+                <Grid Grid.Column="2" RowDefinitions="*, *, 10, 40" HorizontalAlignment="Stretch">
+                    <Image/>
+                    <Border Grid.Row="1" Classes="accent" VerticalAlignment="Bottom">
+                        <TextBox Text="{Binding Description}"
+                                 TextWrapping="Wrap"
+                                 Watermark="Description..."/>
+                    </Border>
+                    <Border Grid.Row="3" Classes="accent" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="Servings: "/>
+                            <TextBlock Text="{Binding Servings}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+            <ItemsControl Items="{Binding CookingSteps}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="10"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Classes="accent">
+                            <TextBox Text="{Binding DescriptionProperty, Mode=TwoWay}"
+                                     TextWrapping="Wrap"
+                                     Watermark="Description..."/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Panel>
+</UserControl>

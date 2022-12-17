@@ -5,16 +5,10 @@
             <!-- Add Controls for Previewer Here -->
         </Border>
     </Design.PreviewWith>
-    <Style Selector="Border.bg">
-        <Setter Property="Background" Value="#20ffffff"/>
+    <Style Selector="Border.recipe">
         <Setter Property="Padding" Value="10"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="CornerRadius" Value="10"/>
-    </Style>
-    <Style Selector="TextBlock">
-        <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="FontWeight" Value="Normal"></Setter>
     </Style>
     <Style Selector="TextBlock.ingr">
         <Setter Property="Foreground" Value="Black"/>

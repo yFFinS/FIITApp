@@ -5,6 +5,12 @@
             <StackPanel Spacing="10">
                 <Button Width="100" Height="100" Content="A" />
                 <TextBlock Text="Abc"/>
+                <Border Padding="10" Background="{DynamicResource AccentBackground}">
+                    <TextBox Watermark="cde"></TextBox>
+                </Border>
+                <ToggleButton Content="Text"
+                              Width="100"
+                              Height="40"/>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -40,5 +46,86 @@
         <Setter Property="FontFamily" Value="Serif"/>
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="Foreground" Value="{DynamicResource TextForeground}"/>
+    </Style>
+    
+    
+    <Style Selector="TextBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Panel Background="{TemplateBinding Background}">
+                        <Border Name="Hover" Background="Transparent"
+                                CornerRadius="{TemplateBinding CornerRadius}"/>
+                        <TextPresenter Name="PART_TextPresenter"
+                                       Text="{TemplateBinding Text, Mode=TwoWay}"
+                                       CaretIndex="{TemplateBinding CaretIndex}"
+                                       SelectionStart="{TemplateBinding SelectionStart}"
+                                       SelectionEnd="{TemplateBinding SelectionEnd}"
+                                       TextAlignment="{TemplateBinding TextAlignment}"
+                                       TextWrapping="{TemplateBinding TextWrapping}"
+                                       LineHeight="{TemplateBinding LineHeight}"
+                                       SelectionBrush="{TemplateBinding SelectionBrush}"
+                                       SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                       CaretBrush="{TemplateBinding CaretBrush}"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       
+                                       FontFamily="Serif"
+                                       FontSize="20"
+                                       Foreground="{StaticResource TextForeground}"/>
+                        <TextBlock Name="PART_Watermark"
+                                   Opacity="0.5"
+                                   Text="{TemplateBinding Watermark}"
+                                   TextAlignment="{TemplateBinding TextAlignment}"
+                                   TextWrapping="{TemplateBinding TextWrapping}"
+                                   IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"/>
+                    </Panel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"/>
+    </Style>
+    <Style Selector="TextBox:focus/template/TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextForeground}"/>
+    </Style>
+    <Style Selector="TextBox:pointerover/template/TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextForeground}"/>
+    </Style>
+    <Style Selector="TextBox:pointerover">
+        <Setter Property="Background" Value="{DynamicResource ButtonHover}"/>
+    </Style>
+    
+    
+    <Style Selector="ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Panel>
+                        <Border Name="Base"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Background="{TemplateBinding Background}"/>
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          Padding="8"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <Border Name="Hover"
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}"
+                                Background="Transparent"/>
+                    </Panel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="ToggleButton">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"/>
+    </Style>
+    <Style Selector="ToggleButton:checked">
+        <Setter Property="Background" Value="{DynamicResource ButtonBackground}"/>
     </Style>
 </Styles>

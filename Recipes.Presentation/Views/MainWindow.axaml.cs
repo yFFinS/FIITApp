@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 
 namespace Recipes.Presentation.Views
 {
@@ -8,11 +9,15 @@ namespace Recipes.Presentation.Views
     {
         private Panel MainPanel;
         internal Border ViewBorder;
+
+        public Geometry CloseButtonGeometry;
         public MainWindow()
         {
             InitializeComponent();
             MainPanel = this.FindControl<Panel>("Main")!;
             ViewBorder = this.FindControl<Border>("View")!;
+            CloseButtonGeometry =
+                StreamGeometry.Parse("M 7,7 17.5,17.5 28,7 17.5,17.5 28,28 17.5,17.5 7,28 17.5,17.5 Z");
         }
 
         protected override void HandleWindowStateChanged(WindowState state)

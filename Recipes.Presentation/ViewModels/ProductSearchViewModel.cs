@@ -26,7 +26,7 @@ public class ProductSearchViewModel : ViewModelBase
         IProductRepository productRepository, IRecipePicker recipePicker)
     {
         SearchCommand = ReactiveCommand.Create<string>(name => Search(name, productRepository));
-        ShowRecipesCommand = ReactiveCommand.Create(() => ShowRecipes(container, loader, recipePicker));
+        ShowRecipesCommand = ReactiveCommand.Create(() => ShowRecipes(container, loader, productRepository, recipePicker));
         CheckProductCommand = ReactiveCommand.Create<Product>(CheckProduct);
 
         Products = new ObservableCollection<Product>(Enumerable.Empty<Product>());
@@ -54,12 +54,12 @@ public class ProductSearchViewModel : ViewModelBase
             SelectedProducts.Add(product);
     }
 
-    private async void ShowRecipes(Lazy<IViewContainer> container, IImageLoader loader, IRecipePicker recipePicker)
+    private async void ShowRecipes(Lazy<IViewContainer> container, IImageLoader loader, IProductRepository repository, IRecipePicker recipePicker)
     {
         var filter = new RecipeFilter();
         foreach (var product in SelectedProducts) 
             filter.AddOption(new ProductFilterOption(product));
         var recipes = await recipePicker.PickRecipes(filter);
-        container.Value.Content = new RecipeListViewModel(recipes, container, loader);
+        container.Value.Content = new RecipeListViewModel(recipes, container, loader, repository);
     }
 }

@@ -36,6 +36,7 @@ namespace Recipes.Presentation
             services.AddSingleton(x => new Lazy<IViewContainer>(x.GetRequiredService<IViewContainer>));
             services.AddSingleton<ProductSearchViewModel>();
             services.AddSingleton<RecipeSearchViewModel>();
+            services.AddTransient<RecipeEditorViewModel>();
             services.AddSingleton(x => new MainWindow());
             services.AddSingleton(x => new MainView
             {
@@ -61,6 +62,11 @@ namespace Recipes.Presentation
                 {
                     Title = "Search by name",
                     Page = x.GetRequiredService<RecipeSearchViewModel>()
+                },
+                new()
+                {
+                    Title = "Add own recipe",
+                    Page = x.GetRequiredService<RecipeEditorViewModel>()
                 }
             });
         }

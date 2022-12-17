@@ -47,7 +47,7 @@
                 <ItemsControl Grid.Row="4" Items="{Binding Products}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel HorizontalAlignment="Center" />
+                            <WrapPanel HorizontalAlignment="Center"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
@@ -58,7 +58,10 @@
                                           Margin="5"
                                           Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
                                           CommandParameter="{Binding}">
-                                <TextBlock Text="{Binding}" />
+                                <TextBlock Text="{Binding Name}" 
+                                           VerticalAlignment="Bottom"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"/>
                             </ToggleButton>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

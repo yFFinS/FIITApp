@@ -9,13 +9,21 @@ namespace Recipes.Presentation.ViewModels;
 
 public class RecipeViewModel : ViewModelBase
 {
-    public Recipe Recipe { get; set; }
-    public ReactiveCommand<Unit, Unit> BackCommand { get; }
-    
+#if DEBUG
+    public RecipeViewModel() { }
+#endif
 
-    public RecipeViewModel(Recipe recipe, Lazy<IViewContainer> container, IImageLoader imageLoader, ViewModelBase parent)
+    public Recipe Recipe { get; set; }
+    public IProductRepository Repository { get; }
+    public object ImageLoader { get; }
+    public ReactiveCommand<Unit, Unit> BackCommand { get; }
+
+
+    public RecipeViewModel(Recipe recipe, Lazy<IViewContainer> container, IImageLoader imageLoader, IProductRepository repository, ViewModelBase parent)
     {
         Recipe = recipe;
+        ImageLoader = imageLoader;
+        Repository = repository;
         BackCommand = ReactiveCommand.Create(() =>
         {
             container.Value.Content = parent;

@@ -1,6 +1,7 @@
 ﻿using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
 using System.Xml.Serialization;
+using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Infrastructure
 {

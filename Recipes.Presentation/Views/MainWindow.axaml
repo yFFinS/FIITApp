@@ -18,16 +18,36 @@
         </Style>
         <StyleInclude Source="/Styles/TitleBarStyles.axaml"/>
     </Window.Styles>
+    <Window.Resources>
+        <StreamGeometry x:Key="ClosePath">m 28.75,8.75 -12.5,12.5 m 0,-12.5 12.5,12.5</StreamGeometry>
+        <StreamGeometry x:Key="MaximizePath">m 26.25,18.75 h 2.5 V 8.75 h -10 v 2.5 h 7.5 z m -10,2.5 h 10 v -10 h -10 z</StreamGeometry>
+        <StreamGeometry x:Key="MinimizePath">M 16.25,15 H 28.75</StreamGeometry>
+    </Window.Resources>
     <Panel Name="Main" Background="{DynamicResource AppBackground}" IsHitTestVisible="False">
-        <Panel Height="35" 
+        <Panel Height="30" 
                VerticalAlignment="Top" 
                HorizontalAlignment="Stretch" 
                IsHitTestVisible="False" 
                Background="{DynamicResource AppTitleBarBackground}">
-            <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
-                <Button Classes="title-btn" Click="MinimizeBtn_OnClick"/>
-                <Button Classes="title-btn" Click="MaximizeBtn_OnClick"/>
-                <Button Classes="title-btn close" Click="CloseBtn_OnClick"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Classes="title-btn" Click="MinimizeBtn_OnClick">
+                    <Path Data="{StaticResource MinimizePath}"
+                          Stroke="Black"
+                          StrokeThickness="0.707"
+                          StrokeLineCap="Round"/>
+                </Button>
+                <Button Classes="title-btn" Click="MaximizeBtn_OnClick">
+                    <Path Data="{StaticResource MaximizePath}"
+                          Stroke="Black"
+                          StrokeThickness="0.707">
+                    </Path>
+                </Button>
+                <Button Classes="title-btn close" Click="CloseBtn_OnClick">
+                    <Path Data="{StaticResource ClosePath}"
+                          Stroke="Black"
+                          StrokeThickness="1"
+                          StrokeLineCap="Round"/>
+                </Button>
             </StackPanel>
         </Panel>
         <Border Name="View" Margin="5 35 5 5">

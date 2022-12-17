@@ -16,15 +16,15 @@ public class RecipeListViewModel : ViewModelBase
     
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
 
-    public RecipeListViewModel(List<Recipe> recipes, Lazy<IViewContainer> container, IImageLoader imageLoader)
+    public RecipeListViewModel(List<Recipe> recipes, Lazy<IViewContainer> container, IImageLoader imageLoader, IProductRepository repository)
     {
         Recipes = recipes;
         ImageLoader = imageLoader;
-        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => ShowRecipe(recipe, container, imageLoader));
+        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => ShowRecipe(recipe, container, imageLoader, repository));
     }
     
-    private void ShowRecipe(Recipe recipe, Lazy<IViewContainer> container, IImageLoader loader)
+    private void ShowRecipe(Recipe recipe, Lazy<IViewContainer> container, IImageLoader loader, IProductRepository repository)
     {
-        container.Value.Content = new RecipeViewModel(recipe, container, loader, this);
+        container.Value.Content = new RecipeViewModel(recipe, container, loader, repository, this);
     }
 }

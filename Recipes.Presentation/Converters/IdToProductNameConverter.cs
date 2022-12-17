@@ -1,35 +1,26 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading.Tasks;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Recipes.Application.Interfaces;
-using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Presentation;
 
-public class RecipeToImageConverter : IValueConverter
+public class IdToProductNameConverter : IValueConverter
 {
-    public static readonly RecipeToImageConverter Instance = new ();
-
+    public static readonly IdToProductNameConverter Instance = new();
+    
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not Recipe recipe)
+        if (value is not EntityId id)
             return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
-        if (parameter is not IImageLoader loader)
+        if (parameter is not IProductRepository repository)
             return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
-        if (!targetType.IsAssignableTo(typeof(IImage)))
+        if (!targetType.IsAssignableTo(typeof(string)))
             return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
-        if (recipe.ImageUrl != null)
-            return Task.Run(async () =>
-            {
-                await Task.Delay(5000);
-                return await loader.LoadImage(recipe.ImageUrl);
-            }).Result;
-
-        return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
+        return repository.GetProductByIdAsync(id).Result.Name;
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
