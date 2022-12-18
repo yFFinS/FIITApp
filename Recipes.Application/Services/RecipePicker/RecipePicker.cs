@@ -10,14 +10,11 @@ public class RecipePicker : IRecipePicker
 {
     private readonly ILogger<RecipePicker> _logger;
     private readonly IRecipeRepository _recipeRepository;
-    private readonly IPreferenceService _preferenceService;
 
-    public RecipePicker(ILogger<RecipePicker> logger, IRecipeRepository recipeRepository,
-        IPreferenceService preferenceService)
+    public RecipePicker(ILogger<RecipePicker> logger, IRecipeRepository recipeRepository)
     {
         _logger = logger;
         _recipeRepository = recipeRepository;
-        _preferenceService = preferenceService;
     }
 
     public async Task<List<Recipe>> PickRecipes(RecipeFilter filter)
