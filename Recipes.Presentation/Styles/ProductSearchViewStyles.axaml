@@ -14,17 +14,4 @@
         <Setter Property="Background" Value="#F5E8C5"/>
         <Setter Property="CornerRadius" Value="5"/>
     </Style>
-    <Style Selector="ToggleButton.Card">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate>
-                    <Panel>
-                        <Border Name="Hover" Background="Transparent"/>
-                        <ContentControl Name="Content" Content="{TemplateBinding Content}"/>
-                        <Border Name="Base" Background="{TemplateBinding Background}"/>
-                    </Panel>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 </Styles>

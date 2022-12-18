@@ -20,8 +20,6 @@
                      Watermark="Search"
                      CornerRadius="20"/>
             <Button Classes="search"
-                    Width="40"
-                    VerticalAlignment="Stretch"
                     Command="{Binding SearchCommand}"
                     CommandParameter="{Binding #TextField.Text}"
                     IsDefault="True"/>

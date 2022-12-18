@@ -14,8 +14,7 @@
     </Design.DataContext>
     <Panel HorizontalAlignment="Stretch"
            VerticalAlignment="Stretch">
-        <Button Classes="item"
-                HorizontalAlignment="Right"
+        <Button HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Command="{Binding ShowRecipesCommand}">
             Find
@@ -24,7 +23,7 @@
               VerticalAlignment="Stretch"
               HorizontalAlignment="Center"
               Width="800">
-            <Label Classes="item"
+            <Label Classes="accent"
                    Grid.Row="0"
                    CornerRadius="10">
                 <TextBlock Text="Какие ингредиенты у вас есть?"

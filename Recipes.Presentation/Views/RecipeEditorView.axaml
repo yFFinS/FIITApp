@@ -3,77 +3,135 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
+             xmlns:productAggregate="clr-namespace:Recipes.Domain.Entities.ProductAggregate;assembly=Recipes.Domain"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.RecipeEditorView">
     <UserControl.Styles>
-        <StyleInclude Source="/Styles/RecipeViewStyles.axaml"/>
+        <StyleInclude Source="/Styles/RecipeViewStyles.axaml" />
     </UserControl.Styles>
     <Design.DataContext>
-        <viewModels:RecipeEditorViewModel/>
+        <viewModels:RecipeEditorViewModel />
     </Design.DataContext>
-    <Panel Width="1000">
+    <Panel>
+        <Button HorizontalAlignment="Right"
+                VerticalContentAlignment="Bottom"
+                Command="{Binding SaveRecipeCommand}"
+                ZIndex="10">
+            <TextBlock Text="Save recipe"/>
+        </Button>
         <ScrollViewer IsHitTestVisible="False">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10" MaxWidth="1000">
-            <Border Classes="accent" Name="Title" MaxWidth="600">
-                <TextBox Watermark="Title"
-                         Text="{Binding Title, Mode=TwoWay}"
-                         TextAlignment="Center"
-                         HorizontalAlignment="Stretch"
-                         CornerRadius="5"/>
-            </Border>
-            <Grid HorizontalAlignment="Stretch"
-                  ColumnDefinitions="*, 10, 2*">
-                <Border Grid.Column="0" Classes="accent" HorizontalAlignment="Stretch">
-                    <ItemsControl Items="{Binding Ingredients}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Spacing="5"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border MinWidth="100">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding ProductId}"/>
-                                        <TextBlock Text=": "/>
-                                        <TextBlock Text="{Binding Quantity}"/>
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                <Border Classes="accent round" Name="Title" MaxWidth="600">
+                    <TextBox Watermark="Title"
+                             Text="{Binding Title, Mode=TwoWay}"
+                             TextAlignment="Center"
+                             HorizontalAlignment="Stretch"
+                             CornerRadius="5" />
                 </Border>
-                <Grid Grid.Column="2" RowDefinitions="*, *, 10, 40" HorizontalAlignment="Stretch">
-                    <Image/>
-                    <Border Grid.Row="1" Classes="accent" VerticalAlignment="Bottom">
-                        <TextBox Text="{Binding Description}"
-                                 TextWrapping="Wrap"
-                                 Watermark="Description..."/>
+                <Grid HorizontalAlignment="Stretch"
+                      ColumnDefinitions="*, 10, 2*">
+                    <Border Grid.Column="0" Classes="accent round" HorizontalAlignment="Stretch">
+                        <DockPanel>
+                            <ItemsControl Items="{Binding Ingredients}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" Spacing="5" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border MinWidth="100">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding ProductId, 
+                                                    Converter={StaticResource IdToProductNameConverter},
+                                                    ConverterParameter={Binding $parent[ItemsControl].DataContext.ProductRepository}}" />
+                                                <TextBlock Text=": " />
+                                                <TextBlock Text="{Binding Quantity}" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Grid ColumnDefinitions="* * * 30" 
+                                  Height="30"
+                                  VerticalAlignment="Top"
+                                  x:DataType="productAggregate:Product">
+                                <AutoCompleteBox Grid.Column="0" 
+                                                 AsyncPopulator="{Binding PopulateProducts}"
+                                                 TextSelector="{Binding SelectProduct}"
+                                                 SelectedItem="{Binding CurrentProduct, Mode=OneWayToSource}"
+                                                 ValueMemberBinding="{CompiledBinding Name}">
+                                    <AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate DataType="productAggregate:Product">
+                                            <Border Classes="accent">
+                                                <TextBox Text="{Binding Name}"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </AutoCompleteBox.ItemTemplate>
+                                </AutoCompleteBox>
+                                <NumericUpDown Grid.Column="1" 
+                                               Minimum="0"
+                                               Value="{Binding CurrentCount, Mode=OneWayToSource}"
+                                               ShowButtonSpinner="False"/>
+                                <ComboBox Grid.Column="2"
+                                          SelectedItem="{Binding CurrentUnit, Mode=OneWayToSource}"/>
+                                <Button Grid.Column="3"
+                                        Width="30" 
+                                        Height="30"
+                                        Command="{Binding AddIngregientCommand}"
+                                        CommandParameter="{Binding $parent[Grid]}"/>
+                            </Grid>
+                        </DockPanel>
                     </Border>
-                    <Border Grid.Row="3" Classes="accent" HorizontalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                            <TextBlock Text="Servings: "/>
-                            <TextBlock Text="{Binding Servings}"/>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </Grid>
-            <ItemsControl Items="{Binding CookingSteps}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" Spacing="10"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Classes="accent">
-                            <TextBox Text="{Binding DescriptionProperty, Mode=TwoWay}"
+                    <Grid Grid.Column="2" RowDefinitions="10*, 10*, 10, *" HorizontalAlignment="Stretch">
+                        <Image />
+                        <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom">
+                            <TextBox Text="{Binding Description}"
                                      TextWrapping="Wrap"
-                                     Watermark="Description..."/>
+                                     Watermark="Description..." />
                         </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                        <Border Grid.Row="3" Classes="accent round" HorizontalAlignment="Stretch">
+                            <Grid ColumnDefinitions="* 10 *"
+                                  HorizontalAlignment="Right">
+                                <TextBlock Grid.Column="0" Text="Servings:" />
+                                <NumericUpDown Grid.Column="2"
+                                               Minimum="0"
+                                               Maximum="1000"
+                                               ShowButtonSpinner="False"
+                                               AllowSpin="True"
+                                               Value="{Binding Servings, Mode=TwoWay}" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+                <ItemsControl Items="{Binding CookingSteps}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="10" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Classes="accent round">
+                                <TextBox Text="{Binding Description, Mode=TwoWay}"
+                                         CaretIndex="2"
+                                         TextWrapping="Wrap"
+                                         Watermark="Description..." />
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Border Classes="accent round">
+                    <Panel>
+                        <TextBox Name="CookingStep"
+                                 TextWrapping="Wrap"
+                                 Watermark="{Binding CookingSteps.Count}"/>
+                        <Button IsDefault="{Binding #CookingStep.IsFocused}"
+                                HorizontalAlignment="Right"
+                                Command="{Binding AddCookingStepCommand}"
+                                CommandParameter="{Binding #CookingStep}"/>
+                    </Panel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
     </Panel>

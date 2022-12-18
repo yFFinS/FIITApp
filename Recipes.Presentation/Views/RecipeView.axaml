@@ -47,7 +47,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </Border>
-                <Grid Grid.Column="2" RowDefinitions="*, *, 10, 40" HorizontalAlignment="Stretch">
+                <Grid Grid.Column="2" RowDefinitions="10*, 10*, 10, *" HorizontalAlignment="Stretch">
                     <Image Source="{Binding Recipe,
                         Converter={StaticResource RecipeToImageConverter},
                         ConverterParameter={Binding ImageLoader}}"/>
@@ -60,9 +60,7 @@
                             Classes="accent recipe"
                             HorizontalAlignment="Stretch">
                         <Grid ColumnDefinitions="* 10 *"
-                                    HorizontalAlignment="Right"
-                                    Background=""
-                                    MinHeight="30">
+                              HorizontalAlignment="Right">
                             <TextBlock Grid.Column="0" Text="Servings: "/>
                             <TextBlock Grid.Column="2" Text="{Binding Recipe.Servings}"/>
                         </Grid>

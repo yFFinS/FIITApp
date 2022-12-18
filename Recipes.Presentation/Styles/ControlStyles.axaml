@@ -8,9 +8,10 @@
                 <Border Padding="10" Background="{DynamicResource AccentBackground}">
                     <TextBox Watermark="cde"></TextBox>
                 </Border>
-                <ToggleButton Content="Text"
-                              Width="100"
-                              Height="40"/>
+                <ToggleButton Width="100"
+                              Height="40">
+                    <TextBlock Text="Text"/>
+                </ToggleButton>
             </StackPanel>
         </Border>
     </Design.PreviewWith>

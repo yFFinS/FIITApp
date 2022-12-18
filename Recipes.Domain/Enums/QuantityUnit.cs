@@ -1,3 +1,5 @@
+using System.Collections;
+
 namespace Recipes.Domain.Enums;
 
 public enum QuantityUnit

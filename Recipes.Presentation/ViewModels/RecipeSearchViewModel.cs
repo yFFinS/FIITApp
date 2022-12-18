@@ -28,7 +28,6 @@ public class RecipeSearchViewModel : ViewModelBase
         ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe =>
             container.Value.Content = ShowRecipe(recipe, container, imageLoader, repository));
         SearchCommand = ReactiveCommand.Create<string>(Search);
-        Dispatcher.UIThread.InvokeAsync(() => { });
     }
 
     public ObservableCollection<Recipe> Items { get; private set; }

@@ -9,6 +9,9 @@
                 <Panel Classes="accent"
                        Width="100"
                        Height="40"/>
+                <Label Classes="accent round"
+                       Width="100"
+                       Height="40"/>
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -18,5 +21,17 @@
     </Style>
     <Style Selector="Panel.accent">
         <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+    </Style>
+    <Style Selector="Label.accent">
+        <Setter Property="Background" Value="{DynamicResource AccentBackground}"></Setter>
+    </Style>
+
+    <Style Selector="Border.round">
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="8"/>
+    </Style>
+    <Style Selector="Label.round">
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="8"/>
     </Style>
 </Styles>
