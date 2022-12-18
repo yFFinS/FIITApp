@@ -45,16 +45,16 @@ public class RecipePicker : IRecipePicker
         return recipe.Ingredients.Select(ing => ing.ProductId).All(filter.IsAllowed);
     }
 
-    private double ScoreRecipe(Recipe recipe, RecipeFilter filter, Preferences.Preferences preferences)
-    {
-        const double notEnoughProductsPenalty = -25.0;
-        const double hasProductScore = 10.0;
-        const double allOptionsSatisfiedScore = 100.0;
-        const double dislikedProductPenalty = -50.0;
-        const double likedProductScore = 50.0;
-        const double dislikedRecipePenalty = -200.0;
-        const double likedRecipeScore = 100.0;
+    public const double notEnoughProductsPenalty = -25.0;
+    public const double hasProductScore = 10.0;
+    public const double allOptionsSatisfiedScore = 100.0;
+    public const double dislikedProductPenalty = -50.0;
+    public const double likedProductScore = 50.0;
+    public const double dislikedRecipePenalty = -200.0;
+    public const double likedRecipeScore = 100.0;
 
+    public static double ScoreRecipe(Recipe recipe, RecipeFilter filter, Preferences.Preferences preferences)
+    {
         var satisfiedOptionsCount = 0;
 
         var score = 0.0;
