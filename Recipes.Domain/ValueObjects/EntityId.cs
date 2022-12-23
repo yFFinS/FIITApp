@@ -6,7 +6,14 @@ namespace Recipes.Domain.ValueObjects;
 
 public class EntityId : ValueObject<EntityId>
 {
-    [XmlAttribute("value")] public Guid Value { get; }
+    private Guid _value;
+
+    [XmlAttribute("value")]
+    public Guid Value
+    {
+        get => _value;
+        set { }
+    }
 
     public EntityId(string value) : this(Guid.Parse(value))
     {
@@ -14,7 +21,7 @@ public class EntityId : ValueObject<EntityId>
 
     public EntityId(Guid value)
     {
-        Value = Guard.Against.Default(value);
+        _value = Guard.Against.Default(value);
     }
 
     public override string ToString() => Value.ToString();

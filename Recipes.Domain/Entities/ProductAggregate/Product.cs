@@ -20,7 +20,7 @@ public sealed class Product : Entity<EntityId>
 
     [XmlIgnore] public Uri? ImageUrl { get; set; }
 
-    [XmlAttribute("uri")]
+    [XmlElement("Uri")]
     [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
     public string? ImageUrlString
     {

@@ -37,7 +37,7 @@ namespace Recipes.Presentation
             services.AddSingleton<ProductSearchViewModel>();
             services.AddSingleton<RecipeSearchViewModel>();
             services.AddTransient<RecipeEditorViewModel>();
-            services.AddSingleton(x => new MainWindow());
+            services.AddSingleton<MainWindow>();
             services.AddSingleton(x => new MainView
             {
                 DataContext = x.GetRequiredService<IViewContainer>()

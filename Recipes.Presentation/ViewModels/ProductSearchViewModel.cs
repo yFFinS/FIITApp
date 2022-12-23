@@ -19,14 +19,16 @@ namespace Recipes.Presentation.ViewModels;
 
 public class ProductSearchViewModel : ViewModelBase
 {
+    public IImageLoader ImageLoader { get; }
     public ObservableCollection<Product> Products { get; private set; }
     public HashSet<Product> SelectedProducts { get; set; }
 
-    public ProductSearchViewModel(Lazy<IViewContainer> container, IImageLoader loader,
+    public ProductSearchViewModel(Lazy<IViewContainer> container, IImageLoader imageLoader,
         IProductRepository productRepository, IRecipePicker recipePicker)
     {
+        ImageLoader = imageLoader;
         SearchCommand = ReactiveCommand.Create<string>(name => Search(name, productRepository));
-        ShowRecipesCommand = ReactiveCommand.Create(() => ShowRecipes(container, loader, productRepository, recipePicker));
+        ShowRecipesCommand = ReactiveCommand.Create(() => ShowRecipes(container, imageLoader, productRepository, recipePicker));
         CheckProductCommand = ReactiveCommand.Create<Product>(CheckProduct);
 
         Products = new ObservableCollection<Product>(Enumerable.Empty<Product>());

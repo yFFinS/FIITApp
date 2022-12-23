@@ -5,9 +5,9 @@ using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Infrastructure
 {
-    public static class DataBase
+    public class DataBase : IDataBase
     {
-        public static void InsertProduct(Product obj)
+        public void InsertProduct(Product obj)
         {
             var products = GetAllProducts();
 
@@ -19,7 +19,7 @@ namespace Recipes.Infrastructure
             xmlSerializer.Serialize(fs, products);
         }
 
-        public static List<Product> GetAllProducts()
+        public List<Product> GetAllProducts()
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Product>));
             var productsPath = "Products.xml";
@@ -33,7 +33,7 @@ namespace Recipes.Infrastructure
             return (List<Product>)xmlSerializer.Deserialize(stream)!;
         }
 
-        public static void InsertRecipe(Recipe obj)
+        public void InsertRecipe(Recipe obj)
         {
             var recipes = GetAllRecipes();
 
@@ -45,7 +45,7 @@ namespace Recipes.Infrastructure
             xmlSerializer.Serialize(fs, recipes);
         }
 
-        public static List<Recipe> GetAllRecipes()
+        public List<Recipe> GetAllRecipes()
         {
             var xmlSerializer = new XmlSerializer(typeof(List<Recipe>));
             var recipesPath = "Recipes.xml";

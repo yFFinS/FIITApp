@@ -57,6 +57,7 @@ public class Recipe : Entity<EntityId>
         set { ImageUrl = value == null ? null : new Uri(value); }
     }
 
+    
     private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
 

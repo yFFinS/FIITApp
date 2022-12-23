@@ -60,7 +60,7 @@ public sealed class AddProductCommand : Command
 
     private Product? TryLoadProductFromFile(string filePath)
     {
-        var text = File.ReadAllText(filePath);
+        var text = File.ReadAllLines(filePath);
         var product = _productParser.TryParseProduct(text);
 
         if (product is not null)

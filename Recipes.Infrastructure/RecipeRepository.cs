@@ -8,16 +8,18 @@ namespace Recipes.Infrastructure;
 public class RecipeRepository : IRecipeRepository
 {
     private readonly ILogger<RecipeRepository> _logger;
+    private readonly IDataBase _dataBase;
 
-    public RecipeRepository(ILogger<RecipeRepository> logger)
+    public RecipeRepository(ILogger<RecipeRepository> logger, IDataBase dataBase)
     {
         _logger = logger;
+        _dataBase = dataBase;
     }
 
     public Task<List<Recipe>> GetAllRecipesAsync()
     {
         _logger.LogDebug("Getting all recipes");
-        var recipes = DataBase.GetAllRecipes();
+        var recipes = _dataBase.GetAllRecipes();
         return Task.FromResult(recipes);
     }
 
@@ -40,7 +42,7 @@ public class RecipeRepository : IRecipeRepository
         foreach (var recipe in recipes)
         {
             _logger.LogDebug("Adding recipe {@Recipe}", recipe);
-            DataBase.InsertRecipe(recipe);
+            _dataBase.InsertRecipe(recipe);
         }
         
         return Task.CompletedTask;

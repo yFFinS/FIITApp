@@ -8,16 +8,18 @@ namespace Recipes.Infrastructure;
 public class ProductRepository : IProductRepository
 {
     private readonly ILogger<ProductRepository> _logger;
+    private readonly IDataBase _dataBase;
 
-    public ProductRepository(ILogger<ProductRepository> logger)
+    public ProductRepository(ILogger<ProductRepository> logger, IDataBase dataBase)
     {
         _logger = logger;
+        _dataBase = dataBase;
     }
 
     public Task<List<Product>> GetAllProductsAsync()
     {
         _logger.LogInformation("Getting all products");
-        var products = DataBase.GetAllProducts();
+        var products = _dataBase.GetAllProducts();
         return Task.FromResult(products);
     }
 
@@ -47,7 +49,7 @@ public class ProductRepository : IProductRepository
         foreach (var product in products)
         {
             _logger.LogInformation("Adding product {@Product} to database", product);
-            DataBase.InsertProduct(product);
+            _dataBase.InsertProduct(product);
         }
 
         return Task.CompletedTask;

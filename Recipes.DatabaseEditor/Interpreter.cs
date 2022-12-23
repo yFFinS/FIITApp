@@ -21,7 +21,7 @@ public class Interpreter
         // Split the input into arguments, but ignore spaces inside quotes, using a regex.
 
         var matches = Regex.Matches(input, @"[\""].+?[\""]|[^ ]+");
-        return matches.Select(m => m.Value).ToArray();
+        return matches.Select(m => m.Value.Trim('"')).ToArray();
     }
 
     private (Command? Command, int ArgumentsStart) TryGetCommand(IReadOnlyList<string> input)

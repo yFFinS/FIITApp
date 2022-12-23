@@ -29,6 +29,7 @@ public static class Bootstrap
             new PreferenceService(provider.GetService<ILogger<PreferenceService>>()!,
                 "preferences.json"));
 
+        services.AddSingleton<IDataBase, DataBase>();
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<IRecipeRepository, RecipeRepository>();
         services.AddSingleton<IImageLoader>(sp =>

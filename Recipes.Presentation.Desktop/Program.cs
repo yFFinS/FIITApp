@@ -12,6 +12,7 @@ namespace Recipes.Presentation.Desktop
         [STAThread]
         public static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += LogException;
             var exit = BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
             Environment.Exit(exit);
