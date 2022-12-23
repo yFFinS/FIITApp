@@ -95,7 +95,7 @@
                                   HorizontalAlignment="Right">
                                 <TextBlock Grid.Column="0" Text="Servings:" />
                                 <NumericUpDown Grid.Column="2"
-                                               Minimum="0"
+                                               Minimum="1"
                                                Maximum="1000"
                                                ShowButtonSpinner="False"
                                                AllowSpin="True"

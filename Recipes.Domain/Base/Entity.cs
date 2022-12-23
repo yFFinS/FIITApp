@@ -9,7 +9,7 @@ public abstract class Entity<TId>
     public TId Id
     {
         get => _id;
-        set {}
+        set { }
     }
 
     protected Entity(TId id)

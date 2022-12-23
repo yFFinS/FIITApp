@@ -1,14 +1,16 @@
+﻿using System.ComponentModel;
+using System.Xml.Serialization;
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
-using Recipes.Domain.Entities.ProductAggregate;
+using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
-using System.ComponentModel;
-using System.Xml.Serialization;
 
-namespace Recipes.Domain.Entities.RecipeAggregate;
+namespace Recipes.Infrastructure;
 
-public class Recipe : Entity<EntityId>
+[Serializable]
+[XmlType(TypeName = "Recipe")]
+public class RecipeDataBaseObject : Entity<EntityId>
 {
     private string _title = null!;
     private string? _description;
@@ -57,34 +59,24 @@ public class Recipe : Entity<EntityId>
         set { ImageUrl = value == null ? null : new Uri(value); }
     }
 
+    private RecipeDataBaseObject()
+    {
+    }
+
+    private RecipeDataBaseObject(Recipe recipe) : base(recipe.Id)
+    {
+        Title = recipe.Title;
+        EnergyValue = recipe.EnergyValue;
+        _ingredientGroup = new IngredientGroup(recipe.Ingredients);
+        _cookingTechnic = new CookingTechnic(recipe.CookingSteps);
+        Description = recipe.Description;
+        Servings = recipe.Servings;
+        CookDuration = recipe.CookDuration;
+    }
     
     private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
-
-
-    public Recipe(EntityId id, string title, EnergyValue energyValue) : base(id)
-    {
-        Title = title;
-        EnergyValue = energyValue;
-        _ingredientGroup = new IngredientGroup();
-        _cookingTechnic = new CookingTechnic();
-    }
-
-    public Recipe(EntityId id, string title, string? description, int servings,
-        TimeSpan cookDuration, EnergyValue energyValue) : this(id, title, energyValue)
-    {
-        Description = description;
-        Servings = servings;
-        CookDuration = cookDuration;
-    }
-
-    public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
-        EnergyValue energyValue, IngredientGroup ingredientGroup, CookingTechnic cookingTechnic)
-        : this(id, title, description, servings, cookDuration, energyValue)
-    {
-        _ingredientGroup = ingredientGroup;
-        _cookingTechnic = cookingTechnic;
-    }
+    private List<CookingStep> _cookingSteps;
 
     public void AddCookingStep(CookingStep cookingStep)
     {
@@ -151,17 +143,24 @@ public class Recipe : Entity<EntityId>
         _energyValue = energyValue;
     }
 
-    public IReadOnlyCollection<CookingStep> CookingSteps
+    public List<CookingStep> CookingSteps
     {
-        get => _cookingTechnic.CookingSteps;
+        get => _cookingSteps;
         set {}
     }
 
-    public IReadOnlyCollection<Ingredient> Ingredients
+    public IngredientGroup Ingredients
     {
-        get => _ingredientGroup.AsReadOnlyCollection();
+        get => _ingredientGroup;
         set {}
     }
 
-    private Recipe() : base() { }
+    public static implicit operator RecipeDataBaseObject(Recipe recipe) => new(recipe);
+
+    public static explicit operator Recipe(RecipeDataBaseObject recipeDBO)
+    {
+        var recipe = new Recipe(recipeDBO.Id, recipeDBO.Title, recipeDBO.Description, recipeDBO.Servings,
+            recipeDBO.CookDuration, recipeDBO.EnergyValue, recipeDBO._ingredientGroup, recipeDBO._cookingTechnic);
+        return recipe;
+    }
 }

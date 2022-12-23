@@ -7,7 +7,13 @@ public class IngredientGroup : IEnumerable<Ingredient>
 {
     private readonly Dictionary<EntityId, Ingredient> _ingredients;
 
-    public int Count => _ingredients.Count;
+    public int Count => Ingredients.Count;
+
+    public Dictionary<EntityId, Ingredient> Ingredients
+    {
+        get => _ingredients;
+        set => throw new NotSupportedException();
+    }
 
     public IngredientGroup()
     {
@@ -23,21 +29,21 @@ public class IngredientGroup : IEnumerable<Ingredient>
     {
         ThrowIfIngredientExists(ingredient.ProductId);
 
-        _ingredients.Add(ingredient.ProductId, ingredient);
+        Ingredients.Add(ingredient.ProductId, ingredient);
     }
 
     public void Update(Ingredient ingredient)
     {
         ThrowIfIngredientDoesNotExist(ingredient.ProductId);
 
-        _ingredients[ingredient.ProductId] = ingredient;
+        Ingredients[ingredient.ProductId] = ingredient;
     }
 
     public void RemoveByProductId(EntityId productId)
     {
         ThrowIfIngredientDoesNotExist(productId);
 
-        _ingredients.Remove(productId);
+        Ingredients.Remove(productId);
     }
 
     public void Remove(Ingredient ingredient) => RemoveByProductId(ingredient.ProductId);
@@ -46,17 +52,17 @@ public class IngredientGroup : IEnumerable<Ingredient>
     {
         ThrowIfIngredientDoesNotExist(productId);
 
-        return _ingredients[productId];
+        return Ingredients[productId];
     }
 
     public Ingredient? TryGetByProductId(EntityId productId)
     {
-        return _ingredients.TryGetValue(productId, out var ingredient) ? ingredient : null;
+        return Ingredients.TryGetValue(productId, out var ingredient) ? ingredient : null;
     }
 
     public IEnumerator<Ingredient> GetEnumerator()
     {
-        return _ingredients.Values.GetEnumerator();
+        return Ingredients.Values.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -64,11 +70,11 @@ public class IngredientGroup : IEnumerable<Ingredient>
         return GetEnumerator();
     }
 
-    public IReadOnlyCollection<Ingredient> AsReadOnlyCollection() => _ingredients.Values.ToList();
+    public IReadOnlyCollection<Ingredient> AsReadOnlyCollection() => Ingredients.Values.ToList();
 
     private void ThrowIfIngredientDoesNotExist(EntityId productId)
     {
-        if (!_ingredients.ContainsKey(productId))
+        if (!Ingredients.ContainsKey(productId))
         {
             throw new IngredientNotFoundException(productId);
         }
@@ -76,7 +82,7 @@ public class IngredientGroup : IEnumerable<Ingredient>
 
     private void ThrowIfIngredientExists(EntityId productId)
     {
-        if (_ingredients.ContainsKey(productId))
+        if (Ingredients.ContainsKey(productId))
         {
             throw new IngredientExistsException(productId);
         }

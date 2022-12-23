@@ -89,7 +89,7 @@ internal class RecipeEditorViewModel : ViewModelBase
     private void SaveRecipe()
     {
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings,
-            TimeSpan.Zero, new EnergyValue(0, 0, 0, 0));
+            new TimeSpan(0, 1,0,0), new EnergyValue(0, 0, 0, 0));
         foreach (var ingr in Ingredients) 
             recipe.AddIngredient(ingr);
         foreach (var cookingStep in CookingSteps) 

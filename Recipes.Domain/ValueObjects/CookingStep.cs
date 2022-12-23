@@ -5,10 +5,19 @@ namespace Recipes.Domain.ValueObjects;
 
 public class CookingStep : ValueObject<CookingStep>
 {
-    public string Description { get; }
+    private readonly string _description;
+
+    public string Description
+    {
+        get => _description;
+        set => throw new NotSupportedException();
+    }
 
     public CookingStep(string description)
     {
-        Description = Guard.Against.NullOrWhiteSpace(description);
+        _description = Guard.Against.NullOrWhiteSpace(description);
     }
+    
+    private CookingStep() {}
+    
 }

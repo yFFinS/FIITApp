@@ -19,7 +19,7 @@ public class RecipeRepository : IRecipeRepository
     public Task<List<Recipe>> GetAllRecipesAsync()
     {
         _logger.LogDebug("Getting all recipes");
-        var recipes = _dataBase.GetAllRecipes();
+        var recipes = _dataBase.GetAllRecipes().Cast<Recipe>().ToList();
         return Task.FromResult(recipes);
     }
 

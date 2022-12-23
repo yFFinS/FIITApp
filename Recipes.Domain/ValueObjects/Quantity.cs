@@ -8,8 +8,13 @@ using Recipes.Shared;
 
 namespace Recipes.Domain.ValueObjects;
 
+[Serializable]
 public sealed class Quantity : ValueObject<Quantity>
 {
+    private readonly double _value;
+    private readonly QuantityUnit _unit;
+    private Quantity() { }
+
     public override bool Equals(object? obj)
     {
         return ReferenceEquals(this, obj) || obj is Quantity other && Equals(other);
@@ -19,12 +24,21 @@ public sealed class Quantity : ValueObject<Quantity>
 
     public Quantity(double value, QuantityUnit unit)
     {
-        Value = Guard.Against.NegativeOrInvalid(value);
-        Unit = Guard.Against.EnumOutOfRange(unit);
+        _value = Guard.Against.NegativeOrInvalid(value);
+        _unit = Guard.Against.EnumOutOfRange(unit);
     }
 
-    public double Value { get; }
-    public QuantityUnit Unit { get; }
+    public double Value
+    {
+        get => _value;
+        set => throw new NotSupportedException();
+    }
+
+    public QuantityUnit Unit
+    {
+        get => _unit;
+        set => throw new NotSupportedException();
+    }
 
     public Quantity Empty => new(0, Unit);
 

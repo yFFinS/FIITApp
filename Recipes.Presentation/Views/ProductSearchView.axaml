@@ -63,6 +63,7 @@
                                             <MultiBinding Converter="{StaticResource UriToImageConverter}">
                                                 <MultiBinding.Bindings>
                                                     <Binding Path="ImageUrl"/>
+                                                    <Binding Path="ImageUrl"/>
                                                     <!-- <Binding Path="$parent[ItemsControl].DataContext.ImageLoader"/> -->
                                                 </MultiBinding.Bindings>
                                             </MultiBinding>

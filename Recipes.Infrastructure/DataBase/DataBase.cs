@@ -33,7 +33,7 @@ namespace Recipes.Infrastructure
             return (List<Product>)xmlSerializer.Deserialize(stream)!;
         }
 
-        public void InsertRecipe(Recipe obj)
+        public void InsertRecipe(RecipeDataBaseObject obj)
         {
             var recipes = GetAllRecipes();
 
@@ -45,18 +45,18 @@ namespace Recipes.Infrastructure
             xmlSerializer.Serialize(fs, recipes);
         }
 
-        public List<Recipe> GetAllRecipes()
+        public List<RecipeDataBaseObject> GetAllRecipes()
         {
-            var xmlSerializer = new XmlSerializer(typeof(List<Recipe>));
+            var xmlSerializer = new XmlSerializer(typeof(List<RecipeDataBaseObject>));
             var recipesPath = "Recipes.xml";
 
             if (!File.Exists(recipesPath))
             {
-                return new List<Recipe>();
+                return new List<RecipeDataBaseObject>();
             }
 
             using var stream = new FileStream(recipesPath, FileMode.Open);
-            return (List<Recipe>)xmlSerializer.Deserialize(stream)!;
+            return (List<RecipeDataBaseObject>)xmlSerializer.Deserialize(stream)!;
         }
     }
 }

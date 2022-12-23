@@ -4,17 +4,32 @@ using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.IngredientsAggregate;
 
+[Serializable]
 public class Ingredient : ValueObject<Ingredient>
 {
-    public EntityId ProductId { get; }
-    public Quantity Quantity { get; }
+    private readonly EntityId _productId;
+    private readonly Quantity _quantity;
+
+    public EntityId ProductId
+    {
+        get => _productId;
+        set => throw new NotSupportedException();
+    }
+
+    public Quantity Quantity
+    {
+        get => _quantity;
+        set => throw new NotSupportedException();
+    }
+    
+    private Ingredient() {}
 
     [EqualityIgnore] public Ingredient Empty => new(ProductId, Quantity.Empty);
 
     public Ingredient(EntityId productId, Quantity quantity)
     {
-        ProductId = Guard.Against.Null(productId);
-        Quantity = Guard.Against.Null(quantity);
+        _productId = Guard.Against.Null(productId);
+        _quantity = Guard.Against.Null(quantity);
     }
 
     public Ingredient WithQuantity(Quantity quantity)

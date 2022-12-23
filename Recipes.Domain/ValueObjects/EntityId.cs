@@ -12,9 +12,9 @@ public class EntityId : ValueObject<EntityId>
     public Guid Value
     {
         get => _value;
-        set { }
+        set {}
     }
-
+    
     public EntityId(string value) : this(Guid.Parse(value))
     {
     }
