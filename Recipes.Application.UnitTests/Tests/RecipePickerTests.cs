@@ -42,9 +42,14 @@ public class RecipePickerTests
             filter.AddOption(option);
         }
 
-        var score = RecipePicker.ScoreRecipe(recipe, filter, preferences);
+        var actualScore = RecipePicker.ScoreRecipe(recipe, filter, preferences);
 
-        Assert.AreEqual(-20, score);
+        var trueScore = 
+            RecipePicker.dislikedProductPenalty * 3 +
+            RecipePicker.hasProductScore * 3 +
+            RecipePicker.allOptionsSatisfiedScore;
+
+        Assert.AreEqual(trueScore, actualScore);
     }
 
     [Test]
@@ -69,9 +74,12 @@ public class RecipePickerTests
             recipe.AddIngredient(dislikedProduct);
         }
 
-        var score = RecipePicker.ScoreRecipe(recipe, filter, preferences);
+        var actualScore = RecipePicker.ScoreRecipe(recipe, filter, preferences);
 
-        Assert.AreEqual(100, score);
+        var trueScore =
+            RecipePicker.allOptionsSatisfiedScore;
+
+        Assert.AreEqual(trueScore, actualScore);
     }
 
     [Test]
@@ -101,9 +109,14 @@ public class RecipePickerTests
             filter.AddOption(option);
         }
 
-        var score = RecipePicker.ScoreRecipe(recipe, filter, preferences);
+        var actualScore = RecipePicker.ScoreRecipe(recipe, filter, preferences);
 
-        Assert.AreEqual(280, score);
+        var trueScore =
+            RecipePicker.likedProductScore * 3 +
+            RecipePicker.hasProductScore * 3 +
+            RecipePicker.allOptionsSatisfiedScore;
+
+        Assert.AreEqual(trueScore, actualScore);
     }
 
     [Test]
@@ -128,9 +141,12 @@ public class RecipePickerTests
             recipe.AddIngredient(likedProduct);
         }
 
-        var score = RecipePicker.ScoreRecipe(recipe, filter, preferences);
+        var actualScore = RecipePicker.ScoreRecipe(recipe, filter, preferences);
 
-        Assert.AreEqual(100, score);
+        var trueScore =
+            RecipePicker.allOptionsSatisfiedScore;
+
+        Assert.AreEqual(trueScore, actualScore);
     }
 
     [Test]
@@ -159,9 +175,13 @@ public class RecipePickerTests
             filter.AddOption(option);
         }
 
-        var score = RecipePicker.ScoreRecipe(recipe, filter, preferences);
+        var actualScore = RecipePicker.ScoreRecipe(recipe, filter, preferences);
 
-        Assert.AreEqual(130, score);
+        var trueScore =
+            RecipePicker.hasProductScore * 3 +
+            RecipePicker.allOptionsSatisfiedScore;
+
+        Assert.AreEqual(trueScore, actualScore);
     }
 
     [Test]
@@ -190,8 +210,11 @@ public class RecipePickerTests
             filter.AddOption(option);
         }
 
-        var score = RecipePicker.ScoreRecipe(recipe, filter, preferences);
+        var actualScore = RecipePicker.ScoreRecipe(recipe, filter, preferences);
 
-        Assert.AreEqual(-75, score);
+        var trueScore =
+            RecipePicker.notEnoughProductsPenalty * 3;
+
+        Assert.AreEqual(trueScore, actualScore);
     }
 }
