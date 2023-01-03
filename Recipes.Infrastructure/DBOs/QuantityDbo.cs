@@ -1,3 +1,7 @@
 namespace Recipes.Infrastructure;
 
-public record QuantityDbo(double Value, int UnitId);
+public class QuantityDbo
+{
+    public double Value { get; set; }
+    public int UnitId { get; set; }
+}

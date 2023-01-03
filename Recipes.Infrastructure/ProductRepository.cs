@@ -69,8 +69,15 @@ public class ProductRepository : IProductRepository
     private ProductDbo ProductToDbo(Product product)
     {
         var units = product.ValidQuantityUnits.Select(u => _quantityUnitRepository.GetUnitId(u)).ToArray();
-        return new ProductDbo(product.Id.ToString(), product.Name, product.Description, product.PieceWeight,
-            product.ImageUrl?.ToString(), units);
+        return new ProductDbo
+        {
+            Id = product.Id.ToString(),
+            Name = product.Name,
+            Description = product.Description,
+            PieceWeight = product.PieceWeight,
+            ImageUrl = product.ImageUrl?.ToString(),
+            QuantityUnitIds = units
+        };
     }
 
     private Product DboToProduct(ProductDbo productDbo)

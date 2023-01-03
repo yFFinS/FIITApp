@@ -84,25 +84,43 @@ public class RecipeRepository : IRecipeRepository
 
     private RecipeDbo RecipeToDbo(Recipe recipe)
     {
-        return new RecipeDbo(recipe.Id.ToString(), recipe.Title, recipe.Servings, recipe.CookDuration,
-            recipe.Description, recipe.ImageUrl?.ToString(),
-            recipe.Ingredients.Select(IngredientToDbo).ToArray(),
-            CookingStepsToDbo(recipe.CookingSteps));
+        return new RecipeDbo
+        {
+            Id = recipe.Id.ToString(),
+            Title = recipe.Title,
+            Servings = recipe.Servings,
+            CookDuration = recipe.CookDuration,
+            Description = recipe.Description,
+            ImageUrl = recipe.ImageUrl?.ToString(),
+            IngredientDbos = recipe.Ingredients.Select(IngredientToDbo).ToArray(),
+            CookingTechniqueDbo = CookingStepsToDbo(recipe.CookingSteps)
+        };
     }
 
     private IngredientDbo IngredientToDbo(Ingredient ingredient)
     {
-        return new IngredientDbo(ingredient.Product.Id.ToString(), QuantityToDbo(ingredient.Quantity));
+        return new IngredientDbo
+        {
+            ProductId = ingredient.Product.Id.ToString(),
+            QuantityDbo = QuantityToDbo(ingredient.Quantity)
+        };
     }
 
     private QuantityDbo QuantityToDbo(Quantity quantity)
     {
-        return new QuantityDbo(quantity.Value, _quantityUnitRepository.GetUnitId(quantity.Unit));
+        return new QuantityDbo
+        {
+            Value = quantity.Value,
+            UnitId = _quantityUnitRepository.GetUnitId(quantity.Unit)
+        };
     }
 
     private static CookingTechniqueDbo CookingStepsToDbo(IEnumerable<CookingStep> cookingSteps)
     {
-        return new CookingTechniqueDbo(cookingSteps.Select(s => s.Description).ToArray());
+        return new CookingTechniqueDbo
+        {
+            Steps = cookingSteps.Select(s => s.Description).ToArray()
+        };
     }
 
     private Recipe DboToRecipe(RecipeDbo recipeDbo)

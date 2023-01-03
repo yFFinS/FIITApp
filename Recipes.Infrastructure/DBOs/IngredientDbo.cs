@@ -1,3 +1,7 @@
 namespace Recipes.Infrastructure;
 
-public record IngredientDbo(string ProductId, QuantityDbo QuantityDbo);
+public class IngredientDbo
+{
+    public string ProductId { get; set; }
+    public QuantityDbo QuantityDbo { get; set; }
+};

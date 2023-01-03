@@ -69,9 +69,21 @@ public class FakeDatabase : IDataBase
 {
     public IReadOnlyList<ProductDbo> TestProducts { get; } = new List<ProductDbo>()
     {
-        new(EntityId.NewId().ToString(), "Продукт 1"),
-        new(EntityId.NewId().ToString(), "Продукт 2"),
-        new(EntityId.NewId().ToString(), "Продукт 3"),
+        new()
+        {
+            Id = EntityId.NewId().ToString(),
+            Name = "Продукт 1",
+        },
+        new()
+        {
+            Id = EntityId.NewId().ToString(),
+            Name = "Продукт 2",
+        },
+        new()
+        {
+            Id = EntityId.NewId().ToString(),
+            Name = "Продукт 3",
+        }
     };
 
     private readonly List<ProductDbo> _products;

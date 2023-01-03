@@ -1,3 +1,6 @@
 namespace Recipes.Infrastructure;
 
-public record CookingTechniqueDbo(string[] Steps);
+public class CookingTechniqueDbo
+{
+    public string[] Steps { get; set; }
+};

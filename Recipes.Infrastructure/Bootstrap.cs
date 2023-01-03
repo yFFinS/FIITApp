@@ -19,7 +19,6 @@ public static class Bootstrap
             .AddExternalOptions(() => new PreferencesCriteriaScores(50, -50, 150, -300))
             .AddExternalOptions(() => new FilterCriteriaScores(-30, 50, 150));
 
-
         serviceCollection.AddTransient<IScoringCriteria, PreferencesScoringCriteria>();
         serviceCollection.AddTransient<IScoringCriteria, FilterScoringCriteria>();
         serviceCollection.AddTransient<IReadOnlyList<IScoringCriteria>>(sp =>
@@ -40,16 +39,19 @@ public static class Bootstrap
 
         services.AddTransient<IRecipeIngredientsMerger, RecipeIngredientsMerger>();
         services.AddTransient<IRecipePicker, RecipePicker>();
-        services.AddTransient<QuantityParser>();
+        services.AddTransient<IQuantityParser, QuantityParser>();
         services.AddTransient<IIngredientGroupEditService, IngredientGroupEditService>();
         services.AddTransient<IShoppingListService, ShoppingListService>();
 
         optionsInjector.AddFixedOptions(new PreferenceServiceOptions("preferences.json"));
         services.AddSingleton<IPreferenceService, PreferenceService>();
 
+        optionsInjector.AddFixedOptions(new DataBaseOptions("Products.xml", "Recipes.xml"));
         services.AddSingleton<IDataBase, DataBase>();
+
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<IRecipeRepository, RecipeRepository>();
+
         optionsInjector.AddFixedOptions(new QuantityUnitRepositoryOptions("units.csv", CacheUnits: true));
         services.AddSingleton<IQuantityUnitRepository, QuantityUnitRepository>();
 
