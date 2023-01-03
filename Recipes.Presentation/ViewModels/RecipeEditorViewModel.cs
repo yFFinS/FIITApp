@@ -28,6 +28,7 @@ internal class RecipeEditorViewModel : ViewModelBase
     public IProductRepository ProductRepository { get; }
 
     #region Ingredient
+
     public Product CurrentProduct { get; set; }
     public float CurrentCount { get; set; }
     public QuantityUnit CurrentUnit { get; set; }
@@ -53,10 +54,10 @@ internal class RecipeEditorViewModel : ViewModelBase
         Description = "";
         Servings = 0;
         CookingSteps = new ObservableCollection<CookingStep>(new List<CookingStep>());
-        
+
         PopulateProducts = async (s, token) => await ProductRepository.GetProductsByPrefixAsync(s!.ToLower());
         SelectProduct = (search, item) => item.Name;
-        
+
         AddCookingStepCommand = ReactiveCommand.Create<TextBox>(AddCookingStep);
         AddIngregientCommand = ReactiveCommand.Create<Grid>(AddIngredient);
         SaveRecipeCommand = ReactiveCommand.Create(SaveRecipe);
@@ -78,22 +79,22 @@ internal class RecipeEditorViewModel : ViewModelBase
     private void AddIngredient(Grid parent)
     {
         Ingredients.Add(new Ingredient(CurrentProduct.Id ?? EntityId.NewId(), new Quantity(CurrentCount, CurrentUnit)));
-        if (parent.Children[0] is AutoCompleteBox box) 
+        if (parent.Children[0] is AutoCompleteBox box)
             box.Text = "";
         if (parent.Children[1] is NumericUpDown num)
             num.Value = 0;
         if (parent.Children[2] is ComboBox combo)
-            combo.SelectedItem = QuantityUnit.Pieces;
+            combo.SelectedItem = new QuantityUnit("штуки", "шт");
     }
 
     private void SaveRecipe()
     {
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings,
             TimeSpan.Zero, new EnergyValue(0, 0, 0, 0));
-        foreach (var ingr in Ingredients) 
+        foreach (var ingr in Ingredients)
             recipe.AddIngredient(ingr);
-        foreach (var cookingStep in CookingSteps) 
+        foreach (var cookingStep in CookingSteps)
             recipe.AddCookingStep(cookingStep);
-        RecipeRepository.AddRecipesAsync(new[] {recipe});
+        RecipeRepository.AddRecipesAsync(new[] { recipe });
     }
 }

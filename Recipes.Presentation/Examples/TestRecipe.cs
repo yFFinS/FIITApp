@@ -15,7 +15,9 @@ public class TestRecipe : Recipe
         Servings = 5;
         CookDuration = new TimeSpan(0, 1, 0, 0);
         ImageUrl = new Uri("https://www.goodnature.com/wp-content/uploads/2021/07/apple-juice-hero.jpg");
-        AddIngredient(new Ingredient(EntityId.NewId(), new Quantity(10, QuantityUnit.Pieces)));
+
+        var pieces = new QuantityUnit("штуки", "шт");
+        AddIngredient(new Ingredient(EntityId.NewId(), new Quantity(10, pieces)));
         AddCookingStep(new CookingStep("1. Steel juice from first apple"));
         AddCookingStep(new CookingStep("2. Steel juice from second apple"));
         AddCookingStep(new CookingStep("3. Steel juice from third apple"));

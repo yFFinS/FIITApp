@@ -18,6 +18,12 @@ public sealed class Product : Entity<EntityId>
 
     public string? Description { get; set; }
 
+    private readonly List<QuantityUnit> _quantityUnits = new();
+
+    public IReadOnlyList<QuantityUnit> ValidQuantityUnits => _quantityUnits;
+
+    public double? PieceWeight { get; set; }
+
     [XmlIgnore] public Uri? ImageUrl { get; set; }
 
     [XmlElement("Uri")]
@@ -31,9 +37,29 @@ public sealed class Product : Entity<EntityId>
     public Product(EntityId id, string name) : base(id)
     {
         Name = name;
+        _quantityUnits = new List<QuantityUnit>();
+    }
+
+    public Product(EntityId id, string name, string description, Uri? imageUrl,
+        IEnumerable<QuantityUnit> validQuantityUnits) : base(id)
+    {
+        Name = name;
+        Description = description;
+        ImageUrl = imageUrl;
+        _quantityUnits = validQuantityUnits.ToList();
     }
 
     private Product()
     {
+    }
+
+    public void AddQuantityUnit(QuantityUnit quantityUnit)
+    {
+        _quantityUnits.Add(quantityUnit);
+    }
+
+    public bool IsAvailableQuantityUnit(QuantityUnit quantityUnit)
+    {
+        return _quantityUnits.Contains(quantityUnit);
     }
 }

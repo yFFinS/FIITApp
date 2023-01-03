@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Recipes.Domain.Enums;
 
-public enum QuantityUnit
+public enum QuantityUnit1
 {
     Grams,
     Kilograms,

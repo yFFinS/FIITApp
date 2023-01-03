@@ -1,26 +1,29 @@
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
+using Recipes.Domain.Interfaces;
 
 namespace Recipes.Application.Services;
+
+public record CachingImageLoaderOptions(int CacheSize = 100) : IOptions;
 
 public class CachingImageLoader : IImageLoader
 {
     private readonly ILogger<CachingImageLoader> _logger;
-    private readonly int _cacheSize;
+    private readonly CachingImageLoaderOptions _options;
 
     private readonly HttpClient _httpClient = new();
     private readonly Dictionary<Uri, Bitmap> _cache = new();
 
-    public CachingImageLoader(ILogger<CachingImageLoader> logger, int cacheSize = 100)
+    public CachingImageLoader(ILogger<CachingImageLoader> logger, CachingImageLoaderOptions options)
     {
         _logger = logger;
-        _cacheSize = cacheSize;
+        _options = options;
     }
 
     private void SaveToCache(Uri uri, Bitmap bitmap)
     {
-        if (_cache.Count >= _cacheSize)
+        if (_cache.Count >= _options.CacheSize)
         {
             _cache.Remove(_cache.Keys.First());
         }

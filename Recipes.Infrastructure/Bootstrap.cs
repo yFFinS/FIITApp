@@ -12,13 +12,13 @@ namespace Recipes.Infrastructure;
 
 public static class Bootstrap
 {
-    private static IServiceCollection AddScoringCriteria(this IServiceCollection serviceCollection)
+    private static IServiceCollection AddScoringCriteria(this IServiceCollection serviceCollection,
+        OptionsInjector optionsInjector)
     {
-        var scoresInjector = new CriteriaScoresInjector(scoresFolderPath: "ScoringCriteria")
-            .AddScores(() => new PreferencesCriteriaScores(50, -50, 150, -300))
-            .AddScores(() => new FilterCriteriaScores(-30, 50, 150));
+        optionsInjector
+            .AddExternalOptions(() => new PreferencesCriteriaScores(50, -50, 150, -300))
+            .AddExternalOptions(() => new FilterCriteriaScores(-30, 50, 150));
 
-        scoresInjector.Inject(serviceCollection);
 
         serviceCollection.AddTransient<IScoringCriteria, PreferencesScoringCriteria>();
         serviceCollection.AddTransient<IScoringCriteria, FilterScoringCriteria>();
@@ -31,6 +31,7 @@ public static class Bootstrap
     public static IServiceCollection ConfigureServices()
     {
         var services = new ServiceCollection();
+        var optionsInjector = new OptionsInjector("Options");
 
         services.AddLogging(builder => builder.AddConsole());
 
@@ -39,21 +40,25 @@ public static class Bootstrap
 
         services.AddTransient<IRecipeIngredientsMerger, RecipeIngredientsMerger>();
         services.AddTransient<IRecipePicker, RecipePicker>();
-        services.AddTransient<IQuantityConverter, QuantityConverter>();
+        services.AddTransient<QuantityParser>();
         services.AddTransient<IIngredientGroupEditService, IngredientGroupEditService>();
         services.AddTransient<IShoppingListService, ShoppingListService>();
-        services.AddSingleton<IPreferenceService>(sp =>
-            new PreferenceService(sp.GetService<ILogger<PreferenceService>>()!,
-                "preferences.json"));
+
+        optionsInjector.AddFixedOptions(new PreferenceServiceOptions("preferences.json"));
+        services.AddSingleton<IPreferenceService, PreferenceService>();
 
         services.AddSingleton<IDataBase, DataBase>();
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<IRecipeRepository, RecipeRepository>();
-        services.AddSingleton<IImageLoader>(sp =>
-            new CachingImageLoader(sp.GetService<ILogger<CachingImageLoader>>()!, cacheSize: 1024));
+        optionsInjector.AddFixedOptions(new QuantityUnitRepositoryOptions("units.csv", CacheUnits: true));
+        services.AddSingleton<IQuantityUnitRepository, QuantityUnitRepository>();
 
-        services.AddScoringCriteria();
+        optionsInjector.AddFixedOptions(new CachingImageLoaderOptions(1024));
+        services.AddSingleton<IImageLoader, CachingImageLoader>();
 
+        services.AddScoringCriteria(optionsInjector);
+
+        optionsInjector.Inject(services);
         return services;
     }
 }

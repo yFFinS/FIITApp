@@ -1,9 +1,7 @@
 using System.Globalization;
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
-using Recipes.Domain.Enums;
 using Recipes.Domain.Exceptions;
-using Recipes.Domain.Extensions;
 using Recipes.Shared;
 
 namespace Recipes.Domain.ValueObjects;
@@ -20,7 +18,7 @@ public sealed class Quantity : ValueObject<Quantity>
     public Quantity(double value, QuantityUnit unit)
     {
         Value = Guard.Against.NegativeOrInvalid(value);
-        Unit = Guard.Against.EnumOutOfRange(unit);
+        Unit = Guard.Against.Null(unit);
     }
 
     public double Value { get; }
@@ -35,16 +33,14 @@ public sealed class Quantity : ValueObject<Quantity>
             return this;
         }
 
-        var grams = Unit.TryGetGrams();
-        if (grams.HasValue)
+        if (Unit.GramsConversionFactor.HasValue)
         {
-            return new Quantity(unit.FromGrams(grams.Value) * Value, unit);
+            return new Quantity(Unit.GramsConversionFactor.Value * Value, unit);
         }
 
-        var milliliters = Unit.TryGetMilliliters();
-        if (milliliters.HasValue)
+        if (Unit.MillilitersConversionFactor.HasValue)
         {
-            return new Quantity(unit.FromMilliliters(milliliters.Value) * Value, unit);
+            return new Quantity(Unit.MillilitersConversionFactor.Value * Value, unit);
         }
 
         throw new QuantityUnitNonConvertibleException(Unit);
@@ -122,16 +118,14 @@ public sealed class Quantity : ValueObject<Quantity>
 
     public double ToElementaryUnit()
     {
-        var grams = Unit.TryGetGrams();
-        if (grams.HasValue)
+        if (Unit.GramsConversionFactor.HasValue)
         {
-            return grams.Value * Value;
+            return Unit.GramsConversionFactor.Value * Value;
         }
 
-        var milliliters = Unit.TryGetMilliliters();
-        if (milliliters.HasValue)
+        if (Unit.GramsConversionFactor.HasValue)
         {
-            return milliliters.Value * Value;
+            return Unit.GramsConversionFactor.Value * Value;
         }
 
         throw new QuantityUnitNonConvertibleException(Unit);
@@ -139,20 +133,7 @@ public sealed class Quantity : ValueObject<Quantity>
 
     public override string ToString()
     {
-        return Unit switch
-        {
-            QuantityUnit.Grams => $"{Value} г",
-            QuantityUnit.Milliliters => $"{Value} мл",
-            QuantityUnit.Pieces => $"{Value} шт",
-            QuantityUnit.TeaSpoons => $"{Value} ч.л",
-            QuantityUnit.TableSpoons => $"{Value} ст.л",
-            QuantityUnit.DessertSpoons => $"{Value} дс.л",
-            QuantityUnit.Cups => $"{Value} ст",
-            QuantityUnit.Kilograms => $"{Value} кг",
-            QuantityUnit.Decilitres => $"{Value} дл",
-            QuantityUnit.Liters => $"{Value} л",
-            _ => throw new ArgumentOutOfRangeException()
-        };
+        return $"{Value.ToString(CultureInfo.InvariantCulture)} {Unit.Abbreviation}";
     }
 
     public override bool Equals(Quantity? quantity)
@@ -170,54 +151,13 @@ public sealed class Quantity : ValueObject<Quantity>
         return Math.Abs(Value - quantity.Value) < ComparisonEpsilon && Unit == quantity.Unit;
     }
 
-    public bool IsImplicitlyConvertibleTo(QuantityUnit unit) => Unit.IsImplicitlyConvertibleTo(unit);
-
     public override int GetHashCode() => HashCode.Combine(Value, Unit);
 
     public bool LessThanWithRatio(Quantity quantity, double ratio)
     {
-        if (!IsImplicitlyConvertibleTo(quantity.Unit))
-        {
-            throw new QuantityIncomparableException(this, quantity);
-        }
-
         var elementaryUnit = ToElementaryUnit();
         var otherElementaryUnit = quantity.ToElementaryUnit();
 
         return elementaryUnit < otherElementaryUnit * (1 + ratio);
-    }
-
-    public static Quantity? TryParse(string value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return null;
-        }
-
-        var split = value.Split();
-        var unit = split[1].Trim() switch
-        {
-            "г" => QuantityUnit.Grams,
-            "мл" => QuantityUnit.Milliliters,
-            "шт" => QuantityUnit.Pieces,
-            "ч.л" => QuantityUnit.TeaSpoons,
-            "ст.л" => QuantityUnit.TableSpoons,
-            "дс.л" => QuantityUnit.DessertSpoons,
-            "ст" => QuantityUnit.Cups,
-            "кг" => QuantityUnit.Kilograms,
-            "дл" => QuantityUnit.Decilitres,
-            "л" => QuantityUnit.Liters,
-            _ => (QuantityUnit)(-1)
-        };
-
-        if (unit == (QuantityUnit)(-1))
-        {
-            return null;
-        }
-
-        return !double.TryParse(split[0].Trim(), NumberStyles.Any, CultureInfo.InvariantCulture,
-            out var amount)
-            ? null
-            : new Quantity(amount, unit);
     }
 }

@@ -1,10 +1,11 @@
 using Recipes.Application.Services.Preferences;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.Interfaces;
 
 namespace Recipes.Application.Services.RecipePicker.ScoringCriteria;
 
 public record PreferencesCriteriaScores(double LikedProductScore, double DislikedProductPenalty,
-    double LikedRecipeScore, double DislikedRecipePenalty) : ICriteriaScores;
+    double LikedRecipeScore, double DislikedRecipePenalty) : IOptions;
 
 public class PreferencesScoringCriteria : IScoringCriteria
 {

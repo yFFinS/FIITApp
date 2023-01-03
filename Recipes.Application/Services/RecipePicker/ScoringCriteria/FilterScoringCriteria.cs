@@ -1,9 +1,10 @@
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.Interfaces;
 
 namespace Recipes.Application.Services.RecipePicker.ScoringCriteria;
 
 public record FilterCriteriaScores(double NotEnoughProductPenalty,
-    double HasEnoughProductScore, double AllOptionsSatisfiedScore) : ICriteriaScores;
+    double HasEnoughProductScore, double AllOptionsSatisfiedScore) : IOptions;
 
 public class FilterScoringCriteria : IScoringCriteria
 {

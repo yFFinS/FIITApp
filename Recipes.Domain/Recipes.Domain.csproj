@@ -18,4 +18,10 @@
       <Folder Include="Entities\PreferencesAggregate" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="QuantityUnits\units.csv">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

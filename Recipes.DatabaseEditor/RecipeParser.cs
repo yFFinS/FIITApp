@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
+using Recipes.Domain.Services;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.DatabaseEditor;
@@ -31,11 +32,13 @@ public class RecipeParser
 {
     private readonly ILogger<RecipeParser> _logger;
     private readonly IProductRepository _productRepository;
+    private readonly IQuantityParser _quantityParser;
 
-    public RecipeParser(ILogger<RecipeParser> logger, IProductRepository productRepository)
+    public RecipeParser(ILogger<RecipeParser> logger, IProductRepository productRepository, IQuantityParser quantityParser)
     {
         _logger = logger;
         _productRepository = productRepository;
+        _quantityParser = quantityParser;
     }
 
     private static string ParseValue(string line)
@@ -53,12 +56,12 @@ public class RecipeParser
     {
         var split = line.Split(" - ");
         var name = split[0].Trim();
-        var amount = split[1].Trim();
+        var quantityString = split[1].Trim();
 
-        var quantity = Quantity.TryParse(amount);
+        var quantity = _quantityParser.TryParseQuantity(quantityString);
         if (quantity is null)
         {
-            throw new QuantityParsingException(amount);
+            throw new QuantityParsingException(quantityString);
         }
 
         var product = _productRepository.GetProductByNameAsync(name).Result;
