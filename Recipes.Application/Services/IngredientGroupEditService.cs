@@ -19,7 +19,7 @@ public class IngredientGroupEditService : IIngredientGroupEditService
 
     public void AddByQuantity(IngredientGroup group, Ingredient ingredient)
     {
-        var existingIngredient = group.TryGetByProductId(ingredient.ProductId);
+        var existingIngredient = group.TryGetByProductId(ingredient.Product.Id);
         if (existingIngredient is null)
         {
             group.Add(ingredient);
@@ -40,14 +40,14 @@ public class IngredientGroupEditService : IIngredientGroupEditService
     {
         ThrowIfNotConvertible(ingredient, existingIngredient);
         var convertedQuantity =
-            _quantityConverter.Convert(ingredient.Quantity, existingIngredient.Quantity.Unit, ingredient.ProductId);
+            _quantityConverter.Convert(ingredient.Quantity, existingIngredient.Quantity.Unit, ingredient.Product.Id);
         var convertedIngredient = ingredient.WithQuantity(convertedQuantity);
         return convertedIngredient;
     }
 
     public Ingredient RemoveByQuantity(IngredientGroup group, Ingredient ingredient)
     {
-        var existingIngredient = group.TryGetByProductId(ingredient.ProductId);
+        var existingIngredient = group.TryGetByProductId(ingredient.Product.Id);
         if (existingIngredient is null)
         {
             group.Add(ingredient);
@@ -78,7 +78,7 @@ public class IngredientGroupEditService : IIngredientGroupEditService
     private void ThrowIfNotConvertible(Ingredient fromIngredient, Ingredient toIngredient)
     {
         if (_quantityConverter.CanConvert(fromIngredient.Quantity.Unit, toIngredient.Quantity.Unit,
-                fromIngredient.ProductId))
+                fromIngredient.Product.Id))
         {
             return;
         }

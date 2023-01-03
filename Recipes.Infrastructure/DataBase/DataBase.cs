@@ -1,62 +1,72 @@
 ﻿using Recipes.Domain.Entities.ProductAggregate;
-using Recipes.Domain.Entities.RecipeAggregate;
 using System.Xml.Serialization;
-using Recipes.Domain.ValueObjects;
+using Recipes.Domain.Interfaces;
 
-namespace Recipes.Infrastructure
+namespace Recipes.Infrastructure;
+
+public record DataBaseOptions(string ProductsPath, string RecipesPath) : IOptions;
+
+public class DataBase : IDataBase
 {
-    public class DataBase : IDataBase
+    private readonly DataBaseOptions _options;
+
+    public DataBase(DataBaseOptions options)
     {
-        public void InsertProduct(Product obj)
+        _options = options;
+    }
+
+    private static void AddOrUpdate<T>(T obj, IList<T> dest) where T : IEquatable<T>
+    {
+        for (var i = 0; i < dest.Count; i++)
         {
-            var products = GetAllProducts();
-
-            products.Add(obj);
-
-            var xmlSerializer = new XmlSerializer(products.GetType());
-
-            using FileStream fs = new("Products.xml", FileMode.OpenOrCreate);
-            xmlSerializer.Serialize(fs, products);
-        }
-
-        public List<Product> GetAllProducts()
-        {
-            var xmlSerializer = new XmlSerializer(typeof(List<Product>));
-            var productsPath = "Products.xml";
-
-            if (!File.Exists(productsPath))
+            if (dest[i].Equals(obj))
             {
-                return new List<Product>();
+                dest[i] = obj;
+                return;
             }
-
-            using var stream = new FileStream(productsPath, FileMode.Open);
-            return (List<Product>)xmlSerializer.Deserialize(stream)!;
         }
 
-        public void InsertRecipe(RecipeDataBaseObject obj)
+        dest.Add(obj);
+    }
+
+    public void InsertProduct(ProductDbo product)
+    {
+        var products = GetAllProducts();
+        AddOrUpdate(product, products);
+        Serialize(products, _options.ProductsPath);
+    }
+
+    public void InsertRecipe(RecipeDbo obj)
+    {
+        var recipes = GetAllRecipes();
+        AddOrUpdate(obj, recipes);
+        Serialize(recipes, _options.RecipesPath);
+    }
+
+
+    public List<ProductDbo> GetAllProducts() =>
+        Deserialize<List<ProductDbo>>(_options.ProductsPath) ?? new List<ProductDbo>();
+
+    public List<RecipeDbo> GetAllRecipes() =>
+        Deserialize<List<RecipeDbo>>(_options.RecipesPath) ?? new List<RecipeDbo>();
+
+
+    private static void Serialize<T>(T obj, string path) where T : notnull
+    {
+        var xmlSerializer = new XmlSerializer(obj.GetType());
+        using FileStream fs = new(path, FileMode.OpenOrCreate);
+        xmlSerializer.Serialize(fs, obj);
+    }
+
+    private static T? Deserialize<T>(string path)
+    {
+        var xmlSerializer = new XmlSerializer(typeof(T));
+        if (!File.Exists(path))
         {
-            var recipes = GetAllRecipes();
-
-            recipes.Add(obj);
-
-            var xmlSerializer = new XmlSerializer(recipes.GetType());
-
-            using FileStream fs = new("Recipes.xml", FileMode.OpenOrCreate);
-            xmlSerializer.Serialize(fs, recipes);
+            return default;
         }
 
-        public List<RecipeDataBaseObject> GetAllRecipes()
-        {
-            var xmlSerializer = new XmlSerializer(typeof(List<RecipeDataBaseObject>));
-            var recipesPath = "Recipes.xml";
-
-            if (!File.Exists(recipesPath))
-            {
-                return new List<RecipeDataBaseObject>();
-            }
-
-            using var stream = new FileStream(recipesPath, FileMode.Open);
-            return (List<RecipeDataBaseObject>)xmlSerializer.Deserialize(stream)!;
-        }
+        using var stream = new FileStream(path, FileMode.Open);
+        return (T)xmlSerializer.Deserialize(stream)!;
     }
 }

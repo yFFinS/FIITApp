@@ -15,7 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Entities\PreferencesAggregate" />
+      <None Update="units.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

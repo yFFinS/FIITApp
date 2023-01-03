@@ -9,11 +9,7 @@ public class IngredientGroup : IEnumerable<Ingredient>
 
     public int Count => Ingredients.Count;
 
-    public Dictionary<EntityId, Ingredient> Ingredients
-    {
-        get => _ingredients;
-        set => throw new NotSupportedException();
-    }
+    public IReadOnlyDictionary<EntityId, Ingredient> Ingredients => _ingredients;
 
     public IngredientGroup()
     {
@@ -22,31 +18,31 @@ public class IngredientGroup : IEnumerable<Ingredient>
 
     public IngredientGroup(IEnumerable<Ingredient> ingredients)
     {
-        _ingredients = ingredients.ToDictionary(ingredient => ingredient.ProductId);
+        _ingredients = ingredients.ToDictionary(ingredient => ingredient.Product.Id);
     }
 
     public void Add(Ingredient ingredient)
     {
-        ThrowIfIngredientExists(ingredient.ProductId);
+        ThrowIfIngredientExists(ingredient.Product.Id);
 
-        Ingredients.Add(ingredient.ProductId, ingredient);
+        _ingredients.Add(ingredient.Product.Id, ingredient);
     }
 
     public void Update(Ingredient ingredient)
     {
-        ThrowIfIngredientDoesNotExist(ingredient.ProductId);
+        ThrowIfIngredientDoesNotExist(ingredient.Product.Id);
 
-        Ingredients[ingredient.ProductId] = ingredient;
+        _ingredients[ingredient.Product.Id] = ingredient;
     }
 
     public void RemoveByProductId(EntityId productId)
     {
         ThrowIfIngredientDoesNotExist(productId);
 
-        Ingredients.Remove(productId);
+        _ingredients.Remove(productId);
     }
 
-    public void Remove(Ingredient ingredient) => RemoveByProductId(ingredient.ProductId);
+    public void Remove(Ingredient ingredient) => RemoveByProductId(ingredient.Product.Id);
 
     public Ingredient GetByProductId(EntityId productId)
     {

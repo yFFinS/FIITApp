@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.ProductAggregate;
+using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Infrastructure;
@@ -9,17 +10,21 @@ public class ProductRepository : IProductRepository
 {
     private readonly ILogger<ProductRepository> _logger;
     private readonly IDataBase _dataBase;
+    private readonly IQuantityUnitRepository _quantityUnitRepository;
 
-    public ProductRepository(ILogger<ProductRepository> logger, IDataBase dataBase)
+    public ProductRepository(ILogger<ProductRepository> logger, IDataBase dataBase,
+        IQuantityUnitRepository quantityUnitRepository)
     {
         _logger = logger;
         _dataBase = dataBase;
+        _quantityUnitRepository = quantityUnitRepository;
     }
 
     public Task<List<Product>> GetAllProductsAsync()
     {
         _logger.LogInformation("Getting all products");
-        var products = _dataBase.GetAllProducts();
+        var productDbos = _dataBase.GetAllProducts();
+        var products = productDbos.Select(DboToProduct).ToList();
         return Task.FromResult(products);
     }
 
@@ -49,7 +54,8 @@ public class ProductRepository : IProductRepository
         foreach (var product in products)
         {
             _logger.LogInformation("Adding product {@Product} to database", product);
-            _dataBase.InsertProduct(product);
+            var productDbo = ProductToDbo(product);
+            _dataBase.InsertProduct(productDbo);
         }
 
         return Task.CompletedTask;
@@ -58,5 +64,39 @@ public class ProductRepository : IProductRepository
     public Task RemoveProductsByIdAsync(IEnumerable<EntityId> products)
     {
         throw new NotImplementedException();
+    }
+
+    private ProductDbo ProductToDbo(Product product)
+    {
+        var units = product.ValidQuantityUnits.Select(u => _quantityUnitRepository.GetUnitId(u)).ToArray();
+        return new ProductDbo(product.Id.ToString(), product.Name, product.Description, product.PieceWeight,
+            product.ImageUrl?.ToString(), units);
+    }
+
+    private Product DboToProduct(ProductDbo productDbo)
+    {
+        var quantityUnits = productDbo.QuantityUnitIds
+            .Select(id => (id, _quantityUnitRepository.GetUnitById(id)))
+            .ToArray();
+
+        var existingQuantityUnitIds = new List<QuantityUnit>();
+        foreach (var (id, quantityUnit) in quantityUnits)
+        {
+            if (quantityUnit is null)
+            {
+                _logger.LogWarning("Quantity unit with id {Id} does not exist", id);
+                continue;
+            }
+
+            existingQuantityUnitIds.Add(quantityUnit);
+        }
+
+        var uri = productDbo.ImageUrl is null ? null : new Uri(productDbo.ImageUrl);
+        return new Product(new EntityId(productDbo.Id), productDbo.Name, productDbo.Description,
+            existingQuantityUnitIds)
+        {
+            ImageUrl = uri,
+            PieceWeight = productDbo.PieceWeight
+        };
     }
 }

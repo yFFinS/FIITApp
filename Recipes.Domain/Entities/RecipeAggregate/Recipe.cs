@@ -11,10 +11,8 @@ namespace Recipes.Domain.Entities.RecipeAggregate;
 public class Recipe : Entity<EntityId>
 {
     private string _title = null!;
-    private string? _description;
     private int _servings;
-    private TimeSpan _cookingTime;
-    private EnergyValue _energyValue = null!;
+    private TimeSpan _cookDuration;
 
     public string Title
     {
@@ -22,11 +20,7 @@ public class Recipe : Entity<EntityId>
         set => _title = Guard.Against.Null(value);
     }
 
-    public string? Description
-    {
-        get => _description;
-        set => _description = value;
-    }
+    public string? Description { get; set; }
 
     public int Servings
     {
@@ -36,42 +30,23 @@ public class Recipe : Entity<EntityId>
 
     public TimeSpan CookDuration
     {
-        get => _cookingTime;
-        set => _cookingTime = Guard.Against.NegativeOrZero(value);
+        get => _cookDuration;
+        set => _cookDuration = Guard.Against.NegativeOrZero(value);
     }
 
-    public EnergyValue EnergyValue
-    {
-        get => _energyValue;
-        set => _energyValue = Guard.Against.Null(value);
-    }
-
-    [XmlIgnore]
     public Uri? ImageUrl { get; set; }
 
-    [XmlAttribute("uri")]
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public string? ImageUrlString
-    {
-        get { return ImageUrl?.ToString(); }
-        set { ImageUrl = value == null ? null : new Uri(value); }
-    }
-
-    
     private readonly IngredientGroup _ingredientGroup;
     private readonly CookingTechnic _cookingTechnic;
 
-
-    public Recipe(EntityId id, string title, EnergyValue energyValue) : base(id)
+    public Recipe(EntityId id, string title) : base(id)
     {
         Title = title;
-        EnergyValue = energyValue;
         _ingredientGroup = new IngredientGroup();
         _cookingTechnic = new CookingTechnic();
     }
 
-    public Recipe(EntityId id, string title, string? description, int servings,
-        TimeSpan cookDuration, EnergyValue energyValue) : this(id, title, energyValue)
+    public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration) : this(id, title)
     {
         Description = description;
         Servings = servings;
@@ -79,12 +54,15 @@ public class Recipe : Entity<EntityId>
     }
 
     public Recipe(EntityId id, string title, string? description, int servings, TimeSpan cookDuration,
-        EnergyValue energyValue, IngredientGroup ingredientGroup, CookingTechnic cookingTechnic)
-        : this(id, title, description, servings, cookDuration, energyValue)
+        IngredientGroup ingredientGroup, CookingTechnic cookingTechnic)
+        : this(id, title, description, servings, cookDuration)
     {
         _ingredientGroup = ingredientGroup;
         _cookingTechnic = cookingTechnic;
     }
+
+    public IReadOnlyList<Ingredient> Ingredients => _ingredientGroup.Ingredients.Values.ToList();
+    public IReadOnlyList<CookingStep> CookingSteps => _cookingTechnic.CookingSteps;
 
     public void AddCookingStep(CookingStep cookingStep)
     {
@@ -109,6 +87,7 @@ public class Recipe : Entity<EntityId>
     public void UpdateIngredient(Ingredient ingredient)
     {
         ArgumentNullException.ThrowIfNull(ingredient);
+
         _ingredientGroup.Update(ingredient);
     }
 
@@ -125,43 +104,4 @@ public class Recipe : Entity<EntityId>
 
         _ingredientGroup.Remove(ingredient);
     }
-
-    public void UpdateTitle(string title)
-    {
-        Title = title;
-    }
-
-    public void UpdateDescription(string? description)
-    {
-        Description = description;
-    }
-
-    public void UpdateServings(int servings)
-    {
-        Servings = servings;
-    }
-
-    public void UpdateCookDuration(TimeSpan cookDuration)
-    {
-        CookDuration = cookDuration;
-    }
-
-    public void UpdateEnergyValue(EnergyValue energyValue)
-    {
-        _energyValue = energyValue;
-    }
-
-    public IReadOnlyCollection<CookingStep> CookingSteps
-    {
-        get => _cookingTechnic.CookingSteps;
-        set {}
-    }
-
-    public IReadOnlyCollection<Ingredient> Ingredients
-    {
-        get => _ingredientGroup.AsReadOnlyCollection();
-        set {}
-    }
-
-    private Recipe() : base() { }
 }

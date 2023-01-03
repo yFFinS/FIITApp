@@ -1,49 +1,26 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
+using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.IngredientsAggregate;
 
-[Serializable]
 public class Ingredient : ValueObject<Ingredient>
 {
-    private readonly EntityId _productId;
-    private readonly Quantity _quantity;
+    public Product Product { get; }
+    public Quantity Quantity { get; }
 
-    public EntityId ProductId
+    [EqualityIgnore] public Ingredient Empty => new(Product, Quantity.Empty);
+
+    public Ingredient(Product product, Quantity quantity)
     {
-        get => _productId;
-        set => throw new NotSupportedException();
+        Product = Guard.Against.Null(product);
+        Quantity = Guard.Against.Null(quantity);
     }
 
-    public Quantity Quantity
-    {
-        get => _quantity;
-        set => throw new NotSupportedException();
-    }
-    
-    private Ingredient() {}
+    public Ingredient WithQuantity(Quantity quantity) => new(Product, quantity);
 
-    [EqualityIgnore] public Ingredient Empty => new(ProductId, Quantity.Empty);
+    public Ingredient WithProduct(Product product) => new(product, Quantity);
 
-    public Ingredient(EntityId productId, Quantity quantity)
-    {
-        _productId = Guard.Against.Null(productId);
-        _quantity = Guard.Against.Null(quantity);
-    }
-
-    public Ingredient WithQuantity(Quantity quantity)
-    {
-        return new Ingredient(ProductId, quantity);
-    }
-
-    public Ingredient WithProduct(EntityId productId)
-    {
-        return new Ingredient(productId, Quantity);
-    }
-
-    public override string ToString()
-    {
-        return $"{ProductId} {Quantity}";
-    }
+    public override string ToString() => $"{Product} {Quantity}";
 }

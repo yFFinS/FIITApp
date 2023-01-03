@@ -8,8 +8,6 @@ namespace Recipes.Domain.Entities.ProductAggregate;
 
 public sealed class Product : Entity<EntityId>
 {
-    private string _name = null!;
-
     public string Name
     {
         get => _name;
@@ -18,22 +16,36 @@ public sealed class Product : Entity<EntityId>
 
     public string? Description { get; set; }
 
-    [XmlIgnore] public Uri? ImageUrl { get; set; }
+    public double? PieceWeight { get; set; }
 
-    [XmlElement("Uri")]
-    [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-    public string? ImageUrlString
-    {
-        get => ImageUrl?.ToString();
-        set => ImageUrl = value == null ? null : new Uri(value);
-    }
+    public Uri? ImageUrl { get; set; }
+
+    public IReadOnlyList<QuantityUnit> ValidQuantityUnits => _quantityUnits;
+    private string _name = null!;
+
+    private readonly List<QuantityUnit> _quantityUnits;
 
     public Product(EntityId id, string name) : base(id)
     {
         Name = name;
+        _quantityUnits = new List<QuantityUnit>();
     }
 
-    private Product()
+    public Product(EntityId id, string name, string? description,
+        IEnumerable<QuantityUnit> validQuantityUnits) : base(id)
     {
+        Name = name;
+        Description = description;
+        _quantityUnits = validQuantityUnits.ToList();
+    }
+
+    public void AddQuantityUnit(QuantityUnit quantityUnit)
+    {
+        _quantityUnits.Add(quantityUnit);
+    }
+
+    public bool IsAvailableQuantityUnit(QuantityUnit quantityUnit)
+    {
+        return _quantityUnits.Contains(quantityUnit);
     }
 }

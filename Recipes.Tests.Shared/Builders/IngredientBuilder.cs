@@ -1,4 +1,4 @@
-using Recipes.Domain.Enums;
+using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 using Recipes.Tests.Shared.BuilderEntries;
@@ -7,12 +7,12 @@ namespace Recipes.Tests.Shared.Builders;
 
 public class IngredientBuilder : AbstractBuilder<Ingredient>
 {
-    private EntityId _productId = An.EntityId;
-    private Quantity _quantity = new(1, QuantityUnit.Pieces);
+    private Product _product = A.Product;
+    private Quantity _quantity = A.Quantity;
 
-    public IngredientBuilder WithProductId(EntityId productId)
+    public IngredientBuilder WithProduct(Product product)
     {
-        _productId = productId;
+        _product = product;
         return this;
     }
 
@@ -24,6 +24,6 @@ public class IngredientBuilder : AbstractBuilder<Ingredient>
 
     public override Ingredient Build()
     {
-        return new Ingredient(_productId, _quantity);
+        return new Ingredient(_product, _quantity);
     }
 }

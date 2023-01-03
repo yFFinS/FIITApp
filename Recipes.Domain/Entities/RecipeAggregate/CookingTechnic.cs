@@ -25,11 +25,7 @@ public class CookingTechnic
         _cookingSteps.Remove(cookingStep);
     }
 
-    public IReadOnlyCollection<CookingStep> CookingSteps
-    {
-        get => _cookingSteps;
-        set => throw new NotSupportedException();
-    }
+    public IReadOnlyList<CookingStep> CookingSteps => _cookingSteps;
 
     public void SetCookingStep(int setIndex, CookingStep cookingStep)
     {

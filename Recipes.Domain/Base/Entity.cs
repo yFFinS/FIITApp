@@ -1,21 +1,11 @@
-using Recipes.Domain.ValueObjects;
-
 namespace Recipes.Domain.Base;
 
 public abstract class Entity<TId>
 {
-    private TId _id;
-
-    public TId Id
-    {
-        get => _id;
-        set { }
-    }
+    public TId Id { get; }
 
     protected Entity(TId id)
     {
-        _id = id;
+        Id = id;
     }
-
-    protected Entity() { }
 }

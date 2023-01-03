@@ -1,4 +1,3 @@
-using Recipes.Domain.Enums;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Interfaces;

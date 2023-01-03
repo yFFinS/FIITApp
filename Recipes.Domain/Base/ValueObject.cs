@@ -25,12 +25,7 @@ public abstract class ValueObject<T> : IEquatable<T> where T : ValueObject<T>
         var me = Expression.Parameter(typeof(T), "me");
         var hash = properties
             .Select(p => Expression.Property(me, p))
-            // TODO: doesn't work for nullables
-            // .Select(p => Expression.Condition(
-            //     Expression.Equal(p, Expression.Constant(null)),
-            //     Expression.Constant(0),
-            //     Expression.Call(p, "GetHashCode", Type.EmptyTypes)))
-            .Select(p => Expression.Call(p, "GetHashCode", Type.EmptyTypes))
+            .Select(p => Expression.Call(p, nameof(object.GetHashCode), Type.EmptyTypes))
             .Select(p => (Expression)p)
             .Aggregate(Expression.ExclusiveOr);
         GetHashCodeExpression = Expression.Lambda<Func<T, int>>(hash, me).Compile();
@@ -48,7 +43,7 @@ public abstract class ValueObject<T> : IEquatable<T> where T : ValueObject<T>
 
     public override bool Equals(object? obj)
     {
-        return obj is ValueObject<T> other && Equals(other);
+        return obj is ValueObject<T> other && Equals((T)other);
     }
 
     public override int GetHashCode()
@@ -58,11 +53,16 @@ public abstract class ValueObject<T> : IEquatable<T> where T : ValueObject<T>
 
     public static bool operator ==(ValueObject<T>? left, ValueObject<T>? right)
     {
-        return Equals(left, right);
+        if (left is null)
+        {
+            return right is null;
+        }
+
+        return left.Equals(right);
     }
 
     public static bool operator !=(ValueObject<T>? left, ValueObject<T>? right)
     {
-        return !Equals(left, right);
+        return !(left == right);
     }
 }

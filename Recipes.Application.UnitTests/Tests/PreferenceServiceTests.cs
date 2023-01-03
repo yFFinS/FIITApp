@@ -33,7 +33,8 @@ public class PreferenceServiceTests
 
     private static PreferenceService CreateService()
     {
-        var preferencesService = new PreferenceService(NullLogger<PreferenceService>.Instance, TestPath);
+        var preferencesService = new PreferenceService(NullLogger<PreferenceService>.Instance,
+            new PreferenceServiceOptions(TestPath));
         return preferencesService;
     }
 

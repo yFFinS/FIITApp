@@ -5,13 +5,11 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
-
-        <RootNamespace>Recipes.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnit" Version="3.13.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
         <PackageReference Include="coverlet.collector" Version="3.1.0" />
     </ItemGroup>
@@ -19,7 +17,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Recipes.Infrastructure\Recipes.Infrastructure.csproj" />
       <ProjectReference Include="..\Recipes.Tests.Shared\Recipes.Tests.Shared.csproj" />
-      <ProjectReference Include="..\Recipes.Domain\Recipes.Domain.csproj" />
     </ItemGroup>
 
 </Project>

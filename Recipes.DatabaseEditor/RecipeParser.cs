@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
+using Recipes.Domain.Services;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.DatabaseEditor;
@@ -31,11 +32,14 @@ public class RecipeParser
 {
     private readonly ILogger<RecipeParser> _logger;
     private readonly IProductRepository _productRepository;
+    private readonly IQuantityParser _quantityParser;
 
-    public RecipeParser(ILogger<RecipeParser> logger, IProductRepository productRepository)
+    public RecipeParser(ILogger<RecipeParser> logger, IProductRepository productRepository,
+        IQuantityParser quantityParser)
     {
         _logger = logger;
         _productRepository = productRepository;
+        _quantityParser = quantityParser;
     }
 
     private static string ParseValue(string line)
@@ -53,12 +57,12 @@ public class RecipeParser
     {
         var split = line.Split(" - ");
         var name = split[0].Trim();
-        var amount = split[1].Trim();
+        var quantityString = split[1].Trim();
 
-        var quantity = Quantity.TryParse(amount);
+        var quantity = _quantityParser.TryParseQuantity(quantityString);
         if (quantity is null)
         {
-            throw new QuantityParsingException(amount);
+            throw new QuantityParsingException(quantityString);
         }
 
         var product = _productRepository.GetProductByNameAsync(name).Result;
@@ -67,7 +71,7 @@ public class RecipeParser
             throw new ProductMissingException(name);
         }
 
-        return new Ingredient(product.Id, quantity);
+        return new Ingredient(product, quantity);
     }
 
     private static CookingStep ParseCookingStep(string line)
@@ -84,7 +88,7 @@ public class RecipeParser
         var title = lines[0];
 
 
-        int servings, calories, proteins, fats, carbohydrates;
+        int servings;
         string? imageUrl;
         string? description;
         TimeSpan cookingTime;
@@ -92,13 +96,11 @@ public class RecipeParser
         try
         {
             imageUrl = ParseValue(lines[1]);
+            imageUrl = string.IsNullOrWhiteSpace(imageUrl) ? null : imageUrl;
+
             servings = int.Parse(ParseValue(lines[2]));
             cookingTime = TimeSpan.FromSeconds(int.Parse(ParseValue(lines[3])));
-            calories = int.Parse(ParseValue(lines[4]));
-            proteins = int.Parse(ParseValue(lines[5]));
-            fats = int.Parse(ParseValue(lines[6]));
-            carbohydrates = int.Parse(ParseValue(lines[7]));
-            description = ParseValue(lines[8]);
+            description = ParseValue(lines[4]);
             description = string.IsNullOrWhiteSpace(description) ? null : description;
         }
         catch (Exception e)
@@ -107,12 +109,9 @@ public class RecipeParser
             return null;
         }
 
-        var energyValue = new EnergyValue(calories, proteins, fats, carbohydrates);
-
-
         var ingredients = new List<Ingredient>();
 
-        var ingredientsIndex = 10;
+        var ingredientsIndex = 6;
         while (IsIngredient(lines[ingredientsIndex]))
         {
             ingredients.Add(ParseIngredient(lines[ingredientsIndex]));
@@ -124,10 +123,10 @@ public class RecipeParser
             .Select(ParseCookingStep)
             .ToList();
 
-        return new Recipe(EntityId.NewId(), title, description, servings, cookingTime, energyValue,
+        return new Recipe(EntityId.NewId(), title, description, servings, cookingTime,
             new IngredientGroup(ingredients), new CookingTechnic(cookingSteps))
         {
-            ImageUrl = new Uri(imageUrl)
+            ImageUrl = imageUrl is null ? null : new Uri(imageUrl)
         };
     }
 }

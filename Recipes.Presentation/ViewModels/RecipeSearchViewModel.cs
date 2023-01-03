@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Threading.Tasks;
-using Avalonia.Threading;
 using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.RecipeAggregate;
-using Recipes.Domain.Enums;
-using Recipes.Domain.IngredientsAggregate;
-using Recipes.Domain.Interfaces;
-using Recipes.Domain.ValueObjects;
 using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
