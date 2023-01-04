@@ -1,5 +1,9 @@
+using System.Xml.Serialization;
+using Recipes.Domain.Entities.ProductAggregate;
+
 namespace Recipes.Infrastructure;
 
+[XmlType(nameof(Product))]
 public class ProductDbo : EntityDbo<ProductDbo>
 {
     public string Name { get; set; }

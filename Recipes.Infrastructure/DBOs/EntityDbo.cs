@@ -1,5 +1,10 @@
+using System.Xml.Serialization;
+using Recipes.Domain.Base;
+using Recipes.Domain.Entities.ProductAggregate;
+
 namespace Recipes.Infrastructure;
 
+[XmlType(nameof(Entity<T>))]
 public class EntityDbo<T> : IEquatable<T> where T : EntityDbo<T>
 {
     public string Id { get; set; }

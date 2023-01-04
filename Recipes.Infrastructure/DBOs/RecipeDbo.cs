@@ -1,5 +1,9 @@
+using System.Xml.Serialization;
+using Recipes.Domain.Entities.RecipeAggregate;
+
 namespace Recipes.Infrastructure;
 
+[XmlType(nameof(Recipe))]
 public class RecipeDbo : EntityDbo<RecipeDbo>
 {
     public string Title { get; set; }
