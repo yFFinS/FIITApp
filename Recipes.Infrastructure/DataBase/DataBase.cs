@@ -36,20 +36,20 @@ public class DataBase : IDataBase
 
     public void InsertProduct(ProductDbo product)
     {
-        _isDirty = true;
-
         var products = GetAllProducts();
         AddOrUpdate(product, products);
         Serialize(products, _options.ProductsPath);
+        
+        _isDirty = true;
     }
 
     public void InsertRecipe(RecipeDbo obj)
     {
-        _isDirty = true;
-
         var recipes = GetAllRecipes();
         AddOrUpdate(obj, recipes);
         Serialize(recipes, _options.RecipesPath);
+        
+        _isDirty = true;
     }
 
 
