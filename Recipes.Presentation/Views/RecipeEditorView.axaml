@@ -45,18 +45,16 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <StackPanel Orientation="Horizontal"
-                                        Height="30"
-                                        Margin="0 5 0 0"
-                                        VerticalAlignment="Top"
-                                        Spacing="5"
-                                        x:DataType="productAggregate:Product">
-                                <AutoCompleteBox 
+                            <Grid ColumnDefinitions="*, 10, Auto, 30" 
+                                  Height="30"
+                                  Margin="0 5 0 0"
+                                  VerticalAlignment="Top"
+                                  x:DataType="productAggregate:Product">
+                                <AutoCompleteBox Grid.Column="0" 
                                                  Watermark="Product"
                                                  AsyncPopulator="{Binding PopulateProducts}"
                                                  TextSelector="{Binding SelectProduct}"
                                                  SelectedItem="{Binding CurrentProduct, Mode=TwoWay}"
-                                                 MaxWidth="150"
                                                  ValueMemberBinding="{CompiledBinding Name}">
                                     <AutoCompleteBox.ItemTemplate>
                                         <DataTemplate DataType="productAggregate:Product">
@@ -66,10 +64,11 @@
                                         </DataTemplate>
                                     </AutoCompleteBox.ItemTemplate>
                                 </AutoCompleteBox>
-                                <TextBlock Text=": "/>
-                                <NumericUpDown Minimum="0.001"
-                                               Maximum="10000000"
-                                               Value="{Binding CurrentCount, Mode=TwoWay}"/>
+                                <TextBlock Grid.Column="1" Text=": "/>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <NumericUpDown Minimum="0.001"
+                                                   Maximum="10000000"
+                                                   Value="{Binding CurrentCount, Mode=TwoWay}"/>
                                     <ComboBox Items="{Binding Units}"
                                               Padding="0"
                                               SelectedItem="{Binding CurrentUnit, Mode=TwoWay}">
@@ -84,15 +83,18 @@
                                             <ItemsPanelTemplate>
                                                 <StackPanel Spacing="0"/>
                                             </ItemsPanelTemplate>
-                                        </ComboBox.ItemsPanel></ComboBox>
-                                <Button Width="30" 
+                                        </ComboBox.ItemsPanel>
+                                    </ComboBox>
+                                </StackPanel>
+                                <Button Grid.Column="3"
+                                        Width="30" 
                                         Height="30"
                                         Command="{Binding AddIngredientCommand}"
                                         CommandParameter="{Binding $parent[Grid]}"/>
-                            </StackPanel>
+                            </Grid>
                         </StackPanel>
                     </Border>
-                    <Grid Grid.Column="2" RowDefinitions="10*, 10*, 10, *" HorizontalAlignment="Stretch">
+                    <Grid Grid.Column="2" RowDefinitions="*, Auto, 10, Auto" HorizontalAlignment="Stretch">
                         <Image />
                         <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom">
                             <TextBox Text="{Binding Description}"
@@ -100,14 +102,21 @@
                                      Watermark="Description..." />
                         </Border>
                         <Border Grid.Row="3" Classes="accent round" HorizontalAlignment="Stretch">
-                            <Grid ColumnDefinitions="* 10 *"
-                                  HorizontalAlignment="Right">
-                                <TextBlock Grid.Column="0" Text="Servings:" />
-                                <NumericUpDown Grid.Column="2"
-                                               Minimum="1"
-                                               Maximum="1000"
-                                               AllowSpin="True"
-                                               Value="{Binding Servings, Mode=TwoWay}" />
+                            <Grid ColumnDefinitions="* *">
+                                <Grid ColumnDefinitions="Auto 10 Auto"
+                                      HorizontalAlignment="Right">
+                                    <TextBlock Grid.Column="0" Text="Servings:" />
+                                    <NumericUpDown Grid.Column="2"
+                                                   Minimum="1"
+                                                   Maximum="1000"
+                                                   AllowSpin="True"
+                                                   Value="{Binding Servings, Mode=TwoWay}" />
+                                </Grid>
+                                <Grid Grid.Column="1" ColumnDefinitions="Auto 10 Auto"
+                                      HorizontalAlignment="Right">
+                                    <TextBlock Grid.Column="0" Text="Cooking Time:" />
+                                    <TimePicker Grid.Column="2" SelectedTime="{Binding CookDuration, Mode=TwoWay}"/>
+                                </Grid>
                             </Grid>
                         </Border>
                     </Grid>

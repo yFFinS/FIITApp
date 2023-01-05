@@ -39,6 +39,8 @@ internal class RecipeEditorViewModel : ViewModelBase
     public ObservableCollection<Ingredient> Ingredients { get; set; }
 
     public string Description { get; set; }
+    
+    public TimeSpan CookDuration { get; set; }
 
     public int Servings { get; set; }
 
@@ -97,12 +99,12 @@ internal class RecipeEditorViewModel : ViewModelBase
         if (parent.Children[1] is NumericUpDown num)
             num.Value = 1;
         if (parent.Children[2] is ComboBox combo)
-            CurrentUnit = Units[0];
+            combo.SelectedIndex = 0;
     }
 
     private void SaveRecipe()
     {
-        var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings,TimeSpan.Zero);
+        var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings, CookDuration);
         foreach (var ingr in Ingredients)
             recipe.AddIngredient(ingr);
         foreach (var cookingStep in CookingSteps)

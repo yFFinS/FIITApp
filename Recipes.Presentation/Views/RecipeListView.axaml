@@ -26,15 +26,9 @@
                             VerticalAlignment="Stretch"
                             Margin="20">
                         <Panel>
-                            <Image>
-                                <Image.Source>
-                                    <MultiBinding Converter="{StaticResource UriToImageConverter}">
-                                        <Binding Path="ImageUrl"/>
-                                        <Binding Path="$parent[ItemsControl].DataContext.ImageLoader"/>
-                                    </MultiBinding>
-                                </Image.Source>
-                            </Image>
-                            <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
+                            <Image/>
+                            <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
+                                    CommandParameter="{Binding}">
                                 <TextBlock Text="{Binding Title}"/>
                             </Button>
                         </Panel>

@@ -5,13 +5,13 @@
              xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Controls.IngredientLabel">
-    <Border MinWidth="100" DataContext="{Binding $parent}">
+    <Border MinWidth="100">
         <DockPanel>
             <Button DockPanel.Dock="Right" Width="30" Height="30" />
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Ingredient.Product.Name}" />
+                <TextBlock Text="{Binding Product.Name}" />
                 <TextBlock Text=": " />
-                <TextBlock Text="{Binding Ingredient.Quantity}" />
+                <TextBlock Text="{Binding Quantity}" />
             </StackPanel>
         </DockPanel>
     </Border>

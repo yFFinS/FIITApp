@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Xml;
+using System.Xml.Serialization;
 using Recipes.Domain.Interfaces;
 
 namespace Recipes.Infrastructure;
@@ -66,7 +67,7 @@ public class DataBase : IDataBase
 
     public List<RecipeDbo> GetAllRecipes()
     {
-        if (!_isDirty)
+        if (!_isDirty && _recipes is not null)
         {
             return _recipes;
         }
@@ -93,6 +94,6 @@ public class DataBase : IDataBase
         }
 
         using var stream = new FileStream(path, FileMode.Open);
-        return (T)xmlSerializer.Deserialize(stream)!;
+        return (T) xmlSerializer.Deserialize(stream)!;
     }
 }
