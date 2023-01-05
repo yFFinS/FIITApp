@@ -10,17 +10,20 @@ public class QuantityUnit : ValueObject<QuantityUnit>
     public double? GramsConversionFactor { get; }
     public double? MillilitersConversionFactor { get; }
     public bool IsUniversal { get; }
+    public bool IsMeasurable { get; }
 
     public QuantityUnit(string name, string abbreviation,
         double? gramsConversionFactor = null, double? millilitersConversionFactor = null,
-        bool isUniversal = false) : this(new QuantityNames(name),
-        new QuantityNames(abbreviation), gramsConversionFactor, millilitersConversionFactor, isUniversal)
+        bool isUniversal = false, bool isMeasurable = false) :
+        this(new QuantityNames(name), new QuantityNames(abbreviation),
+            gramsConversionFactor, millilitersConversionFactor,
+            isUniversal, isMeasurable)
     {
     }
 
     public QuantityUnit(QuantityNames names, QuantityNames abbreviations,
         double? gramsConversionFactor = null, double? millilitersConversionFactor = null,
-        bool isUniversal = false)
+        bool isUniversal = false, bool isMeasurable = false)
     {
         Names = Guard.Against.Null(names);
         Abbreviations = Guard.Against.Null(abbreviations);
@@ -28,6 +31,7 @@ public class QuantityUnit : ValueObject<QuantityUnit>
         GramsConversionFactor = gramsConversionFactor;
         MillilitersConversionFactor = millilitersConversionFactor;
         IsUniversal = isUniversal;
+        IsMeasurable = isMeasurable;
     }
 
     public bool CanConvertTo(QuantityUnit quantityUnit)
@@ -45,4 +49,9 @@ public class QuantityUnit : ValueObject<QuantityUnit>
 
     public string GetName(double quantity) => Names.GetQuantityName(quantity);
     public string GetAbbreviation(double quantity) => Abbreviations.GetQuantityName(quantity);
+
+    public override string ToString()
+    {
+        return $"{Names.Singular} ({Abbreviations.Singular})";
+    }
 }

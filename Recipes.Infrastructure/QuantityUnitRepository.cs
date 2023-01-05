@@ -31,11 +31,12 @@ public class QuantityUnitRepository : IQuantityUnitRepository
         double? milliliters = reader.TryGetField<double>(4, out var milliliterEquivalent) ? milliliterEquivalent : null;
 
         var isUniversal = reader.TryGetField<bool>(5, out var universal) && universal;
+        var isMeasurable = reader.TryGetField<bool>(6, out var measurable) && measurable;
 
         var names = ToQuantityNames(rawNames);
         var abbreviations = ToQuantityNames(rawAbbreviations);
 
-        return (id, new QuantityUnit(names, abbreviations, grams, milliliters, isUniversal));
+        return (id, new QuantityUnit(names, abbreviations, grams, milliliters, isUniversal, isMeasurable));
     }
 
     private static QuantityNames ToQuantityNames(string rawNames)
