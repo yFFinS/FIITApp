@@ -33,15 +33,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Classes="recipe"
-                                CommandParameter="{Binding}"
-                                Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
-                            <TextBlock VerticalAlignment="Bottom"
-                                       HorizontalAlignment="Center"
-                                       Text="{Binding Title}"
-                                       FontSize="16"
-                                       Foreground="AntiqueWhite"/>
-                        </Button>
+                        <controls:RecipeCard/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

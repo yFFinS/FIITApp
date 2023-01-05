@@ -35,15 +35,13 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <controls:IngredientLabel Ingredient="{Binding}"/>
+                                <controls:IngredientLabel/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </Border>
                 <Grid Grid.Column="2" RowDefinitions="10*, 10*, 10, *" HorizontalAlignment="Stretch">
-                    <Image Source="{Binding Recipe,
-                        Converter={StaticResource RecipeToImageConverter},
-                        ConverterParameter={Binding ImageLoader}}"/>
+                    <Image />
                     <Border Grid.Row="1" Classes="accent recipe" VerticalAlignment="Bottom">
                         <TextBlock Text="{Binding Recipe.Description}"
                                    TextAlignment="End"
