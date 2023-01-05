@@ -1,5 +1,4 @@
-﻿using Recipes.Domain.Entities.ProductAggregate;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Recipes.Domain.Interfaces;
 
 namespace Recipes.Infrastructure;
@@ -8,6 +7,11 @@ public record DataBaseOptions(string ProductsPath, string RecipesPath) : IOption
 
 public class DataBase : IDataBase
 {
+    private List<RecipeDbo> _recipes = null!;
+    private List<ProductDbo> _products = null!;
+
+    private bool _isDirty = true;
+
     private readonly DataBaseOptions _options;
 
     public DataBase(DataBaseOptions options)
@@ -31,6 +35,8 @@ public class DataBase : IDataBase
 
     public void InsertProduct(ProductDbo product)
     {
+        _isDirty = true;
+
         var products = GetAllProducts();
         AddOrUpdate(product, products);
         Serialize(products, _options.ProductsPath);
@@ -38,17 +44,37 @@ public class DataBase : IDataBase
 
     public void InsertRecipe(RecipeDbo obj)
     {
+        _isDirty = true;
+
         var recipes = GetAllRecipes();
         AddOrUpdate(obj, recipes);
         Serialize(recipes, _options.RecipesPath);
     }
 
 
-    public List<ProductDbo> GetAllProducts() =>
-        Deserialize<List<ProductDbo>>(_options.ProductsPath) ?? new List<ProductDbo>();
+    public List<ProductDbo> GetAllProducts()
+    {
+        if (!_isDirty)
+        {
+            return _products;
+        }
 
-    public List<RecipeDbo> GetAllRecipes() =>
-        Deserialize<List<RecipeDbo>>(_options.RecipesPath) ?? new List<RecipeDbo>();
+        _products = Deserialize<List<ProductDbo>>(_options.ProductsPath) ?? new List<ProductDbo>();
+        _isDirty = false;
+        return _products;
+    }
+
+    public List<RecipeDbo> GetAllRecipes()
+    {
+        if (!_isDirty)
+        {
+            return _recipes;
+        }
+
+        _recipes = Deserialize<List<RecipeDbo>>(_options.RecipesPath) ?? new List<RecipeDbo>();
+        _isDirty = false;
+        return _recipes;
+    }
 
 
     private static void Serialize<T>(T obj, string path) where T : notnull

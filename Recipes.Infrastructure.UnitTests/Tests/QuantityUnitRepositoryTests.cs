@@ -26,7 +26,7 @@ public class QuantityUnitRepositoryTests
 
         foreach (var unit in units)
         {
-            Console.WriteLine($"{unit.Name} ({unit.Abbreviation})");
+            Console.WriteLine($"{unit.Names} ({unit.Abbreviations})");
         }
     }
 }

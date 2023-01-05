@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.ValueObjects;
 
