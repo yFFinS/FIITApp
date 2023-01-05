@@ -18,7 +18,7 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme Mode="Dark"/>
+        <FluentTheme Mode="Light"/>
         <StyleInclude Source="/Styles/ControlStyles.axaml"/>
         <StyleInclude Source="/Styles/ClassesStyles.axaml"/>
     </Application.Styles>

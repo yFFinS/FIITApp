@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
              xmlns:productAggregate="clr-namespace:Recipes.Domain.Entities.ProductAggregate;assembly=Recipes.Domain"
+             xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.RecipeEditorView">
     <UserControl.Styles>
@@ -29,9 +30,9 @@
                              CornerRadius="5" />
                 </Border>
                 <Grid HorizontalAlignment="Stretch"
-                      ColumnDefinitions="*, 10, 2*">
+                      ColumnDefinitions="*, 10, 2*, 30">
                     <Border Grid.Column="0" Classes="accent round" HorizontalAlignment="Stretch">
-                        <DockPanel>
+                        <StackPanel Orientation="Vertical">
                             <ItemsControl Items="{Binding Ingredients}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -40,26 +41,22 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border MinWidth="100">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="{Binding ProductId, 
-                                                    Converter={StaticResource IdToProductNameConverter},
-                                                    ConverterParameter={Binding $parent[ItemsControl].DataContext.ProductRepository}}" />
-                                                <TextBlock Text=": " />
-                                                <TextBlock Text="{Binding Quantity}" />
-                                            </StackPanel>
-                                        </Border>
+                                        <controls:IngredientLabel Ingredient="{Binding}"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <Grid ColumnDefinitions="* * * 30" 
-                                  Height="30"
-                                  VerticalAlignment="Top"
-                                  x:DataType="productAggregate:Product">
-                                <AutoCompleteBox Grid.Column="0" 
+                            <StackPanel Orientation="Horizontal"
+                                        Height="30"
+                                        Margin="0 5 0 0"
+                                        VerticalAlignment="Top"
+                                        Spacing="5"
+                                        x:DataType="productAggregate:Product">
+                                <AutoCompleteBox 
+                                                 Watermark="Product"
                                                  AsyncPopulator="{Binding PopulateProducts}"
                                                  TextSelector="{Binding SelectProduct}"
-                                                 SelectedItem="{Binding CurrentProduct, Mode=OneWayToSource}"
+                                                 SelectedItem="{Binding CurrentProduct, Mode=TwoWay}"
+                                                 MaxWidth="150"
                                                  ValueMemberBinding="{CompiledBinding Name}">
                                     <AutoCompleteBox.ItemTemplate>
                                         <DataTemplate DataType="productAggregate:Product">
@@ -69,19 +66,31 @@
                                         </DataTemplate>
                                     </AutoCompleteBox.ItemTemplate>
                                 </AutoCompleteBox>
-                                <NumericUpDown Grid.Column="1" 
-                                               Minimum="0"
-                                               Value="{Binding CurrentCount, Mode=OneWayToSource}"
-                                               ShowButtonSpinner="False"/>
-                                <ComboBox Grid.Column="2"
-                                          SelectedItem="{Binding CurrentUnit, Mode=OneWayToSource}"/>
-                                <Button Grid.Column="3"
-                                        Width="30" 
+                                <TextBlock Text=": "/>
+                                <NumericUpDown Minimum="0.001"
+                                               Maximum="10000000"
+                                               Value="{Binding CurrentCount, Mode=TwoWay}"/>
+                                    <ComboBox Items="{Binding Units}"
+                                              Padding="0"
+                                              SelectedItem="{Binding CurrentUnit, Mode=TwoWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Classes="accent">
+                                                    <TextBlock Text="{Binding Abbreviations.Singular}"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                        <ComboBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Spacing="0"/>
+                                            </ItemsPanelTemplate>
+                                        </ComboBox.ItemsPanel></ComboBox>
+                                <Button Width="30" 
                                         Height="30"
-                                        Command="{Binding AddIngregientCommand}"
+                                        Command="{Binding AddIngredientCommand}"
                                         CommandParameter="{Binding $parent[Grid]}"/>
-                            </Grid>
-                        </DockPanel>
+                            </StackPanel>
+                        </StackPanel>
                     </Border>
                     <Grid Grid.Column="2" RowDefinitions="10*, 10*, 10, *" HorizontalAlignment="Stretch">
                         <Image />
@@ -97,7 +106,6 @@
                                 <NumericUpDown Grid.Column="2"
                                                Minimum="1"
                                                Maximum="1000"
-                                               ShowButtonSpinner="False"
                                                AllowSpin="True"
                                                Value="{Binding Servings, Mode=TwoWay}" />
                             </Grid>

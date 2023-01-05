@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -42,7 +44,7 @@ public class ProductSearchViewModel : ViewModelBase
     private async void Search(string name, IProductRepository repository)
     {
         Products.Clear();
-        foreach (var product in await repository.GetAllProductsAsync())
+        foreach (var product in await repository.GetProductsByPrefixAsync(name))
         {
             Products.Add(product);
         }

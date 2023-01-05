@@ -1,17 +1,18 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Recipes.Presentation.Controls">
     <Design.PreviewWith>
-        <Border Padding="20">
-            <!-- Add Controls for Previewer Here -->
+        <Border Background="Gray" Padding="20">
+            <AutoCompleteBox Classes="search" Width="600" Height="400"/>
         </Border>
     </Design.PreviewWith>
-    
+
     <Style Selector="Label.item">
-        <Setter Property="Background" Value="#F5E8C5"/>
-        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Background" Value="#F5E8C5" />
+        <Setter Property="CornerRadius" Value="5" />
     </Style>
     <Style Selector="Border.item">
-        <Setter Property="Background" Value="#F5E8C5"/>
-        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Background" Value="#F5E8C5" />
+        <Setter Property="CornerRadius" Value="5" />
     </Style>
 </Styles>

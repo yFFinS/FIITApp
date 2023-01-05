@@ -27,6 +27,9 @@
       <Compile Update="Views\MainWindow.axaml.cs">
         <DependentUpon>MainWindow.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Controls\IngredientLabel.axaml.cs">
+        <DependentUpon>IngredientLabel.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
     <ItemGroup>
       <AdditionalFiles Include="Styles\RecipeViewStyles.axaml" />

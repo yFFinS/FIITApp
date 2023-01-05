@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
+             xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.RecipeListView">
     <Design.DataContext>
@@ -25,9 +26,14 @@
                             VerticalAlignment="Stretch"
                             Margin="20">
                         <Panel>
-                            <Image Source="{Binding 
-                            Converter={StaticResource RecipeToImageConverter},
-                            ConverterParameter={Binding $parent[ItemsControl].DataContext.ImageLoader}}"/>
+                            <Image>
+                                <Image.Source>
+                                    <MultiBinding Converter="{StaticResource UriToImageConverter}">
+                                        <Binding Path="ImageUrl"/>
+                                        <Binding Path="$parent[ItemsControl].DataContext.ImageLoader"/>
+                                    </MultiBinding>
+                                </Image.Source>
+                            </Image>
                             <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
                                 <TextBlock Text="{Binding Title}"/>
                             </Button>

@@ -18,6 +18,7 @@
             <TextBox Name="TextField"
                      Classes="search"
                      Watermark="Search"
+                     Text=""
                      CornerRadius="20"/>
             <Button Classes="search"
                     Command="{Binding SearchCommand}"

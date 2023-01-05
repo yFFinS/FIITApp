@@ -23,6 +23,6 @@ public class UriToImageConverter : IMultiValueConverter
             return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
         if (!targetType.IsAssignableTo(typeof(IImage)))
             return new BindingNotification(new InvalidCastException(), BindingErrorType.Error);
-        return loader.LoadImage(uri).Result;
+        return loader.LoadImage(uri);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -28,7 +29,7 @@ internal class RecipeEditorViewModel : ViewModelBase
     #region Ingredient
 
     public Product CurrentProduct { get; set; }
-    public float CurrentCount { get; set; }
+    public float CurrentCount { get; set; } = 1;
     public QuantityUnit CurrentUnit { get; set; }
 
     #endregion
@@ -42,8 +43,10 @@ internal class RecipeEditorViewModel : ViewModelBase
     public int Servings { get; set; }
 
     public ObservableCollection<CookingStep> CookingSteps { get; set; }
+    
+    public IReadOnlyList<QuantityUnit> Units { get; }
 
-    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository)
+    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository, IQuantityUnitRepository unitRepository)
     {
         RecipeRepository = recipeRepository;
         ProductRepository = productRepository;
@@ -52,18 +55,23 @@ internal class RecipeEditorViewModel : ViewModelBase
         Description = "";
         Servings = 0;
         CookingSteps = new ObservableCollection<CookingStep>(new List<CookingStep>());
+        Units = unitRepository.GetAllUnits();
 
         PopulateProducts = async (s, token) => await ProductRepository.GetProductsByPrefixAsync(s!.ToLower());
         SelectProduct = (search, item) => item.Name;
 
         AddCookingStepCommand = ReactiveCommand.Create<TextBox>(AddCookingStep);
-        AddIngregientCommand = ReactiveCommand.Create<Grid>(AddIngredient);
+        AddIngredientCommand = ReactiveCommand.Create<Grid>(AddIngredient);
         SaveRecipeCommand = ReactiveCommand.Create(SaveRecipe);
+
+        GetProductNameCommand = ReactiveCommand.CreateFromTask<EntityId, Product>(
+                id => productRepository.GetProductByIdAsync(id));
     }
 
     public ReactiveCommand<TextBox, Unit> AddCookingStepCommand { get; }
-    public ReactiveCommand<Grid, Unit> AddIngregientCommand { get; }
+    public ReactiveCommand<Grid, Unit> AddIngredientCommand { get; }
     public ReactiveCommand<Unit, Unit> SaveRecipeCommand { get; }
+    public ReactiveCommand<EntityId, Product> GetProductNameCommand { get; }
 
     private void AddCookingStep(TextBox description)
     {
@@ -76,13 +84,20 @@ internal class RecipeEditorViewModel : ViewModelBase
 
     private void AddIngredient(Grid parent)
     {
-        Ingredients.Add(new Ingredient(CurrentProduct ?? new (EntityId.NewId(), "Unknown product"), new Quantity(CurrentCount, CurrentUnit)));
+        if (CurrentProduct is null)
+            //TODO
+            throw new Exception();
+        Ingredients.Add(new Ingredient(CurrentProduct, new Quantity(CurrentCount, CurrentUnit)));
         if (parent.Children[0] is AutoCompleteBox box)
+        {
             box.Text = "";
+            box.SelectedItem = null;
+            box.Focus();
+        }
         if (parent.Children[1] is NumericUpDown num)
-            num.Value = 0;
+            num.Value = 1;
         if (parent.Children[2] is ComboBox combo)
-            combo.SelectedItem = new QuantityUnit("штуки", "шт");
+            CurrentUnit = Units[0];
     }
 
     private void SaveRecipe()

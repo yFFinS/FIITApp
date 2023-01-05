@@ -134,7 +134,7 @@ public sealed class Quantity : ValueObject<Quantity>
 
     public override string ToString()
     {
-        return $"{Value.ToString(CultureInfo.InvariantCulture)} {Unit.Abbreviations}";
+        return $"{Value.ToString(CultureInfo.InvariantCulture)} {Unit.Abbreviations.GetQuantityName(Value)}";
     }
 
     public override bool Equals(Quantity? quantity)

@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
+             xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Views.RecipeView">
     <UserControl.Styles>
@@ -34,15 +35,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border MinWidth="100">
-                                    <Grid ColumnDefinitions="* 10 *">
-                                        <TextBlock Grid.Column="0" Text="{Binding ProductId,
-                                         Converter={StaticResource IdToProductNameConverter},
-                                         ConverterParameter={Binding $parent[ItemsControl].DataContext.Repository}}"/>
-                                        <TextBlock Grid.Column="1" Text=": "/>
-                                        <TextBlock Grid.Column="2" Text="{Binding Quantity}"/>
-                                    </Grid>
-                                </Border>
+                                <controls:IngredientLabel Ingredient="{Binding}"/>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

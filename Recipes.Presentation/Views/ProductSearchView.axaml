@@ -51,9 +51,9 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <ToggleButton Classes="Card" 
-                                          Height="200" 
-                                          Width="180" 
+                            <ToggleButton Classes="Card"
+                                          Height="200"
+                                          Width="180"
                                           Margin="5"
                                           Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
                                           CommandParameter="{Binding}">
@@ -61,15 +61,12 @@
                                     <Image>
                                         <Image.Source>
                                             <MultiBinding Converter="{StaticResource UriToImageConverter}">
-                                                <MultiBinding.Bindings>
-                                                    <Binding Path="ImageUrl"/>
-                                                    <Binding Path="ImageUrl"/>
-                                                    <!-- <Binding Path="$parent[ItemsControl].DataContext.ImageLoader"/> -->
-                                                </MultiBinding.Bindings>
+                                                <Binding Path="ImageUrl"/>
+                                                <Binding Path="$parent[ItemsControl].DataContext.ImageLoader"/>
                                             </MultiBinding>
                                         </Image.Source>
                                     </Image>
-                                    <TextBlock Text="{Binding Name}" 
+                                    <TextBlock Text="{Binding Name}"
                                                VerticalAlignment="Bottom"
                                                TextAlignment="Center"
                                                TextWrapping="Wrap"/>
