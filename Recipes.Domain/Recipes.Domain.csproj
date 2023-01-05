@@ -14,10 +14,4 @@
       <ProjectReference Include="..\Recipes.Shared\Recipes.Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="units.csv">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>

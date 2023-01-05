@@ -2,8 +2,10 @@ using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
+using Recipes.Domain.Interfaces;
 using Recipes.Domain.Services;
 using Recipes.Domain.ValueObjects;
+using Recipes.Shared;
 
 namespace Recipes.DatabaseEditor;
 
@@ -33,13 +35,15 @@ public class RecipeParser
     private readonly ILogger<RecipeParser> _logger;
     private readonly IProductRepository _productRepository;
     private readonly IQuantityParser _quantityParser;
+    private readonly IProductNameUnifier _productNameUnifier;
 
     public RecipeParser(ILogger<RecipeParser> logger, IProductRepository productRepository,
-        IQuantityParser quantityParser)
+        IQuantityParser quantityParser, IProductNameUnifier productNameUnifier)
     {
         _logger = logger;
         _productRepository = productRepository;
         _quantityParser = quantityParser;
+        _productNameUnifier = productNameUnifier;
     }
 
     private static string ParseValue(string line)
@@ -56,7 +60,7 @@ public class RecipeParser
     private Ingredient ParseIngredient(string line)
     {
         var split = line.Split(" - ");
-        var name = split[0].Trim();
+        var name = _productNameUnifier.GetUnifiedName(split[0].Trim()).FirstCharToUpper();
         var quantityString = split[1].Trim();
 
         var quantity = _quantityParser.TryParseQuantity(quantityString);
@@ -120,6 +124,7 @@ public class RecipeParser
 
         var cookingTechniqueStartIndex = ingredientsIndex + 1;
         var cookingSteps = lines.Skip(cookingTechniqueStartIndex)
+            .Where(line => !string.IsNullOrWhiteSpace(line))
             .Select(ParseCookingStep)
             .ToList();
 

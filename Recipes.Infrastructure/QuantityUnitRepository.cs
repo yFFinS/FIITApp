@@ -24,13 +24,24 @@ public class QuantityUnitRepository : IQuantityUnitRepository
     private static (int Id, QuantityUnit Unit) ReadUnit(IReaderRow reader)
     {
         var id = reader.GetField<int>(0);
-        var name = reader.GetField<string>(1);
-        var abbreviation = reader.GetField<string>(2);
+        var rawNames = reader.GetField<string>(1)!;
+        var rawAbbreviations = reader.GetField<string>(2)!;
 
         double? grams = reader.TryGetField<double>(3, out var gramEquivalent) ? gramEquivalent : null;
         double? milliliters = reader.TryGetField<double>(4, out var milliliterEquivalent) ? milliliterEquivalent : null;
 
-        return (id, new QuantityUnit(name!, abbreviation!, grams, milliliters));
+        var isUniversal = reader.TryGetField<bool>(5, out var universal) && universal;
+
+        var names = ToQuantityNames(rawNames);
+        var abbreviations = ToQuantityNames(rawAbbreviations);
+
+        return (id, new QuantityUnit(names, abbreviations, grams, milliliters, isUniversal));
+    }
+
+    private static QuantityNames ToQuantityNames(string rawNames)
+    {
+        var names = rawNames.Split(';');
+        return names.Length == 1 ? new QuantityNames(names[0]) : new QuantityNames(names[0], names[1], names[2]);
     }
 
     private List<(int Id, QuantityUnit Unit)> ReadUnits()

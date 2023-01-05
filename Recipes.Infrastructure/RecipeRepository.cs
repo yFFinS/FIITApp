@@ -15,6 +15,8 @@ public class RecipeRepository : IRecipeRepository
     private readonly IProductRepository _productRepository;
     private readonly IQuantityUnitRepository _quantityUnitRepository;
 
+    private readonly Dictionary<QuantityUnit, HashSet<QuantityUnit>> _convertibleTo = new();
+
     public RecipeRepository(ILogger<RecipeRepository> logger, IDataBase dataBase,
         IProductRepository productRepository, IQuantityUnitRepository quantityUnitRepository)
     {
@@ -48,6 +50,8 @@ public class RecipeRepository : IRecipeRepository
 
     private async Task AddMissingQuantitiesAsync(Recipe recipe)
     {
+        InitConversionTable();
+
         var updatedProducts = new Dictionary<EntityId, Product>();
 
         foreach (var ingredient in recipe.Ingredients)
@@ -55,9 +59,14 @@ public class RecipeRepository : IRecipeRepository
             var product = await _productRepository.GetProductByIdAsync(ingredient.Product.Id);
             var quantityUnit = ingredient.Quantity.Unit;
 
-            if (!product!.IsAvailableQuantityUnit(quantityUnit))
+            var convertibleTo = _convertibleTo.TryGetValue(quantityUnit, out var convertibleToSet)
+                ? convertibleToSet
+                : new HashSet<QuantityUnit>();
+
+            foreach (var unit in convertibleTo.Append(quantityUnit)
+                         .Where(unit => !product!.IsAvailableQuantityUnit(unit)))
             {
-                product.AddQuantityUnit(quantityUnit);
+                product!.AddQuantityUnit(unit);
                 updatedProducts[product.Id] = product;
             }
         }
@@ -65,16 +74,49 @@ public class RecipeRepository : IRecipeRepository
         await _productRepository.AddProductsAsync(updatedProducts.Values.ToList());
     }
 
-    public Task AddRecipesAsync(IEnumerable<Recipe> recipes)
+    private void InitConversionTable()
+    {
+        if (_convertibleTo.Count > 0)
+        {
+            return;
+        }
+
+        var quantityUnits = _quantityUnitRepository.GetAllUnits();
+        foreach (var from in quantityUnits)
+        {
+            foreach (var to in quantityUnits)
+            {
+                if (from == to)
+                {
+                    continue;
+                }
+
+                if (!from.CanConvertTo(to))
+                {
+                    continue;
+                }
+
+                if (!_convertibleTo.ContainsKey(from))
+                {
+                    _convertibleTo[from] = new HashSet<QuantityUnit>();
+                }
+
+                _convertibleTo[from].Add(to);
+            }
+        }
+    }
+
+    public async Task AddRecipesAsync(IEnumerable<Recipe> recipes)
     {
         foreach (var recipe in recipes)
         {
             _logger.LogDebug("Adding recipe {@Recipe}", recipe);
+
+            await AddMissingQuantitiesAsync(recipe);
+
             var recipeDbo = RecipeToDbo(recipe);
             _dataBase.InsertRecipe(recipeDbo);
         }
-
-        return Task.CompletedTask;
     }
 
     public Task RemoveRecipesByIdAsync(IEnumerable<EntityId> recipeIds)

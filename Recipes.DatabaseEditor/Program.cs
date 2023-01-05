@@ -1,12 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Recipes.DatabaseEditor;
 using Recipes.DatabaseEditor.Commands;
+using Recipes.Domain.Interfaces;
 using Recipes.Infrastructure;
 
 var services = Bootstrap.ConfigureServices();
 
 services.AddSingleton(Console.In);
 services.AddSingleton(Console.Out);
+
+services.AddSingleton(new ProductNameUnifierOptions("product_mapping.csv"));
+services.AddSingleton<IProductNameUnifier, ProductNameUnifier>();
 
 services.AddSingleton<ProductParser>();
 services.AddSingleton<RecipeParser>();

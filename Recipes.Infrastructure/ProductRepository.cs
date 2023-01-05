@@ -53,7 +53,7 @@ public class ProductRepository : IProductRepository
     {
         foreach (var product in products)
         {
-            _logger.LogInformation("Adding product {@Product} to database", product);
+            _logger.LogInformation("Adding product {ProductName} to database", product.Name);
             var productDbo = ProductToDbo(product);
             _dataBase.InsertProduct(productDbo);
         }

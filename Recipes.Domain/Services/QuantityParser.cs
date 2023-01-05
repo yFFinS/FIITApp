@@ -1,3 +1,4 @@
+using System.Globalization;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
 
@@ -20,18 +21,22 @@ public class QuantityParser : IQuantityParser
 
     public QuantityUnit? TryParseUnit(string unitNameOrAbbreviation)
     {
+        unitNameOrAbbreviation = unitNameOrAbbreviation.Replace('c', 'с').ToLower();
+
         var units = _quantityUnitRepository.GetAllUnits();
         return units.FirstOrDefault(u =>
-            u.Name == unitNameOrAbbreviation || u.Abbreviation == unitNameOrAbbreviation);
+            u.Names.Contains(unitNameOrAbbreviation) || u.Abbreviations.Contains(unitNameOrAbbreviation));
     }
 
     public Quantity? TryParseQuantity(string quantity)
     {
-        var quantityParts = quantity.Split(' ');
-        if (quantityParts.Length != 2)
+        var unitWithoutValue = TryParseUnit(quantity);
+        if (unitWithoutValue is not null)
         {
-            return null;
+            return new Quantity(0, unitWithoutValue);
         }
+
+        var quantityParts = quantity.Split(' ', 2);
 
         var unit = TryParseUnit(quantityParts[1]);
         if (unit == null)
@@ -39,6 +44,8 @@ public class QuantityParser : IQuantityParser
             return null;
         }
 
-        return double.TryParse(quantityParts[0], out var amount) ? new Quantity(amount, unit) : null;
+        return double.TryParse(quantityParts[0], NumberStyles.Any, CultureInfo.InvariantCulture, out var amount)
+            ? new Quantity(amount, unit)
+            : null;
     }
 }
