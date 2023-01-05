@@ -31,7 +31,7 @@ public class QuantityUnitRepository : IQuantityUnitRepository
         double? milliliters = reader.TryGetField<double>(4, out var milliliterEquivalent) ? milliliterEquivalent : null;
 
         var isUniversal = reader.TryGetField<bool>(5, out var universal) && universal;
-        var isMeasurable = reader.TryGetField<bool>(6, out var measurable) && measurable;
+        var isMeasurable = !(reader.TryGetField<bool>(6, out var unmeasurable) && unmeasurable);
 
         var names = ToQuantityNames(rawNames);
         var abbreviations = ToQuantityNames(rawAbbreviations);
