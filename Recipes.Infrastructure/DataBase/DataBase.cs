@@ -11,7 +11,8 @@ public class DataBase : IDataBase
     private List<RecipeDbo> _recipes = null!;
     private List<ProductDbo> _products = null!;
 
-    private bool _isDirty = true;
+    private bool _productsIsDirty = true;
+    private bool _recipesIsDirty = true;
 
     private readonly DataBaseOptions _options;
 
@@ -40,7 +41,7 @@ public class DataBase : IDataBase
         AddOrUpdate(product, products);
         Serialize(products, _options.ProductsPath);
         
-        _isDirty = true;
+        _productsIsDirty = true;
     }
 
     public void InsertRecipe(RecipeDbo obj)
@@ -49,31 +50,31 @@ public class DataBase : IDataBase
         AddOrUpdate(obj, recipes);
         Serialize(recipes, _options.RecipesPath);
         
-        _isDirty = true;
+        _recipesIsDirty = true;
     }
 
 
     public List<ProductDbo> GetAllProducts()
     {
-        if (!_isDirty)
+        if (!_productsIsDirty)
         {
             return _products;
         }
 
         _products = Deserialize<List<ProductDbo>>(_options.ProductsPath) ?? new List<ProductDbo>();
-        _isDirty = false;
+        _productsIsDirty = false;
         return _products;
     }
 
     public List<RecipeDbo> GetAllRecipes()
     {
-        if (!_isDirty && _recipes is not null)
+        if (!_recipesIsDirty)
         {
             return _recipes;
         }
 
         _recipes = Deserialize<List<RecipeDbo>>(_options.RecipesPath) ?? new List<RecipeDbo>();
-        _isDirty = false;
+        _recipesIsDirty = false;
         return _recipes;
     }
 
