@@ -18,6 +18,7 @@
         <ItemsControl Items="{Binding MenuItems}" 
                       Width="200"
                       HorizontalAlignment="Left"
+                      VerticalAlignment="Top"
                       Classes="menu">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

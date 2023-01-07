@@ -1,5 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StyleInclude Source="/Styles/BoxItemsStyles.axaml"/>
     <Design.PreviewWith>
         <Border Padding="20" Background="{DynamicResource AppBackground}">
             <StackPanel Spacing="10">
@@ -24,7 +25,19 @@
                         Delaware
                     </AutoCompleteBox.Items>
                 </AutoCompleteBox>
-                <NumericUpDown Width="100"/>
+                <StackPanel Spacing="5"
+                            Orientation="Horizontal"
+                            Background="{DynamicResource AccentBackground}" HorizontalAlignment="Left">
+                    <TextBlock Text="Test:"/>
+                    <NumericUpDown HorizontalAlignment="Left" Value="1392"/>
+                    <TextBlock Text="Test2:"/>
+                    <TextBox Text="abcd"/>
+                </StackPanel>
+                <NumericUpDown Width="100" HorizontalAlignment="Left"/>
+                <NumericUpDown Width="100" HorizontalAlignment="Left"
+                               Value="1"
+                               HorizontalContentAlignment="Right"
+                               Text="a"/>
                 <ButtonSpinner Width="100"/>
             </StackPanel>
         </Border>
@@ -52,12 +65,12 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-    <Style Selector="Button">
-        <Setter Property="Padding" Value="8"/>
-    </Style>
-    <Style Selector="Button:pointerover/template/Border#Hover">
-        <Setter Property="Background" Value="{DynamicResource ButtonHover}" />
+        <Style Selector="^">
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+        <Style Selector="^:pointerover/template/Border#Hover">
+            <Setter Property="Background" Value="{DynamicResource ButtonHover}" />
+        </Style>
     </Style>
 
     <!-- TextBlock -->
@@ -104,18 +117,18 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-    <Style Selector="TextBox">
-        <Setter Property="Background" Value="{DynamicResource AccentBackground}" />
-    </Style>
-    <Style Selector="TextBox:focus/template/TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
-    </Style>
-    <Style Selector="TextBox:pointerover/template/TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
-    </Style>
-    <Style Selector="TextBox:pointerover">
-        <Setter Property="Background" Value="{DynamicResource ButtonHover}" />
+        <Style Selector="^">
+            <Setter Property="Background" Value="{DynamicResource AccentBackground}" />
+        </Style>
+        <Style Selector="^:focus/template/TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
+        </Style>
+        <Style Selector="^:pointerover/template/TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
+        </Style>
+        <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ButtonHover}" />
+        </Style>
     </Style>
 
     <!-- ToggleButton -->
@@ -140,12 +153,12 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
-    <Style Selector="ToggleButton">
-        <Setter Property="Background" Value="{DynamicResource AccentBackground}" />
-    </Style>
-    <Style Selector="ToggleButton:checked">
-        <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+        <Style Selector="^">
+            <Setter Property="Background" Value="{DynamicResource AccentBackground}" />
+        </Style>
+        <Style Selector="^:checked">
+            <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
+        </Style>
     </Style>
 
     <!-- AutoCompleteBox -->
@@ -178,11 +191,6 @@
                                          BorderThickness="0"
                                          Background="Transparent"
                                          ItemTemplate="{TemplateBinding ItemTemplate}">
-                                    <ListBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <StackPanel/>
-                                        </ItemsPanelTemplate>
-                                    </ListBox.ItemsPanel>
                                 </ListBox>
                             </Border>
                         </Popup>
@@ -217,9 +225,7 @@
                                    DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}"
                                    ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
                         <TextBox Name="PART_TextBox"
-                                 Background="Transparent"
                                  BorderBrush="Transparent"
-                                 Margin="-1"
                                  Padding="{TemplateBinding Padding}"
                                  MinWidth="20"
                                  Foreground="{TemplateBinding Foreground}"
@@ -229,6 +235,7 @@
                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                  Text="{TemplateBinding Text}"
+                                 TextAlignment="Right"
                                  AcceptsReturn="False"
                                  TextWrapping="NoWrap" />
                     </ButtonSpinner>
@@ -299,13 +306,5 @@
 
     <Style Selector="ComboBox">
         <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-    
-    <Style Selector="ComboBoxItem">
-        <Setter Property="Padding" Value="0"/>
-    </Style>
-    
-    <Style Selector="ListBoxItem">
-        <Setter Property="Padding" Value="0"/>
     </Style>
 </Styles>

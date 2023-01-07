@@ -58,14 +58,7 @@
                                           Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
                                           CommandParameter="{Binding}">
                                 <Panel>
-                                    <Image>
-                                        <Image.Source>
-                                            <MultiBinding Converter="{StaticResource UriToImageConverter}">
-                                                <Binding Path="ImageUrl"/>
-                                                <Binding Path="$parent[ItemsControl].DataContext.ImageLoader"/>
-                                            </MultiBinding>
-                                        </Image.Source>
-                                    </Image>
+                                    <Image/>
                                     <TextBlock Text="{Binding Name}"
                                                VerticalAlignment="Bottom"
                                                TextAlignment="Center"

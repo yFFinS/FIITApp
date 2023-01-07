@@ -18,6 +18,7 @@ public class RecipeSearchViewModel : ViewModelBase
     {
         Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
         _picker = picker;
+        Search("");
         ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe =>
             container.Value.Content = ShowRecipe(recipe, container, imageLoader, repository));
         SearchCommand = ReactiveCommand.Create<string>(Search);

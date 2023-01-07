@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reactive;
+using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
 using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
@@ -15,7 +17,7 @@ public class RecipeViewModel : ViewModelBase
 
     public Recipe Recipe { get; set; }
     public IProductRepository Repository { get; }
-    public object ImageLoader { get; }
+    public IImageLoader ImageLoader { get; }
     public ReactiveCommand<Unit, Unit> BackCommand { get; }
 
 
@@ -29,4 +31,6 @@ public class RecipeViewModel : ViewModelBase
             container.Value.Content = parent;
         });
     }
+
+    public Task<Bitmap> Image => ImageLoader.LoadImage(Recipe.ImageUrl);
 }
