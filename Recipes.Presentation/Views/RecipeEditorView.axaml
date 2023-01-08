@@ -15,7 +15,7 @@
     </Design.DataContext>
     <Panel>
         <Button HorizontalAlignment="Right"
-                VerticalContentAlignment="Bottom"
+                VerticalAlignment="Bottom"
                 Command="{Binding SaveRecipeCommand}"
                 ZIndex="10">
             <TextBlock Text="Save recipe"/>
@@ -45,9 +45,8 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <!-- <DataValidationErrors> -->
+                            <DataValidationErrors>
                                 <Grid ColumnDefinitions="*, 10, Auto, 30" 
-                                      Height="30"
                                       Margin="0 5 0 0"
                                       VerticalAlignment="Top"
                                       x:DataType="productAggregate:Product">
@@ -63,8 +62,7 @@
                                             </DataTemplate>
                                         </AutoCompleteBox.ItemTemplate>
                                     </AutoCompleteBox>
-                                    <TextBlock Grid.Column="1" Text=": "/>
-                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5">
                                         <NumericUpDown Minimum="0.001"
                                                        Maximum="10000000"
                                                        Value="{Binding CurrentCount, Mode=TwoWay}"
@@ -72,6 +70,7 @@
                                                        IsVisible="{Binding CurrentUnit.IsMeasurable}"/>
                                         <ComboBox Items="{Binding Units}"
                                                   Padding="0"
+                                                  SelectedIndex="0"
                                                   SelectedItem="{Binding CurrentUnit, Mode=TwoWay}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
@@ -91,7 +90,7 @@
                                             Command="{Binding AddIngredientCommand}"
                                             CommandParameter="{Binding $parent[Grid]}"/>
                                 </Grid>
-                            <!-- </DataValidationErrors> -->
+                            </DataValidationErrors>
                         </StackPanel>
                     </Border>
                     <Grid Grid.Column="2" RowDefinitions="*, Auto, 10, Auto" HorizontalAlignment="Stretch">
