@@ -32,5 +32,14 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Popup Name="ErrorPopup"
+               IsOpen="{Binding HasError}"
+               WindowManagerAddShadowHint="False"
+               InheritsTransform="True"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Bottom"
+               IsLightDismissEnabled="False">
+            <Border Width="200" Height="60" Background="red" CornerRadius="20"/>
+        </Popup>
     </Panel>
 </UserControl>
