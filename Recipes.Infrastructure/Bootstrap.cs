@@ -32,7 +32,13 @@ public static class Bootstrap
         var services = new ServiceCollection();
         var optionsInjector = new OptionsInjector("Options");
 
-        services.AddLogging(builder => builder.AddConsole());
+#if DEBUG
+        const LogLevel loggingLevel = LogLevel.Debug;
+#else
+        const LogLevel loggingLevel = LogLevel.Information;
+#endif
+        services.AddLogging(builder => builder.AddConsole()
+            .SetMinimumLevel(loggingLevel));
 
         services.AddSingleton<ILogger>(x =>
             x.GetRequiredService<ILoggerFactory>().CreateLogger("Default"));

@@ -7,8 +7,6 @@ using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
 using System.Collections.Generic;
-using Recipes.Application.Interfaces;
-using Recipes.Domain.Interfaces;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
 
@@ -23,7 +21,7 @@ namespace Recipes.Presentation
         }
     }
 
-    
+
     public partial class App : Avalonia.Application
     {
         public override void Initialize()
@@ -78,7 +76,7 @@ namespace Recipes.Presentation
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = provider.GetRequiredService<MainWindow>();
-                var window = desktop.MainWindow as MainWindow;
+                var window = (MainWindow)desktop.MainWindow;
                 window.ViewBorder.Child = provider.GetRequiredService<MainView>();
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)

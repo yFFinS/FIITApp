@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
-namespace Recipes.Infrastructure.UnitTests.Tests;
+namespace Recipes.Infrastructure.UnitTests;
 
 [TestFixture]
 public class QuantityUnitRepositoryTests

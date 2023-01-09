@@ -41,8 +41,13 @@ public class CachingImageLoader : IImageLoader
 
         _logger.LogDebug("Image {ImageUri} not found in cache, loading from Uri", imageUri);
 
-        await using var imageStream = await _httpClient.GetStreamAsync(imageUri);
-        image = new Bitmap(imageStream);
+        await using var httpStream = await _httpClient.GetStreamAsync(imageUri);
+
+        using var memoryStream = new MemoryStream();
+        await httpStream.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+
+        image = new Bitmap(memoryStream);
 
         SaveToCache(imageUri, image);
 

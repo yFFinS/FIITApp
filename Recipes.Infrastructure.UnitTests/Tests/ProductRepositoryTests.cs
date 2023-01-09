@@ -7,7 +7,7 @@ using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
 using Recipes.Tests.Shared.BuilderEntries;
 
-namespace Recipes.Infrastructure.UnitTests.Tests;
+namespace Recipes.Infrastructure.UnitTests;
 
 [TestFixture]
 public class ProductRepositoryTests
