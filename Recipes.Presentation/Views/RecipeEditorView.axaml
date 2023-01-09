@@ -18,7 +18,7 @@
                 VerticalAlignment="Bottom"
                 Command="{Binding SaveRecipeCommand}"
                 ZIndex="10">
-            <TextBlock Text="Save recipe"/>
+            <TextBlock Text="Save recipe" />
         </Button>
         <ScrollViewer IsHitTestVisible="False">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10" MaxWidth="1000">
@@ -45,52 +45,51 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <DataValidationErrors>
-                                <Grid ColumnDefinitions="*, 10, Auto, 30" 
-                                      Margin="0 5 0 0"
-                                      VerticalAlignment="Top"
-                                      x:DataType="productAggregate:Product">
-                                    <AutoCompleteBox Grid.Column="0" 
-                                                     Watermark="Product"
-                                                     AsyncPopulator="{Binding PopulateProducts}"
-                                                     TextSelector="{Binding SelectProduct}"
-                                                     SelectedItem="{Binding CurrentProduct, Mode=TwoWay}"
-                                                     ValueMemberBinding="{CompiledBinding Name}">
-                                        <AutoCompleteBox.ItemTemplate>
-                                            <DataTemplate DataType="productAggregate:Product">
-                                                <TextBox Text="{Binding Name}" Background="Transparent"/>
+                            <Grid ColumnDefinitions="*, 10, Auto, 30"
+                                  Margin="0 5 0 0"
+                                  VerticalAlignment="Top"
+                                  x:DataType="productAggregate:Product">
+                                <AutoCompleteBox Grid.Column="0"
+                                                 Watermark="Product"
+                                                 AsyncPopulator="{Binding PopulateProducts}"
+                                                 TextSelector="{Binding SelectProduct}"
+                                                 SelectedItem="{Binding CurrentProduct, Mode=TwoWay}"
+                                                 ValueMemberBinding="{CompiledBinding Name}">
+                                    <AutoCompleteBox.ItemTemplate>
+                                        <DataTemplate DataType="productAggregate:Product">
+                                            <TextBox Text="{Binding Name}" Background="Transparent" />
+                                        </DataTemplate>
+                                    </AutoCompleteBox.ItemTemplate>
+                                </AutoCompleteBox>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5">
+                                    <NumericUpDown Minimum="0.001"
+                                                   Maximum="10000000"
+                                                   Value="{Binding CurrentCount, Mode=TwoWay}"
+                                                   IsEnabled="{Binding CurrentUnit.IsMeasurable}"
+                                                   IsVisible="{Binding CurrentUnit.IsMeasurable}" />
+                                    <ComboBox Items="{Binding Units}"
+                                              Padding="0"
+                                              SelectedIndex="0"
+                                              SelectedItem="{Binding CurrentUnit, Mode=TwoWay}">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Abbreviations.Singular}" />
                                             </DataTemplate>
-                                        </AutoCompleteBox.ItemTemplate>
-                                    </AutoCompleteBox>
-                                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5">
-                                        <NumericUpDown Minimum="0.001"
-                                                       Maximum="10000000"
-                                                       Value="{Binding CurrentCount, Mode=TwoWay}"
-                                                       IsEnabled="{Binding CurrentUnit.IsMeasurable}"
-                                                       IsVisible="{Binding CurrentUnit.IsMeasurable}"/>
-                                        <ComboBox Items="{Binding Units}"
-                                                  Padding="0"
-                                                  SelectedIndex="0"
-                                                  SelectedItem="{Binding CurrentUnit, Mode=TwoWay}">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding Abbreviations.Singular}"/>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                            <ComboBox.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Spacing="0"/>
-                                                </ItemsPanelTemplate>
-                                            </ComboBox.ItemsPanel>
-                                        </ComboBox>
-                                    </StackPanel>
-                                    <Button Grid.Column="3"
-                                            Width="30" 
-                                            Height="30"
-                                            Command="{Binding AddIngredientCommand}"
-                                            CommandParameter="{Binding $parent[Grid]}"/>
-                                </Grid>
-                            </DataValidationErrors>
+                                        </ComboBox.ItemTemplate>
+                                        <ComboBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Spacing="0" />
+                                            </ItemsPanelTemplate>
+                                        </ComboBox.ItemsPanel>
+                                    </ComboBox>
+                                </StackPanel>
+                                <Button Grid.Column="3"
+                                        Width="30"
+                                        Height="30"
+                                        IsEnabled="{Binding CurrentProduct, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                        Command="{Binding AddIngredientCommand}"
+                                        CommandParameter="{Binding $parent[Grid]}" />
+                            </Grid>
                         </StackPanel>
                     </Border>
                     <Grid Grid.Column="2" RowDefinitions="*, Auto, 10, Auto" HorizontalAlignment="Stretch">
@@ -119,29 +118,29 @@
                                     <Grid Grid.Column="2" ColumnDefinitions="*, Auto, *, Auto, *">
                                         <Grid.Styles>
                                             <Style Selector="NumericUpDown">
-                                                <Setter Property="Minimum" Value="0"/>
-                                                <Setter Property="Value" Value="0"/>
-                                                <Setter Property="AllowSpin" Value="True"/>
-                                                <Setter Property="ShowButtonSpinner" Value="False"/>
-                                                <Setter Property="ParsingNumberStyle" Value="Integer"/>
-                                                <Setter Property="FormatString" Value="\{0:f0\}"/>
-                                                <Setter Property="HorizontalContentAlignment" Value="Right"/>
+                                                <Setter Property="Minimum" Value="0" />
+                                                <Setter Property="Value" Value="0" />
+                                                <Setter Property="AllowSpin" Value="True" />
+                                                <Setter Property="ShowButtonSpinner" Value="False" />
+                                                <Setter Property="ParsingNumberStyle" Value="Integer" />
+                                                <Setter Property="FormatString" Value="\{0:f0\}" />
+                                                <Setter Property="HorizontalContentAlignment" Value="Right" />
                                             </Style>
                                         </Grid.Styles>
                                         <NumericUpDown Name="PART_HourPicker" Grid.Column="0"
-                                                       Value="{Binding Hours}"/>
-                                        <TextBlock Grid.Column="1" 
-                                                   Text=" : " 
-                                                   TextAlignment="Left"/>
+                                                       Value="{Binding Hours}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text=" : "
+                                                   TextAlignment="Left" />
                                         <NumericUpDown Name="PART_MinutePicker" Grid.Column="2"
-                                                       HorizontalAlignment="Center" 
-                                                       Value="{Binding Minutes}" 
-                                                       Maximum="59"/>
-                                        <TextBlock Grid.Column="3" Text=" : " TextAlignment="Left"/>
-                                        <NumericUpDown Name="PART_SecondPicker" Grid.Column="4" 
-                                                       HorizontalAlignment="Center" 
-                                                       Value="{Binding Seconds}" 
-                                                       Maximum="59"/>
+                                                       HorizontalAlignment="Center"
+                                                       Value="{Binding Minutes}"
+                                                       Maximum="59" />
+                                        <TextBlock Grid.Column="3" Text=" : " TextAlignment="Left" />
+                                        <NumericUpDown Name="PART_SecondPicker" Grid.Column="4"
+                                                       HorizontalAlignment="Center"
+                                                       Value="{Binding Seconds}"
+                                                       Maximum="59" />
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -169,11 +168,11 @@
                     <Panel>
                         <TextBox Name="CookingStep"
                                  TextWrapping="Wrap"
-                                 Watermark="{Binding CookingSteps.Count}"/>
+                                 Watermark="{Binding CookingSteps.Count}" />
                         <Button IsDefault="{Binding #CookingStep.IsFocused}"
                                 HorizontalAlignment="Right"
                                 Command="{Binding AddCookingStepCommand}"
-                                CommandParameter="{Binding #CookingStep}"/>
+                                CommandParameter="{Binding #CookingStep}" />
                     </Panel>
                 </Border>
             </StackPanel>
