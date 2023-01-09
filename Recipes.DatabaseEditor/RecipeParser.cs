@@ -88,7 +88,7 @@ public class RecipeParser
 
     public Recipe? TryParseRecipe(string text)
     {
-        var lines = text.Split(Environment.NewLine);
+        var lines = text.Split("\n");
         var title = lines[0];
 
 

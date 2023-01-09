@@ -15,10 +15,16 @@ namespace Recipes.Presentation.ViewModels
 {
     public class MainViewModel : ViewModelBase, IViewContainer
     {
+#if DEBUG
+        public MainViewModel() { }
+#endif
+        
         private readonly ILogger<MainViewModel> _logger;
         private ViewModelBase _content;
         private readonly List<MainMenuItem> _menuItems;
         private MainMenuItem _selectedView;
+
+        public bool HasError { get; set; } = false;
 
         public List<MainMenuItem> MenuItems => _menuItems;
         public ReactiveCommand<ViewModelBase, Unit> ChangeView { get; }

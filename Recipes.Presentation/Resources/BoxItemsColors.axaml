@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="ItemBackground" Color="#DDCCA0"/>
+    <SolidColorBrush x:Key="ItemBackgroundPointerOver" Color="#CFBF95"/>
+    <SolidColorBrush x:Key="ItemBackgroundPressed" Color="#CFBF95"/>
+    <SolidColorBrush x:Key="ItemBackgroundSelected" Color="#D8C595"/>
+    <SolidColorBrush x:Key="ItemBackgroundSelectedPointerOver" Color="#CAB88B"/>
+    <SolidColorBrush x:Key="ItemBackgroundSelectedPressed" Color="#CAB88B"/>
+</ResourceDictionary>

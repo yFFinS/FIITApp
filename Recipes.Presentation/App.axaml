@@ -8,8 +8,6 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="/Resources/Colors.axaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <local:UriToImageConverter x:Key="UriToImageConverter" />
-            <local:IdToProductNameConverter x:Key="IdToProductNameConverter" />
             <test:TestRecipe x:Key="TestRecipe"/>
         </ResourceDictionary>
     </Application.Resources>

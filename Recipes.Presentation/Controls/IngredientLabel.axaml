@@ -7,7 +7,6 @@
              x:Class="Recipes.Presentation.Controls.IngredientLabel">
     <Border MinWidth="100">
         <DockPanel>
-            <Button DockPanel.Dock="Right" Width="30" Height="30" />
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Product.Name}" />
                 <TextBlock Text=": " />

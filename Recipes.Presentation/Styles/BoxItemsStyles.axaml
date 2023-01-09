@@ -1,0 +1,112 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Resources/BoxItemsColors.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Style Selector="ListBoxItem">
+        <Setter Property="Background" Value="{DynamicResource ItemBackground}" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Background="{TemplateBinding Background}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Content="{TemplateBinding Content}"
+                                  FontWeight="Normal"
+                                  FontSize="{DynamicResource ControlContentThemeFontSize}"
+                                  Padding="{TemplateBinding Padding}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+            </ControlTemplate>
+        </Setter>
+        
+
+        <!--  PointerOver State  -->
+        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ItemBackgroundPointerOver}" />
+        </Style>
+
+        <!--  Pressed State  -->
+        <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ItemBackgroundPressed}" />
+        </Style>
+
+        <!--  Selected State  -->
+        <Style Selector="^:selected">
+
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ItemBackgroundSelected}" />
+            </Style>
+
+            <!--  Selected PointerOver State  -->
+            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ItemBackgroundSelectedPointerOver}" />
+            </Style>
+
+            <!--  Selected Pressed State  -->
+            <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ItemBackgroundSelectedPressed}" />
+            </Style>
+        </Style>
+    </Style>
+
+    <Style Selector="ComboBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
+        <Setter Property="Background" Value="{DynamicResource ItemBackground}" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  Background="{TemplateBinding Background}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Content="{TemplateBinding Content}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  Padding="{TemplateBinding Padding}" />
+            </ControlTemplate>
+        </Setter>
+
+        <!--  PointerOver state  -->
+        <Style Selector="^:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ItemBackgroundPointerOver}" />
+        </Style>
+
+        <!--  Pressed state  -->
+        <Style Selector="^:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ItemBackgroundPressed}" />
+        </Style>
+
+        <!--  Selected state  -->
+        <Style Selector="^:selected">
+            <Style Selector="^ /template/ ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ItemBackgroundSelected}" />
+            </Style>
+            <!--  Selected PointerOver state  -->
+            <Style Selector="^:pointerover /template/ ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ItemBackgroundSelectedPointerOver}" />
+            </Style>
+            <!--  Selected Pressed state  -->
+            <Style Selector="^:pressed /template/ ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ItemBackgroundSelectedPressed}" />
+            </Style>
+        </Style>
+    </Style>
+</Styles>
