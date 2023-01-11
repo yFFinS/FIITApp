@@ -12,5 +12,10 @@ namespace Recipes.Presentation.Views
             // DataContext = new MainViewModel();
             InitializeComponent();
         }
+        
+        public MainView(IViewContainer viewContainer) : this()
+        {
+            DataContext = viewContainer;
+        }
     }
 }

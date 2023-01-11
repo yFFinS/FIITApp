@@ -22,24 +22,91 @@ namespace Recipes.Presentation
     }
 
 
+        internal class ApplicationViewInitializer
+        {
+            private readonly MainWindow _mainWindow;
+            private readonly MainView _mainView;
+            private readonly MainMenuItemsBuilder _mainMenuItemsBuilder;
+
+            public ApplicationViewInitializer(MainMenuItemsBuilder mainMenuItemsBuilder,
+                MainWindow mainWindow, MainView mainView)
+            {
+                _mainWindow = mainWindow;
+                _mainView = mainView;
+                _mainMenuItemsBuilder = mainMenuItemsBuilder;
+            }
+            
+            public void InitializeLifetime(IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.MainWindow = _mainWindow;
+                _mainWindow.ViewBorder.Child = _mainView;
+            }
+            
+            public void InitializeLifetime(ISingleViewApplicationLifetime singleView)
+            {
+                singleView.MainView = _mainView;
+            }
+            
+            public List<MainMenuItem> GetMainMenuItems()
+            {
+                return _mainMenuItemsBuilder.Build();
+            }
+        }
+        
+        internal class MainMenuItemsBuilder
+        {
+            private readonly ProductSearchViewModel _productSearchViewModel;
+            private readonly RecipeSearchViewModel _recipeSearchViewModel;
+            private readonly RecipeEditorViewModel _recipeEditorViewModel;
+
+            public MainMenuItemsBuilder(ProductSearchViewModel productSearchViewModel,
+                RecipeSearchViewModel recipeSearchViewModel,
+                RecipeEditorViewModel recipeEditorViewModel)
+            {
+                _productSearchViewModel = productSearchViewModel;
+                _recipeSearchViewModel = recipeSearchViewModel;
+                _recipeEditorViewModel = recipeEditorViewModel;
+            }
+            
+            public List<MainMenuItem> Build()
+            {
+                return new List<MainMenuItem>
+                {
+                    new()
+                    {
+                        Title = "Search by ingregients",
+                        Page = _productSearchViewModel
+                    },
+                    new()
+                    {
+                        Title = "Search by name",
+                        Page = _recipeSearchViewModel
+                    },
+                    new()
+                    {
+                        Title = "Add own recipe",
+                        Page = _recipeEditorViewModel
+                    }
+                };
+            }
+        }
+
     public partial class App : Avalonia.Application
     {
         public override void Initialize()
         {
             var services = Bootstrap.ConfigureServices();
 
-            ConfigureMenu(services);
-
             services.AddSingleton<IViewContainer, MainViewModel>();
             services.AddSingleton(x => new Lazy<IViewContainer>(x.GetRequiredService<IViewContainer>));
             services.AddSingleton<ProductSearchViewModel>();
             services.AddSingleton<RecipeSearchViewModel>();
             services.AddTransient<RecipeEditorViewModel>();
+            services.AddTransient<MainMenuItemsBuilder>();
             services.AddSingleton<MainWindow>();
-            services.AddSingleton(x => new MainView
-            {
-                DataContext = x.GetRequiredService<IViewContainer>()
-            });
+            services.AddSingleton<MainView>();
+            services.AddSingleton<ApplicationViewInitializer>();
+            services.AddSingleton(x => x.GetRequiredService<ApplicationViewInitializer>().GetMainMenuItems());
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
@@ -47,41 +114,18 @@ namespace Recipes.Presentation
             Resources.Add(typeof(IServiceProvider), serviceProvider);
         }
 
-        private void ConfigureMenu(IServiceCollection services)
-        {
-            services.AddSingleton(x => new List<MainMenuItem>
-            {
-                new()
-                {
-                    Title = "Search by ingregients",
-                    Page = x.GetRequiredService<ProductSearchViewModel>()
-                },
-                new()
-                {
-                    Title = "Search by name",
-                    Page = x.GetRequiredService<RecipeSearchViewModel>()
-                },
-                new()
-                {
-                    Title = "Add own recipe",
-                    Page = x.GetRequiredService<RecipeEditorViewModel>()
-                }
-            });
-        }
-
         public override void OnFrameworkInitializationCompleted()
         {
             var provider = this.GetServiceProvider();
+            var initializer = provider.GetRequiredService<ApplicationViewInitializer>();
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = provider.GetRequiredService<MainWindow>();
-                var window = (MainWindow)desktop.MainWindow;
-                window.ViewBorder.Child = provider.GetRequiredService<MainView>();
+                initializer.InitializeLifetime(desktop);
             }
             else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
             {
-                singleViewPlatform.MainView = provider.GetRequiredService<MainView>();
+                initializer.InitializeLifetime(singleViewPlatform);
             }
 
             base.OnFrameworkInitializationCompleted();
