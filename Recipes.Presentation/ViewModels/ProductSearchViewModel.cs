@@ -25,7 +25,7 @@ public class ProductSearchViewModel : ViewModelBase
     public ObservableCollection<Product> Products { get; private set; }
     public HashSet<Product> SelectedProducts { get; set; }
 
-    public ProductSearchViewModel(Lazy<IViewContainer> container, IImageLoader imageLoader,
+    public ProductSearchViewModel(IViewContainer container, IImageLoader imageLoader,
         IProductRepository productRepository, IRecipePicker recipePicker)
     {
         ImageLoader = imageLoader;
@@ -58,12 +58,12 @@ public class ProductSearchViewModel : ViewModelBase
             SelectedProducts.Add(product);
     }
 
-    private async void ShowRecipes(Lazy<IViewContainer> container, IImageLoader loader, IProductRepository repository, IRecipePicker recipePicker)
+    private async void ShowRecipes(IViewContainer container, IImageLoader loader, IProductRepository repository, IRecipePicker recipePicker)
     {
         var filter = new RecipeFilter();
         foreach (var product in SelectedProducts) 
             filter.AddOption(new ProductFilterOption(product));
         var recipes = await recipePicker.PickRecipes(filter);
-        container.Value.Content = new RecipeListViewModel(recipes, container, loader, repository);
+        container.Content = new RecipeListViewModel(recipes, container, loader, repository);
     }
 }

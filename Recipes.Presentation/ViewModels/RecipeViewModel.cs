@@ -21,14 +21,14 @@ public class RecipeViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> BackCommand { get; }
 
 
-    public RecipeViewModel(Recipe recipe, Lazy<IViewContainer> container, IImageLoader imageLoader, IProductRepository repository, ViewModelBase parent)
+    public RecipeViewModel(Recipe recipe, IViewContainer container, IImageLoader imageLoader, IProductRepository repository, ViewModelBase parent)
     {
         Recipe = recipe;
         ImageLoader = imageLoader;
         Repository = repository;
         BackCommand = ReactiveCommand.Create(() =>
         {
-            container.Value.Content = parent;
+            container.Content = parent;
         });
     }
 

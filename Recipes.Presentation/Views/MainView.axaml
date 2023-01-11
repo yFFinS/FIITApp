@@ -32,5 +32,27 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Panel HorizontalAlignment="Left"
+               VerticalAlignment="Bottom">
+            <ItemsControl Items="{Binding Errors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#20ff0000" 
+                                CornerRadius="20"
+                                Width="200"
+                                Padding="20">
+                            <Panel>
+                                <Button Command="{Binding $parent[ItemsControl].DataContext.RemoveExceptionCommand}"
+                                        CommandParameter="{Binding}"
+                                        HorizontalAlignment="Right"/>
+                                <TextBlock Text="{Binding Message}"
+                                           TextWrapping="Wrap"
+                                           FontSize="20"/>
+                            </Panel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Panel>
     </Panel>
 </UserControl>

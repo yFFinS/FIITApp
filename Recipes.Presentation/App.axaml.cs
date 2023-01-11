@@ -7,6 +7,7 @@ using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
 using System.Collections.Generic;
+using ReactiveUI;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
 
@@ -30,10 +31,12 @@ namespace Recipes.Presentation
 
             ConfigureMenu(services);
 
-            services.AddSingleton<IViewContainer, MainViewModel>();
-            services.AddSingleton(x => new Lazy<IViewContainer>(x.GetRequiredService<IViewContainer>));
+            services.AddSingleton<IViewContainer>(x => x.GetRequiredService<IMainViewModel>());
+            services.AddSingleton<IExceptionContainer>(x => x.GetRequiredService<IMainViewModel>());
+            services.AddSingleton<IMainViewModel, MainViewModel>();
             services.AddSingleton<ProductSearchViewModel>();
             services.AddSingleton<RecipeSearchViewModel>();
+            services.AddSingleton<RecipeViewFactory>();
             services.AddTransient<RecipeEditorViewModel>();
             services.AddSingleton<MainWindow>();
             services.AddSingleton(x => new MainView
@@ -44,6 +47,7 @@ namespace Recipes.Presentation
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             AvaloniaXamlLoader.Load(this);
+            // RxApp.DefaultExceptionHandler = new UiExceptionHandler();
             Resources.Add(typeof(IServiceProvider), serviceProvider);
         }
 
@@ -53,18 +57,18 @@ namespace Recipes.Presentation
             {
                 new()
                 {
-                    Title = "Search by ingregients",
-                    Page = x.GetRequiredService<ProductSearchViewModel>()
+                    Title = "Искать по ингредиентам",
+                    Page = x.GetRequiredService<ProductSearchViewModel>
                 },
                 new()
                 {
-                    Title = "Search by name",
-                    Page = x.GetRequiredService<RecipeSearchViewModel>()
+                    Title = "Искать по имени",
+                    Page = x.GetRequiredService<RecipeSearchViewModel>
                 },
                 new()
                 {
-                    Title = "Add own recipe",
-                    Page = x.GetRequiredService<RecipeEditorViewModel>()
+                    Title = "Добавить свой рецепт",
+                    Page = x.GetRequiredService<RecipeEditorViewModel>
                 }
             });
         }

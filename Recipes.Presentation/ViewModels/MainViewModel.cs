@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using Avalonia.Controls;
 using Avalonia.Controls.Selection;
@@ -13,7 +16,7 @@ using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels
 {
-    public class MainViewModel : ViewModelBase, IViewContainer
+    public class MainViewModel : ViewModelBase, IMainViewModel
     {
 #if DEBUG
         public MainViewModel() { }
@@ -23,11 +26,21 @@ namespace Recipes.Presentation.ViewModels
         private ViewModelBase _content;
         private readonly List<MainMenuItem> _menuItems;
         private MainMenuItem _selectedView;
-
-        public bool HasError { get; set; } = false;
+        private bool _hasErrors;
 
         public List<MainMenuItem> MenuItems => _menuItems;
-        public ReactiveCommand<ViewModelBase, Unit> ChangeView { get; }
+
+        public ReactiveCommand<Func<ViewModelBase>, Unit> ChangeView { get; }
+
+        public bool HasErrors   
+        {
+            get => _hasErrors;
+            set => this.RaiseAndSetIfChanged(ref _hasErrors, value);
+        }
+        
+        public ObservableCollection<Exception> Errors { get; private set; }
+        
+        public ReactiveCommand<Exception, Unit> RemoveExceptionCommand { get; }
 
         public ViewModelBase Content
         {
@@ -47,14 +60,30 @@ namespace Recipes.Presentation.ViewModels
         public MainViewModel(ILogger<MainViewModel> logger, List<MainMenuItem> menuItems)
         {
             _menuItems = menuItems;
-            ChangeView = ReactiveCommand.Create<ViewModelBase>(view =>
+            ChangeView = ReactiveCommand.Create<Func<ViewModelBase>>(getView =>
             {
-                Content = view;
+                Content = getView();
             });
-
-            Content = menuItems[0].Page;
+            
             _logger = logger;
             logger.LogInformation("ViewModelBase created");
+
+            // Errors = new ObservableCollection<Exception>(Enumerable.Empty<Exception>());
+            Errors = new ObservableCollection<Exception>(new []{new Exception("test")});
+            HasErrors = false;
+            RemoveExceptionCommand = ReactiveCommand.Create<Exception>(RemoveException);
+        }
+
+        public void AddException(Exception ex)
+        {
+            Errors.Add(ex);
+            HasErrors = true;
+        }
+
+        private void RemoveException(Exception ex)
+        {
+            Errors.Remove(ex);
+            HasErrors = Errors.Any();
         }
     }
 }

@@ -13,6 +13,8 @@ using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
+using Recipes.Presentation.DataTypes;
+using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -102,7 +104,9 @@ internal class RecipeEditorViewModel : ViewModelBase
 
     public IReadOnlyList<QuantityUnit> Units { get; }
 
-    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository, IQuantityUnitRepository unitRepository)
+    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository,
+        IQuantityUnitRepository unitRepository, IViewContainer viewContainer, RecipeViewFactory factory,
+        IExceptionContainer exceptionContainer)
     {
         RecipeRepository = recipeRepository;
         ProductRepository = productRepository;
@@ -119,10 +123,21 @@ internal class RecipeEditorViewModel : ViewModelBase
         AddCookingStepCommand = ReactiveCommand.Create<TextBox>(AddCookingStep);
         AddIngredientCommand = ReactiveCommand.Create<Grid>(AddIngredient);
         RemoveIngredientCommand = ReactiveCommand.Create<Ingredient>(RemoveIngredient);
-        SaveRecipeCommand = ReactiveCommand.Create(SaveRecipe);
+        SaveRecipeCommand = ReactiveCommand.Create(() => SaveRecipe(viewContainer, factory));
 
         GetProductNameCommand = ReactiveCommand.CreateFromTask<EntityId, Product>(
                 id => productRepository.GetProductByIdAsync(id));
+        
+        RegisterCommands(exceptionContainer);
+    }
+
+    private void RegisterCommands(IExceptionContainer container)
+    {
+        AddCookingStepCommand.ThrownExceptions.Subscribe(container.AddException);
+        AddIngredientCommand.ThrownExceptions.Subscribe(container.AddException);
+        RemoveIngredientCommand.ThrownExceptions.Subscribe(container.AddException);
+        SaveRecipeCommand.ThrownExceptions.Subscribe(container.AddException);
+        GetProductNameCommand.ThrownExceptions.Subscribe(container.AddException);
     }
 
     public ReactiveCommand<TextBox, Unit> AddCookingStepCommand { get; }
@@ -169,7 +184,7 @@ internal class RecipeEditorViewModel : ViewModelBase
         Ingredients.Remove(ingredient);
     }
 
-    private void SaveRecipe()
+    private void SaveRecipe(IViewContainer container, RecipeViewFactory factory)
     {
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings, CookDuration);
         foreach (var ingr in Ingredients)
@@ -177,5 +192,6 @@ internal class RecipeEditorViewModel : ViewModelBase
         foreach (var cookingStep in CookingSteps)
             recipe.AddCookingStep(cookingStep);
         RecipeRepository.AddRecipesAsync(new[] { recipe });
+        container.Content = factory.Create(recipe, this);
     }
 }

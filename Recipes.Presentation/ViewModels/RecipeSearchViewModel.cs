@@ -14,13 +14,13 @@ public class RecipeSearchViewModel : ViewModelBase
 {
     private readonly IRecipePicker _picker;
 
-    public RecipeSearchViewModel(Lazy<IViewContainer> container, IImageLoader imageLoader, IProductRepository repository, IRecipePicker picker)
+    public RecipeSearchViewModel(IViewContainer container, IImageLoader imageLoader, IProductRepository repository, IRecipePicker picker)
     {
         Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
         _picker = picker;
         Search("");
         ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe =>
-            container.Value.Content = ShowRecipe(recipe, container, imageLoader, repository));
+            container.Content = ShowRecipe(recipe, container, imageLoader, repository));
         SearchCommand = ReactiveCommand.Create<string>(Search);
     }
 
@@ -29,7 +29,7 @@ public class RecipeSearchViewModel : ViewModelBase
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
 
-    private ViewModelBase ShowRecipe(Recipe recipe, Lazy<IViewContainer> container, IImageLoader loader, IProductRepository repository)
+    private ViewModelBase ShowRecipe(Recipe recipe, IViewContainer container, IImageLoader loader, IProductRepository repository)
     {
         return new RecipeViewModel(recipe, container, loader, repository, this);
     }
