@@ -176,40 +176,45 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate>
-                    <Panel Name="PART_LayoutRoot">
-                        <TextBox Name="PART_TextBox"
-                                 Watermark="{TemplateBinding Watermark}"
-                                 Width="{TemplateBinding Width}"
-                                 Foreground="{TemplateBinding Foreground}"
-                                 Background="{TemplateBinding Background}"
-                                 BorderBrush="{TemplateBinding BorderBrush}"
-                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                 CornerRadius="{TemplateBinding CornerRadius}"
-                                 FontSize="{TemplateBinding FontSize}"
-                                 FontFamily="{TemplateBinding FontFamily}"
-                                 FontWeight="{TemplateBinding FontWeight}"
-                                 Padding="{TemplateBinding Padding}"
-                                 Margin="0"/>
-                        <Popup Name="PART_Popup"
-                               WindowManagerAddShadowHint="False"
-                               MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
-                               MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                               IsLightDismissEnabled="True"
-                               PlacementTarget="{TemplateBinding}">
-                            <Border Name="PART_SuggestionsContainer">
-                                <ListBox Name="PART_SelectingItemsControl"
-                                         BorderThickness="0"
-                                         Background="Transparent"
-                                         ItemTemplate="{TemplateBinding ItemTemplate}">
-                                </ListBox>
-                            </Border>
-                        </Popup>
-                    </Panel>
+                    <DataValidationErrors>
+                        <Panel Name="PART_LayoutRoot">
+                            <TextBox Name="PART_TextBox"
+                                     Watermark="{TemplateBinding Watermark}"
+                                     Width="{TemplateBinding Width}"
+                                     Foreground="{TemplateBinding Foreground}"
+                                     Background="{TemplateBinding Background}"
+                                     BorderBrush="{TemplateBinding BorderBrush}"
+                                     BorderThickness="{TemplateBinding BorderThickness}"
+                                     CornerRadius="{TemplateBinding CornerRadius}"
+                                     FontSize="{TemplateBinding FontSize}"
+                                     FontFamily="{TemplateBinding FontFamily}"
+                                     FontWeight="{TemplateBinding FontWeight}"
+                                     Padding="{TemplateBinding Padding}"
+                                     Margin="0"/>
+                            <Popup Name="PART_Popup"
+                                   WindowManagerAddShadowHint="False"
+                                   MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                                   MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                   IsLightDismissEnabled="True"
+                                   PlacementTarget="{TemplateBinding}">
+                                <Border Name="PART_SuggestionsContainer">
+                                    <ListBox Name="PART_SelectingItemsControl"
+                                             BorderThickness="0"
+                                             Background="Transparent"
+                                             ItemTemplate="{TemplateBinding ItemTemplate}">
+                                    </ListBox>
+                                </Border>
+                            </Popup>
+                        </Panel>
+                    </DataValidationErrors>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style Selector="^">
             <Setter Property="Background" Value="{DynamicResource AccentBackground}" />
+        </Style>
+        <Style Selector="^:error/template/TextBox">
+            <Setter Property="BorderBrush" Value="Red"/>
         </Style>
     </Style>
 

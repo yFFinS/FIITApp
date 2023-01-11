@@ -23,7 +23,7 @@
         <ScrollViewer IsHitTestVisible="False">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10" MaxWidth="1000">
                 <Border Classes="accent round" Name="Title" MaxWidth="600">
-                    <TextBox Watermark="Title"
+                    <TextBox Watermark="Название"
                              Text="{Binding Title, Mode=TwoWay}"
                              TextAlignment="Center"
                              HorizontalAlignment="Stretch"
@@ -62,7 +62,7 @@
                                     </AutoCompleteBox.ItemTemplate>
                                 </AutoCompleteBox>
                                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5">
-                                    <NumericUpDown Minimum="0.001"
+                                    <NumericUpDown Minimum="1"
                                                    Maximum="10000000"
                                                    Value="{Binding CurrentCount, Mode=TwoWay}"
                                                    IsEnabled="{Binding CurrentUnit.IsMeasurable}"
@@ -86,7 +86,6 @@
                                 <Button Grid.Column="3"
                                         Width="30"
                                         Height="30"
-                                        IsEnabled="{Binding CurrentProduct, Converter={x:Static ObjectConverters.IsNotNull}}"
                                         Command="{Binding AddIngredientCommand}"
                                         CommandParameter="{Binding $parent[Grid]}" />
                             </Grid>
@@ -97,13 +96,13 @@
                         <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom">
                             <TextBox Text="{Binding Description}"
                                      TextWrapping="Wrap"
-                                     Watermark="Description..." />
+                                     Watermark="Описание рецепта..." />
                         </Border>
                         <Border Grid.Row="3" Classes="accent round" HorizontalAlignment="Stretch">
                             <Grid ColumnDefinitions="* *">
                                 <Grid ColumnDefinitions="Auto 10 Auto"
                                       HorizontalAlignment="Right">
-                                    <TextBlock Grid.Column="0" Text="Servings:" />
+                                    <TextBlock Grid.Column="0" Text="Порции:" />
                                     <NumericUpDown Grid.Column="2"
                                                    Minimum="1"
                                                    Maximum="1000"
@@ -114,7 +113,7 @@
                                 </Grid>
                                 <Grid Grid.Column="1" ColumnDefinitions="Auto 10 Auto"
                                       HorizontalAlignment="Right">
-                                    <TextBlock Grid.Column="0" Text="Cooking Time:" />
+                                    <TextBlock Grid.Column="0" Text="Время приготовления:" />
                                     <Grid Grid.Column="2" ColumnDefinitions="*, Auto, *, Auto, *">
                                         <Grid.Styles>
                                             <Style Selector="NumericUpDown">
@@ -158,8 +157,7 @@
                             <Border Classes="accent round">
                                 <TextBox Text="{Binding Description, Mode=TwoWay}"
                                          CaretIndex="2"
-                                         TextWrapping="Wrap"
-                                         Watermark="Description..." />
+                                         TextWrapping="Wrap"/>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -168,7 +166,7 @@
                     <Panel>
                         <TextBox Name="CookingStep"
                                  TextWrapping="Wrap"
-                                 Watermark="{Binding CookingSteps.Count}" />
+                                 Watermark="Шаг приготовления..." />
                         <Button IsDefault="{Binding #CookingStep.IsFocused}"
                                 HorizontalAlignment="Right"
                                 Command="{Binding AddCookingStepCommand}"

@@ -68,8 +68,7 @@ namespace Recipes.Presentation.ViewModels
             _logger = logger;
             logger.LogInformation("ViewModelBase created");
 
-            // Errors = new ObservableCollection<Exception>(Enumerable.Empty<Exception>());
-            Errors = new ObservableCollection<Exception>(new []{new Exception("test")});
+            Errors = new ObservableCollection<Exception>(Enumerable.Empty<Exception>());
             HasErrors = false;
             RemoveExceptionCommand = ReactiveCommand.Create<Exception>(RemoveException);
         }

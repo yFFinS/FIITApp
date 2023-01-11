@@ -14,6 +14,7 @@ using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
 using Recipes.Presentation.DataTypes;
+using Recipes.Presentation.Exceptions;
 using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
@@ -162,21 +163,36 @@ internal class RecipeEditorViewModel : ViewModelBase
 
     private void AddIngredient(Grid parent)
     {
+        if (parent.Children[0] is not AutoCompleteBox box)
+            return;
+        if (parent.Children[1].LogicalChildren[0] is not NumericUpDown num)
+            return;
+        if (parent.Children[1].LogicalChildren[1] is not ComboBox combo)
+            return;
+
         if (CurrentProduct is null)
-            //TODO
-            throw new Exception();
-        Ingredients.Add(new Ingredient(CurrentProduct, new Quantity(CurrentCount, CurrentUnit)));
-        if (parent.Children[0] is AutoCompleteBox box)
         {
-            box.Text = "";
-            CurrentProduct = null;
-            box.Focus();
+            var ex = new RecipeEditorException("Выберете продукт");
+            // DataValidationErrors.SetError(box, ex);
+            throw ex;
         }
 
-        if (parent.Children[1] is NumericUpDown num)
-            CurrentCount = 1;
-        if (parent.Children[2] is ComboBox combo)
-            CurrentUnit = null;
+        if (CurrentUnit is null)
+        {
+            var ex = new RecipeEditorException("Выберете единицу измерения");
+            // DataValidationErrors.SetError(combo, ex);
+            throw ex;
+        }
+
+        Ingredients.Add(new Ingredient(CurrentProduct, new Quantity(CurrentCount, CurrentUnit)));
+        
+        box.Text = "";
+        CurrentProduct = null;
+        box.Focus();
+        CurrentCount = 1;
+        CurrentUnit = null;
+
+
     }
 
     private void RemoveIngredient(Ingredient ingredient)
@@ -186,6 +202,15 @@ internal class RecipeEditorViewModel : ViewModelBase
 
     private void SaveRecipe(IViewContainer container, RecipeViewFactory factory)
     {
+        if (Ingredients.Count == 0)
+            throw new RecipeEditorException("Запишите ингредиенты");
+        if (Servings == 0)
+            throw new RecipeEditorException("Назначьте количество порций");
+        if (CookDuration == TimeSpan.Zero)
+            throw new RecipeEditorException("Выберите время приготовления");
+        if (CookingSteps.Count == 0)
+            throw new RecipeEditorException("Напишите шаги приготовления");
+        
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings, CookDuration);
         foreach (var ingr in Ingredients)
             recipe.AddIngredient(ingr);
