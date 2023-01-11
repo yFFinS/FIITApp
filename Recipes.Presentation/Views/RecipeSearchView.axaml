@@ -33,7 +33,9 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <controls:RecipeCard Margin="5"/>
+                        <controls:RecipeCard Margin="5" 
+                                             ImageLoader="{Binding $parent[ItemsControl].DataContext.ImageLoader}"
+                                             Recipe="{Binding}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

@@ -8,7 +8,7 @@
             CommandParameter="{Binding}"
             Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
         <Panel>
-            <Image/>
+            <Image Source="{Binding $self.Image^}"/>
             <TextBlock VerticalAlignment="Bottom"
                        HorizontalAlignment="Center"
                        Text="{Binding Title}"/>

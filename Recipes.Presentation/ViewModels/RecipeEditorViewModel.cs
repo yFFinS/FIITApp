@@ -54,6 +54,8 @@ internal class RecipeEditorViewModel : ViewModelBase
     public ObservableCollection<Ingredient> Ingredients { get; set; }
 
     public string Description { get; set; }
+    
+    public string ImageUrl { get; set; }
 
     #region CookingTime
 
@@ -121,24 +123,13 @@ internal class RecipeEditorViewModel : ViewModelBase
         PopulateProducts = async (s, token) => await ProductRepository.GetProductsByPrefixAsync(s!.ToLower());
         SelectProduct = (search, item) => item.Name;
 
-        AddCookingStepCommand = ReactiveCommand.Create<TextBox>(AddCookingStep);
-        AddIngredientCommand = ReactiveCommand.Create<Grid>(AddIngredient);
-        RemoveIngredientCommand = ReactiveCommand.Create<Ingredient>(RemoveIngredient);
-        SaveRecipeCommand = ReactiveCommand.Create(() => SaveRecipe(viewContainer, factory));
+        AddCookingStepCommand = ReactiveCommandExtended.Create<TextBox>(AddCookingStep, exceptionContainer);
+        AddIngredientCommand = ReactiveCommandExtended.Create<Grid>(AddIngredient, exceptionContainer);
+        RemoveIngredientCommand = ReactiveCommandExtended.Create<Ingredient>(RemoveIngredient, exceptionContainer);
+        SaveRecipeCommand = ReactiveCommandExtended.Create(() => SaveRecipe(viewContainer, factory), exceptionContainer);
 
-        GetProductNameCommand = ReactiveCommand.CreateFromTask<EntityId, Product>(
-                id => productRepository.GetProductByIdAsync(id));
-        
-        RegisterCommands(exceptionContainer);
-    }
-
-    private void RegisterCommands(IExceptionContainer container)
-    {
-        AddCookingStepCommand.ThrownExceptions.Subscribe(container.AddException);
-        AddIngredientCommand.ThrownExceptions.Subscribe(container.AddException);
-        RemoveIngredientCommand.ThrownExceptions.Subscribe(container.AddException);
-        SaveRecipeCommand.ThrownExceptions.Subscribe(container.AddException);
-        GetProductNameCommand.ThrownExceptions.Subscribe(container.AddException);
+        GetProductNameCommand = ReactiveCommandExtended.CreateFromTask<EntityId, Product>(
+                id => productRepository.GetProductByIdAsync(id), exceptionContainer);
     }
 
     public ReactiveCommand<TextBox, Unit> AddCookingStepCommand { get; }
@@ -212,6 +203,7 @@ internal class RecipeEditorViewModel : ViewModelBase
             throw new RecipeEditorException("Напишите шаги приготовления");
         
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings, CookDuration);
+        recipe.ImageUrl = new Uri(ImageUrl);
         foreach (var ingr in Ingredients)
             recipe.AddIngredient(ingr);
         foreach (var cookingStep in CookingSteps)

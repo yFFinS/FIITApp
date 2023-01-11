@@ -92,7 +92,10 @@
                         </StackPanel>
                     </Border>
                     <Grid Grid.Column="2" RowDefinitions="*, Auto, 10, Auto" HorizontalAlignment="Stretch">
-                        <Image />
+                        <Border Margin="0 0 0 10" Grid.Row="0" Classes="accent round">
+                            <TextBox Watermark="Image Url"
+                                     Text="{Binding ImageUrl}"/>
+                        </Border>
                         <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom">
                             <TextBox Text="{Binding Description}"
                                      TextWrapping="Wrap"

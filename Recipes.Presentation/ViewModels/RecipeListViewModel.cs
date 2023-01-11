@@ -5,7 +5,9 @@ using System.Reactive;
 using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
+using ReactiveCommand = ReactiveUI.ReactiveCommand;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -16,15 +18,18 @@ public class RecipeListViewModel : ViewModelBase
     
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
 
-    public RecipeListViewModel(List<Recipe> recipes, IViewContainer container, IImageLoader imageLoader, IProductRepository repository)
+    public RecipeListViewModel(List<Recipe> recipes, IViewContainer container, IImageLoader imageLoader,
+        RecipeViewFactory factory, IExceptionContainer exceptionContainer)
     {
         Recipes = recipes;
         ImageLoader = imageLoader;
-        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe => ShowRecipe(recipe, container, imageLoader, repository));
+        ShowRecipeCommand =
+            ReactiveCommandExtended.Create<Recipe>(recipe => ShowRecipe(recipe, container, factory),
+                exceptionContainer);
     }
     
-    private void ShowRecipe(Recipe recipe, IViewContainer container, IImageLoader loader, IProductRepository repository)
+    private void ShowRecipe(Recipe recipe, IViewContainer container, RecipeViewFactory factory)
     {
-        container.Content = new RecipeViewModel(recipe, container, loader, repository, this);
+        container.Content = factory.Create(recipe, this);
     }
 }

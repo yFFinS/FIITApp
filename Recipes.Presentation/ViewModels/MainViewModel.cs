@@ -13,6 +13,7 @@ using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Interfaces;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
+using ReactiveCommand = ReactiveUI.ReactiveCommand;
 
 namespace Recipes.Presentation.ViewModels
 {

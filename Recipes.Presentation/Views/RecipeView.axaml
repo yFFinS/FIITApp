@@ -54,14 +54,14 @@
                         <Border Grid.Row="3"
                                 Classes="accent round"
                                 HorizontalAlignment="Stretch">
-                            <Grid ColumnDefinitions="* *">
+                            <Grid ColumnDefinitions="* 10 *">
                                 <Grid ColumnDefinitions="auto 10 auto"
-                                      HorizontalAlignment="Right">
+                                      HorizontalAlignment="Center">
                                     <TextBlock Grid.Column="0" Text="Порции: " />
                                     <TextBlock Grid.Column="2" Text="{Binding Recipe.Servings}" />
                                 </Grid>
-                                <Grid Grid.Column="1" ColumnDefinitions="auto 10 auto"
-                                      HorizontalAlignment="Right">
+                                <Grid Grid.Column="2" ColumnDefinitions="auto 10 auto"
+                                      HorizontalAlignment="Center">
                                     <TextBlock Grid.Column="0" Text="Время приготовления: " />
                                     <TextBlock Grid.Column="2" Text="{Binding Recipe.CookDuration}" />
                                 </Grid>

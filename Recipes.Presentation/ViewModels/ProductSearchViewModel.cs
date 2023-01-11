@@ -15,7 +15,9 @@ using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.ValueObjects;
+using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
+using ReactiveCommand = ReactiveUI.ReactiveCommand;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -26,12 +28,15 @@ public class ProductSearchViewModel : ViewModelBase
     public HashSet<Product> SelectedProducts { get; set; }
 
     public ProductSearchViewModel(IViewContainer container, IImageLoader imageLoader,
-        IProductRepository productRepository, IRecipePicker recipePicker)
+        IProductRepository productRepository, IRecipePicker recipePicker, RecipeViewFactory factory, IExceptionContainer exceptionContainer)
     {
         ImageLoader = imageLoader;
-        SearchCommand = ReactiveCommand.Create<string>(name => Search(name, productRepository));
-        ShowRecipesCommand = ReactiveCommand.Create(() => ShowRecipes(container, imageLoader, productRepository, recipePicker));
-        CheckProductCommand = ReactiveCommand.Create<Product>(CheckProduct);
+        SearchCommand =
+            ReactiveCommandExtended.Create<string>(name => Search(name, productRepository), exceptionContainer);
+        ShowRecipesCommand =
+            ReactiveCommandExtended.Create(() => ShowRecipes(container, imageLoader, recipePicker, factory, exceptionContainer),
+                exceptionContainer);
+        CheckProductCommand = ReactiveCommandExtended.Create<Product>(CheckProduct, exceptionContainer);
 
         Products = new ObservableCollection<Product>(Enumerable.Empty<Product>());
         SelectedProducts = new HashSet<Product>();
@@ -58,12 +63,13 @@ public class ProductSearchViewModel : ViewModelBase
             SelectedProducts.Add(product);
     }
 
-    private async void ShowRecipes(IViewContainer container, IImageLoader loader, IProductRepository repository, IRecipePicker recipePicker)
+    private async void ShowRecipes(IViewContainer container, IImageLoader loader, IRecipePicker recipePicker,
+        RecipeViewFactory factory, IExceptionContainer exceptionContainer)
     {
         var filter = new RecipeFilter();
         foreach (var product in SelectedProducts) 
             filter.AddOption(new ProductFilterOption(product));
         var recipes = await recipePicker.PickRecipes(filter);
-        container.Content = new RecipeListViewModel(recipes, container, loader, repository);
+        container.Content = new RecipeListViewModel(recipes, container, loader, factory, exceptionContainer);
     }
 }

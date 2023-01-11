@@ -6,7 +6,9 @@ using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
+using ReactiveCommand = ReactiveUI.ReactiveCommand;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -14,14 +16,18 @@ public class RecipeSearchViewModel : ViewModelBase
 {
     private readonly IRecipePicker _picker;
 
-    public RecipeSearchViewModel(IViewContainer container, IImageLoader imageLoader, IProductRepository repository, IRecipePicker picker)
+    public IImageLoader ImageLoader { get; }
+
+    public RecipeSearchViewModel(IViewContainer container, IRecipePicker picker, RecipeViewFactory factory,
+        IExceptionContainer exceptionContainer, IImageLoader imageLoader)
     {
         Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
         _picker = picker;
+        ImageLoader = imageLoader;
         Search("");
-        ShowRecipeCommand = ReactiveCommand.Create<Recipe>(recipe =>
-            container.Content = ShowRecipe(recipe, container, imageLoader, repository));
-        SearchCommand = ReactiveCommand.Create<string>(Search);
+        ShowRecipeCommand = ReactiveCommandExtended.Create<Recipe>(recipe =>
+            container.Content = ShowRecipe(recipe, factory), exceptionContainer);
+        SearchCommand = ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
     }
 
     public ObservableCollection<Recipe> Items { get; private set; }
@@ -29,9 +35,9 @@ public class RecipeSearchViewModel : ViewModelBase
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
 
-    private ViewModelBase ShowRecipe(Recipe recipe, IViewContainer container, IImageLoader loader, IProductRepository repository)
+    private ViewModelBase ShowRecipe(Recipe recipe, RecipeViewFactory factory)
     {
-        return new RecipeViewModel(recipe, container, loader, repository, this);
+        return factory.Create(recipe, this);
     }
 
     public async void Search(string? name)
