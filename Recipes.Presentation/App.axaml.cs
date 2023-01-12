@@ -76,17 +76,17 @@ namespace Recipes.Presentation
                     new()
                     {
                         Title = "Search by ingregients",
-                        Page = _productSearchViewModel
+                        Page = ()=>_productSearchViewModel
                     },
                     new()
                     {
                         Title = "Search by name",
-                        Page = _recipeSearchViewModel
+                        Page = ()=>_recipeSearchViewModel
                     },
                     new()
                     {
                         Title = "Add own recipe",
-                        Page = _recipeEditorViewModel
+                        Page = ()=>_recipeEditorViewModel
                     }
                 };
             }
@@ -111,12 +111,10 @@ namespace Recipes.Presentation
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainView>();
             services.AddSingleton<ApplicationViewInitializer>();
-            services.AddSingleton(x => x.GetRequiredService<ApplicationViewInitializer>().GetMainMenuItems());
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
             AvaloniaXamlLoader.Load(this);
-            // RxApp.DefaultExceptionHandler = new UiExceptionHandler();
             Resources.Add(typeof(IServiceProvider), serviceProvider);
         }
 
