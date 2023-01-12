@@ -82,7 +82,17 @@
             <Setter Property="Background" Value="{DynamicResource ButtonHover}" />
         </Style>
     </Style>
-
+    
+    <!-- Border -->
+    <Style Selector="Border">
+        <Setter Property="ClipToBounds" Value="True"/>
+    </Style>
+    
+    <!-- Image -->
+    <Style Selector="Image">
+        <Setter Property="Stretch" Value="Fill"/>
+    </Style>
+    
     <!-- TextBlock -->
     <Style Selector="TextBlock">
         <Setter Property="FontFamily" Value="Serif" />
