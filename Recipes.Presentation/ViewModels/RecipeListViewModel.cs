@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Reactive;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
-using ReactiveCommand = ReactiveUI.ReactiveCommand;
+using System.Collections.Generic;
+using System.Reactive;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -19,7 +16,7 @@ public class RecipeListViewModel : ViewModelBase
 #endif
     public IImageLoader ImageLoader { get; }
     private List<Recipe> Recipes { get; }
-    
+
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<ScrollViewer, Unit> NextPageCommand { get; }
     public ReactiveCommand<ScrollViewer, Unit> PreviousPageCommand { get; }
@@ -35,7 +32,7 @@ public class RecipeListViewModel : ViewModelBase
         PreviousPageCommand = ReactiveCommandExtended.Create<ScrollViewer>(viewer => viewer.PageLeft(), exceptionContainer);
         NextPageCommand = ReactiveCommandExtended.Create<ScrollViewer>(viewer => viewer.PageRight(), exceptionContainer);
     }
-    
+
     private void ShowRecipe(Recipe recipe, IViewContainer container, RecipeViewFactory factory)
     {
         container.Content = factory.Create(recipe, this);

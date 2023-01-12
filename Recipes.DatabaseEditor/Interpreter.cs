@@ -1,5 +1,5 @@
-using System.Text.RegularExpressions;
 using Recipes.DatabaseEditor.Commands;
+using System.Text.RegularExpressions;
 
 namespace Recipes.DatabaseEditor;
 

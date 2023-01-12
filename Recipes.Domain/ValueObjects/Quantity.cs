@@ -1,8 +1,8 @@
-using System.Globalization;
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
 using Recipes.Domain.Exceptions;
 using Recipes.Shared;
+using System.Globalization;
 
 namespace Recipes.Domain.ValueObjects;
 

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Reactive;
-using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
 using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Presentation.Interfaces;
+using System.Reactive;
+using System.Threading.Tasks;
 
 namespace Recipes.Presentation.ViewModels;
 

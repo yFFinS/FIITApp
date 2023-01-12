@@ -1,9 +1,8 @@
-﻿using System;
-using System.Reactive;
-using System.Reactive.Concurrency;
-using System.Threading.Tasks;
-using ReactiveUI;
+﻿using ReactiveUI;
 using Recipes.Presentation.Interfaces;
+using System;
+using System.Reactive;
+using System.Threading.Tasks;
 
 namespace Recipes.Presentation.DataTypes;
 
@@ -16,7 +15,7 @@ public static class ReactiveCommandExtended
         command.ThrownExceptions.Subscribe(container.AddException);
         return command;
     }
-    
+
     public static ReactiveCommand<Unit, Unit> Create(Action execute,
         IExceptionContainer container)
     {

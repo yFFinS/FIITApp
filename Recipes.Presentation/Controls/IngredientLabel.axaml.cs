@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.IngredientsAggregate;
 
 namespace Recipes.Presentation.Controls;
@@ -15,13 +14,13 @@ public partial class IngredientLabel : UserControl
             (o, v) => o.Ingredient = v);
 
     private Ingredient _ingredient;
-    
+
     public Ingredient Ingredient
     {
         get => _ingredient;
         set => SetAndRaise(IngredientProperty, ref _ingredient, value);
     }
-    
+
     public IngredientLabel()
     {
         InitializeComponent();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
-using Recipes.Application.Services.Preferences;
 using Recipes.Application.Services.RecipePicker.ScoringCriteria;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.Interfaces;

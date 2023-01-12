@@ -1,7 +1,4 @@
-﻿using Recipes.Domain.Entities.ProductAggregate;
-using Recipes.Domain.Entities.RecipeAggregate;
-
-namespace Recipes.Infrastructure;
+﻿namespace Recipes.Infrastructure;
 
 public interface IDataBase
 {

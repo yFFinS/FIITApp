@@ -1,11 +1,11 @@
 using NUnit.Framework;
+using Recipes.Domain.Entities.ProductAggregate;
+using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 using Recipes.Tests.Shared.BuilderEntries;
 using System;
 using System.Collections.Generic;
-using Recipes.Domain.Entities.ProductAggregate;
-using Recipes.Domain.Entities.RecipeAggregate;
 
 namespace Recipes.Domain.UnitTests.Tests;
 

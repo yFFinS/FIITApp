@@ -1,5 +1,5 @@
-﻿using System;
-using Recipes.Presentation.ViewModels;
+﻿using Recipes.Presentation.ViewModels;
+using System;
 
 namespace Recipes.Presentation.DataTypes;
 

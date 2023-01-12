@@ -1,4 +1,3 @@
-using System.Xml.Serialization;
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
 

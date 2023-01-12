@@ -3,13 +3,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Recipes.Infrastructure;
+using Recipes.Presentation.DataTypes;
+using Recipes.Presentation.Interfaces;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
 using System.Collections.Generic;
-using ReactiveUI;
-using Recipes.Presentation.DataTypes;
-using Recipes.Presentation.Interfaces;
 
 namespace Recipes.Presentation
 {
@@ -23,55 +22,55 @@ namespace Recipes.Presentation
     }
 
 
-        internal class ApplicationViewInitializer
-        {
-            private readonly MainWindow _mainWindow;
-            private readonly MainView _mainView;
-            private readonly MainMenuItemsBuilder _mainMenuItemsBuilder;
+    internal class ApplicationViewInitializer
+    {
+        private readonly MainWindow _mainWindow;
+        private readonly MainView _mainView;
+        private readonly MainMenuItemsBuilder _mainMenuItemsBuilder;
 
-            public ApplicationViewInitializer(MainMenuItemsBuilder mainMenuItemsBuilder,
-                MainWindow mainWindow, MainView mainView)
-            {
-                _mainWindow = mainWindow;
-                _mainView = mainView;
-                _mainMenuItemsBuilder = mainMenuItemsBuilder;
-            }
-            
-            public void InitializeLifetime(IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                desktop.MainWindow = _mainWindow;
-                _mainWindow.ViewBorder.Child = _mainView;
-            }
-            
-            public void InitializeLifetime(ISingleViewApplicationLifetime singleView)
-            {
-                singleView.MainView = _mainView;
-            }
-            
-            public List<MainMenuItem> GetMainMenuItems()
-            {
-                return _mainMenuItemsBuilder.Build();
-            }
+        public ApplicationViewInitializer(MainMenuItemsBuilder mainMenuItemsBuilder,
+            MainWindow mainWindow, MainView mainView)
+        {
+            _mainWindow = mainWindow;
+            _mainView = mainView;
+            _mainMenuItemsBuilder = mainMenuItemsBuilder;
         }
-        
-        internal class MainMenuItemsBuilder
-        {
-            private readonly ProductSearchViewModel _productSearchViewModel;
-            private readonly RecipeSearchViewModel _recipeSearchViewModel;
-            private readonly RecipeEditorViewModel _recipeEditorViewModel;
 
-            public MainMenuItemsBuilder(ProductSearchViewModel productSearchViewModel,
-                RecipeSearchViewModel recipeSearchViewModel,
-                RecipeEditorViewModel recipeEditorViewModel)
-            {
-                _productSearchViewModel = productSearchViewModel;
-                _recipeSearchViewModel = recipeSearchViewModel;
-                _recipeEditorViewModel = recipeEditorViewModel;
-            }
-            
-            public List<MainMenuItem> Build()
-            {
-                return new List<MainMenuItem>
+        public void InitializeLifetime(IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.MainWindow = _mainWindow;
+            _mainWindow.ViewBorder.Child = _mainView;
+        }
+
+        public void InitializeLifetime(ISingleViewApplicationLifetime singleView)
+        {
+            singleView.MainView = _mainView;
+        }
+
+        public List<MainMenuItem> GetMainMenuItems()
+        {
+            return _mainMenuItemsBuilder.Build();
+        }
+    }
+
+    internal class MainMenuItemsBuilder
+    {
+        private readonly ProductSearchViewModel _productSearchViewModel;
+        private readonly RecipeSearchViewModel _recipeSearchViewModel;
+        private readonly RecipeEditorViewModel _recipeEditorViewModel;
+
+        public MainMenuItemsBuilder(ProductSearchViewModel productSearchViewModel,
+            RecipeSearchViewModel recipeSearchViewModel,
+            RecipeEditorViewModel recipeEditorViewModel)
+        {
+            _productSearchViewModel = productSearchViewModel;
+            _recipeSearchViewModel = recipeSearchViewModel;
+            _recipeEditorViewModel = recipeEditorViewModel;
+        }
+
+        public List<MainMenuItem> Build()
+        {
+            return new List<MainMenuItem>
                 {
                     new()
                     {
@@ -89,8 +88,8 @@ namespace Recipes.Presentation
                         Page = ()=>_recipeEditorViewModel
                     }
                 };
-            }
         }
+    }
 
     public partial class App : Avalonia.Application
     {
