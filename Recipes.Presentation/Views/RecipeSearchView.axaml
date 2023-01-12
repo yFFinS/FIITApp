@@ -25,7 +25,9 @@
             
         </Grid>
         <ScrollViewer ZIndex="-2">
-            <ItemsControl ZIndex="100" Items="{Binding Items}">
+            <ItemsControl ZIndex="100"
+                          Items="{Binding Items}"
+                          Margin="0 60 0 0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel HorizontalAlignment="Center" MaxWidth="1500"/>
