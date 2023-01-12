@@ -21,7 +21,14 @@ public class TestRecipe : Recipe
         AddCookingStep(new CookingStep("2. Steel juice from second apple"));
         AddCookingStep(new CookingStep("3. Steel juice from third apple"));
         AddCookingStep(new CookingStep("4. Steel juice from fourth apple"));
-        AddCookingStep(new CookingStep("5. Steel juice from fifth apple"));
+        AddCookingStep(new CookingStep(
+            "5. Яблоко Яблоко Яблоко\n Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко " +
+            "Яблоко Яблоко Яблоко Яблоко Яблоко\n Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко " +
+            "Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко " +
+            "Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко " +
+            "Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко " +
+            "Яблоко Яблоко Яблоко Яблоко Яблоко\n Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко " +
+            "Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко Яблоко "));
         AddCookingStep(new CookingStep("6. Steel juice from sixth apple"));
         AddCookingStep(new CookingStep("7. Steel juice from seventh apple"));
         AddCookingStep(new CookingStep("8. Steel juice from 8th apple"));

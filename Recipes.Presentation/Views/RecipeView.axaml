@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
              xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1280" d:DesignHeight="720"
              x:Class="Recipes.Presentation.Views.RecipeView">
     <UserControl.Styles>
         <StyleInclude Source="/Styles/RecipeViewStyles.axaml" />
