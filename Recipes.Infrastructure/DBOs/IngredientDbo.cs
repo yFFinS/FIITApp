@@ -1,5 +1,5 @@
-using System.Xml.Serialization;
 using Recipes.Domain.IngredientsAggregate;
+using System.Xml.Serialization;
 
 namespace Recipes.Infrastructure;
 

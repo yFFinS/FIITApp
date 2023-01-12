@@ -1,8 +1,6 @@
 using Ardalis.GuardClauses;
 using Recipes.Domain.Base;
 using Recipes.Domain.ValueObjects;
-using System.ComponentModel;
-using System.Xml.Serialization;
 
 namespace Recipes.Domain.Entities.ProductAggregate;
 

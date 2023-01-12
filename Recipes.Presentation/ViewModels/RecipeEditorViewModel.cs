@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Reactive;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.ProductAggregate;
@@ -16,6 +9,12 @@ using Recipes.Domain.ValueObjects;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Exceptions;
 using Recipes.Presentation.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -54,7 +53,7 @@ internal class RecipeEditorViewModel : ViewModelBase
     public ObservableCollection<Ingredient> Ingredients { get; set; }
 
     public string Description { get; set; }
-    
+
     public string ImageUrl { get; set; }
 
     #region CookingTime
@@ -176,7 +175,7 @@ internal class RecipeEditorViewModel : ViewModelBase
         }
 
         Ingredients.Add(new Ingredient(CurrentProduct, new Quantity(CurrentCount, CurrentUnit)));
-        
+
         box.Text = "";
         CurrentProduct = null;
         box.Focus();
@@ -201,7 +200,7 @@ internal class RecipeEditorViewModel : ViewModelBase
             throw new RecipeEditorException("Выберите время приготовления");
         if (CookingSteps.Count == 0)
             throw new RecipeEditorException("Напишите шаги приготовления");
-        
+
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings, CookDuration);
         recipe.ImageUrl = new Uri(ImageUrl);
         foreach (var ingr in Ingredients)

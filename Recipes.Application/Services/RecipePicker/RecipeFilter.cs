@@ -1,5 +1,4 @@
 using Ardalis.GuardClauses;
-using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Application.Services.RecipePicker;

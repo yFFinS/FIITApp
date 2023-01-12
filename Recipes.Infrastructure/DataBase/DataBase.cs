@@ -1,6 +1,5 @@
-﻿using System.Xml;
+﻿using Recipes.Domain.Interfaces;
 using System.Xml.Serialization;
-using Recipes.Domain.Interfaces;
 
 namespace Recipes.Infrastructure;
 
@@ -40,7 +39,7 @@ public class DataBase : IDataBase
         var products = GetAllProducts();
         AddOrUpdate(product, products);
         Serialize(products, _options.ProductsPath);
-        
+
         _productsIsDirty = true;
     }
 
@@ -49,7 +48,7 @@ public class DataBase : IDataBase
         var recipes = GetAllRecipes();
         AddOrUpdate(obj, recipes);
         Serialize(recipes, _options.RecipesPath);
-        
+
         _recipesIsDirty = true;
     }
 
@@ -95,6 +94,6 @@ public class DataBase : IDataBase
         }
 
         using var stream = new FileStream(path, FileMode.Open);
-        return (T) xmlSerializer.Deserialize(stream)!;
+        return (T)xmlSerializer.Deserialize(stream)!;
     }
 }

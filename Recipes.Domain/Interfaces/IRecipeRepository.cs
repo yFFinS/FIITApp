@@ -1,5 +1,4 @@
 using Recipes.Domain.Entities.RecipeAggregate;
-using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Domain.Interfaces;

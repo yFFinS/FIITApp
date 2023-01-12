@@ -1,18 +1,13 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using ReactiveUI;
+using Recipes.Presentation.DataTypes;
+using Recipes.Presentation.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using Avalonia.Controls;
-using Avalonia.Controls.Selection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using ReactiveUI;
-using Recipes.Application.Services.Preferences;
-using Recipes.Application.Services.RecipePicker;
-using Recipes.Domain.Interfaces;
-using Recipes.Presentation.DataTypes;
-using Recipes.Presentation.Interfaces;
 using ReactiveCommand = ReactiveUI.ReactiveCommand;
 
 namespace Recipes.Presentation.ViewModels
@@ -22,7 +17,7 @@ namespace Recipes.Presentation.ViewModels
 #if DEBUG
         public MainViewModel() { }
 #endif
-        
+
         private readonly ILogger<MainViewModel> _logger;
         private ViewModelBase _content;
         private readonly List<MainMenuItem> _menuItems;
@@ -33,14 +28,14 @@ namespace Recipes.Presentation.ViewModels
 
         public ReactiveCommand<Func<ViewModelBase>, Unit> ChangeView { get; }
 
-        public bool HasErrors   
+        public bool HasErrors
         {
             get => _hasErrors;
             set => this.RaiseAndSetIfChanged(ref _hasErrors, value);
         }
-        
+
         public ObservableCollection<Exception> Errors { get; private set; }
-        
+
         public ReactiveCommand<Exception, Unit> RemoveExceptionCommand { get; }
 
         public ViewModelBase Content
@@ -65,7 +60,7 @@ namespace Recipes.Presentation.ViewModels
             {
                 Content = getView();
             });
-            
+
             _logger = logger;
             logger.LogInformation("ViewModelBase created");
 

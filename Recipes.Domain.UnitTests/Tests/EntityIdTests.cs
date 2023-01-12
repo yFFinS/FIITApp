@@ -1,6 +1,6 @@
-using System;
 using NUnit.Framework;
 using Recipes.Domain.ValueObjects;
+using System;
 
 namespace Recipes.Domain.UnitTests.Tests;
 

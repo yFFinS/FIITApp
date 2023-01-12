@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive;
-using ReactiveUI;
+﻿using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
-using ReactiveCommand = ReactiveUI.ReactiveCommand;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -31,7 +29,7 @@ public class RecipeSearchViewModel : ViewModelBase
     }
 
     public ObservableCollection<Recipe> Items { get; private set; }
-    
+
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
 

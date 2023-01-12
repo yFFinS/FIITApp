@@ -1,5 +1,5 @@
-using System.Xml.Serialization;
 using Recipes.Domain.ValueObjects;
+using System.Xml.Serialization;
 
 namespace Recipes.Infrastructure;
 

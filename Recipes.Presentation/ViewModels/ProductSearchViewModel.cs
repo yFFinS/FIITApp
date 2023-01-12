@@ -1,23 +1,13 @@
-﻿using System;
+﻿using ReactiveUI;
+using Recipes.Application.Interfaces;
+using Recipes.Application.Services.RecipePicker;
+using Recipes.Domain.Entities.ProductAggregate;
+using Recipes.Presentation.DataTypes;
+using Recipes.Presentation.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using System.Threading;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using JetBrains.Annotations;
-using Microsoft.Extensions.Logging.Abstractions;
-using ReactiveUI;
-using Recipes.Application.Interfaces;
-using Recipes.Application.Services.Preferences;
-using Recipes.Application.Services.RecipePicker;
-using Recipes.Domain.Entities.ProductAggregate;
-using Recipes.Domain.Entities.RecipeAggregate;
-using Recipes.Domain.ValueObjects;
-using Recipes.Presentation.DataTypes;
-using Recipes.Presentation.Interfaces;
-using ReactiveCommand = ReactiveUI.ReactiveCommand;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -67,7 +57,7 @@ public class ProductSearchViewModel : ViewModelBase
         RecipeViewFactory factory, IExceptionContainer exceptionContainer)
     {
         var filter = new RecipeFilter();
-        foreach (var product in SelectedProducts) 
+        foreach (var product in SelectedProducts)
             filter.AddOption(new ProductFilterOption(product));
         var recipes = await recipePicker.PickRecipes(filter);
         container.Content = new RecipeListViewModel(recipes, container, loader, factory, exceptionContainer);

@@ -1,8 +1,8 @@
-﻿using System;
-using Recipes.Domain.Entities.ProductAggregate;
+﻿using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.ValueObjects;
+using System;
 
 namespace Recipes.Presentation.Examples;
 

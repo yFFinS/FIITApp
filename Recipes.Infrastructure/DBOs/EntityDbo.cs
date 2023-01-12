@@ -1,6 +1,5 @@
-using System.Xml.Serialization;
 using Recipes.Domain.Base;
-using Recipes.Domain.Entities.ProductAggregate;
+using System.Xml.Serialization;
 
 namespace Recipes.Infrastructure;
 
