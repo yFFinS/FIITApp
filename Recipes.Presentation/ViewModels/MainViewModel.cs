@@ -55,12 +55,12 @@ namespace Recipes.Presentation.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedView, value);
         }
 
-        public MainViewModel(List<MainMenuItem> menuItems) : this(NullLogger<MainViewModel>.Instance, menuItems)
+        public MainViewModel(IEnumerable<MainMenuItem> menuItems) : this(NullLogger<MainViewModel>.Instance, menuItems)
         { }
 
-        public MainViewModel(ILogger<MainViewModel> logger, List<MainMenuItem> menuItems)
+        public MainViewModel(ILogger<MainViewModel> logger, IEnumerable<MainMenuItem> menuItems)
         {
-            _menuItems = menuItems;
+            _menuItems = menuItems.ToList();
             ChangeView = ReactiveCommand.Create<Func<ViewModelBase>>(getView =>
             {
                 Content = getView();

@@ -120,23 +120,20 @@ namespace Recipes.Presentation
 
         private void ConfigureMenu(IServiceCollection services)
         {
-            services.AddSingleton(x => new List<MainMenuItem>
+            services.AddSingleton<MainMenuItem>(x => new()
             {
-                new()
-                {
-                    Title = "Искать по ингредиентам",
-                    Page = x.GetRequiredService<ProductSearchViewModel>
-                },
-                new()
-                {
-                    Title = "Искать по имени",
-                    Page = x.GetRequiredService<RecipeSearchViewModel>
-                },
-                new()
-                {
-                    Title = "Добавить свой рецепт",
-                    Page = x.GetRequiredService<RecipeEditorViewModel>
-                }
+                Title = "Искать по ингредиентам",
+                Page = x.GetRequiredService<ProductSearchViewModel>
+            });
+            services.AddSingleton<MainMenuItem>(x => new()
+            {
+                Title = "Искать по имени",
+                Page = x.GetRequiredService<RecipeSearchViewModel>
+            });
+            services.AddSingleton<MainMenuItem>(x => new()
+            {
+                Title = "Добавить свой рецепт",
+                Page = x.GetRequiredService<RecipeEditorViewModel>
             });
         }
 
