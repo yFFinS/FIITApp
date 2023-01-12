@@ -5,13 +5,13 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Controls.RecipeCard">
     <Button Width="200" Height="160"
-            CommandParameter="{Binding}"
+            CommandParameter="{Binding Object}"
             Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
         <Panel>
-            <Image Source="{Binding $self.Image^}"/>
+            <Image Source="{Binding Image^}"/>
             <TextBlock VerticalAlignment="Bottom"
                        HorizontalAlignment="Center"
-                       Text="{Binding Title}"/>
+                       Text="{Binding Object.Title}"/>
         </Panel>
     </Button>
 </UserControl>

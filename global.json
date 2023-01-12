@@ -4,7 +4,6 @@
     "rollForward": "latestFeature",
     "allowPrerelease": true
   },
-  
   "msbuild-sdks": {
     "Microsoft.Build.Traversal": "1.0.43",
     "Xamarin.Legacy.Sdk": "0.1.2-alpha6",

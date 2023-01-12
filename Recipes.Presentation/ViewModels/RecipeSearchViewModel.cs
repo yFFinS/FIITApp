@@ -19,7 +19,7 @@ public class RecipeSearchViewModel : ViewModelBase
     public RecipeSearchViewModel(IViewContainer container, IRecipePicker picker, RecipeViewFactory factory,
         IExceptionContainer exceptionContainer, IImageLoader imageLoader)
     {
-        Items = new ObservableCollection<Recipe>(Enumerable.Empty<Recipe>());
+        Items = new ObservableCollection<ImageWrapper<Recipe>>(Enumerable.Empty<ImageWrapper<Recipe>>());
         _picker = picker;
         ImageLoader = imageLoader;
         Search("");
@@ -28,7 +28,7 @@ public class RecipeSearchViewModel : ViewModelBase
         SearchCommand = ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
     }
 
-    public ObservableCollection<Recipe> Items { get; private set; }
+    public ObservableCollection<ImageWrapper<Recipe>> Items { get; private set; }
 
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
@@ -47,7 +47,7 @@ public class RecipeSearchViewModel : ViewModelBase
         Items.Clear();
         foreach (var recipe in await _picker.PickRecipes(filter))
         {
-            Items.Add(recipe);
+            Items.Add(new ImageWrapper<Recipe>(recipe, ImageLoader));
         }
     }
 }

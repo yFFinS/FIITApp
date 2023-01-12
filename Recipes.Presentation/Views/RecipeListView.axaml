@@ -36,10 +36,10 @@
                                     Background="{DynamicResource AccentBackground}"
                                     VerticalAlignment="Stretch">
                                 <Panel>
-                                    <Image/>
+                                    <Image Source="{Binding Image^}"/>
                                     <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
-                                            CommandParameter="{Binding}">
-                                        <TextBlock Text="{Binding Title}"/>
+                                            CommandParameter="{Binding Object}">
+                                        <TextBlock Text="{Binding Object.Title}"/>
                                     </Button>
                                 </Panel>
                             </Border>
