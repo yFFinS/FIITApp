@@ -28,6 +28,7 @@ namespace Recipes.Presentation.ViewModels
         private readonly List<MainMenuItem> _menuItems;
         private MainMenuItem _selectedView;
         private bool _hasErrors;
+        private bool _menuOpened;
 
         public List<MainMenuItem> MenuItems => _menuItems;
 

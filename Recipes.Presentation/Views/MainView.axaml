@@ -15,23 +15,32 @@
     </UserControl.Styles>
     <Panel>
         <ContentControl Content="{Binding Content}"/>
-        <ItemsControl Items="{Binding MenuItems}" 
-                      Width="200"
-                      HorizontalAlignment="Left"
+        <ToggleButton Height="40" Width="40" Name="MenuButton"
                       VerticalAlignment="Top"
-                      Classes="menu">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button Classes="menu-item"
-                            Command="{Binding $parent[ItemsControl].DataContext.ChangeView}"
-                            CommandParameter="{Binding Page}">
-                        <TextBlock Text="{Binding Title}"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                      HorizontalAlignment="Left"
+                      IsChecked="{Binding Path=#MenuPanel.IsPointerOver}"/>
+        <Panel Width="300"
+               Name="MenuPanel"
+               Classes="menu"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Stretch"
+               IsVisible="{Binding Path=#MenuButton.IsChecked}">
+            <ItemsControl Items="{Binding MenuItems}" 
+                          Margin="0 40 0 0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Classes="menu-item"
+                                Command="{Binding $parent[ItemsControl].DataContext.ChangeView}"
+                                CommandParameter="{Binding Page}">
+                            <TextBlock Text="{Binding Title}"
+                                       TextAlignment="Left"
+                                       TextWrapping="WrapWithOverflow"
+                                       VerticalAlignment="Center"/>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Panel>
         <Panel HorizontalAlignment="Left"
                VerticalAlignment="Bottom">
             <ItemsControl Items="{Binding Errors}">

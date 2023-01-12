@@ -6,8 +6,8 @@
         </Border>
     </Design.PreviewWith>
 
-    <Style Selector="ItemsControl.menu">
-        <Setter Property="Background" Value="Transparent"/>
+    <Style Selector="Panel.menu">
+        <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
     </Style>
     
     <Style Selector="Button.menu-item">
