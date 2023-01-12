@@ -23,6 +23,7 @@
             <Button Classes="search"
                     Command="{Binding SearchCommand}"
                     CommandParameter="{Binding #TextField.Text}"
+                    HorizontalAlignment="Right"
                     IsDefault="True"/>
         </Panel>
     </Border>

@@ -4,37 +4,49 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewModels="clr-namespace:Recipes.Presentation.ViewModels"
              xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
              x:Class="Recipes.Presentation.Views.RecipeListView">
     <Design.DataContext>
         <viewModels:RecipeListViewModel/>
     </Design.DataContext>
-    <ScrollViewer Margin="200 0"
-                  HorizontalScrollBarVisibility="Visible"
-                  VerticalScrollBarVisibility="Disabled">
-        <ItemsControl Items="{Binding Recipes}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" Spacing="20"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border CornerRadius="20"
-                            Background="#0fffffff"
-                            Width="1000"
-                            VerticalAlignment="Stretch"
-                            Margin="20">
-                        <Panel>
-                            <Image/>
-                            <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
-                                    CommandParameter="{Binding}">
-                                <TextBlock Text="{Binding Title}"/>
-                            </Button>
+    <DockPanel>
+        <Button VerticalAlignment="Stretch" Width="200" DockPanel.Dock="Left" 
+                Command="{Binding PreviousPageCommand}"
+                Background="Transparent"
+                CommandParameter="{Binding #Viewer}"/>
+        <Button VerticalAlignment="Stretch" Width="200" DockPanel.Dock="Right" 
+                Command="{Binding NextPageCommand}"
+                Background="Transparent"
+                CommandParameter="{Binding #Viewer}"/>
+        <ScrollViewer Name="Viewer"
+                      HorizontalScrollBarVisibility="Hidden"
+                      VerticalScrollBarVisibility="Disabled">
+            <ItemsControl Items="{Binding Recipes}"
+                          Margin="0 0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="0"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Panel Width="{Binding #Viewer.Viewport.Width}">
+                            <Border CornerRadius="20"
+                                    Margin="10 20"
+                                    Background="{DynamicResource AccentBackground}"
+                                    VerticalAlignment="Stretch">
+                                <Panel>
+                                    <Image/>
+                                    <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
+                                            CommandParameter="{Binding}">
+                                        <TextBlock Text="{Binding Title}"/>
+                                    </Button>
+                                </Panel>
+                            </Border>
                         </Panel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>
