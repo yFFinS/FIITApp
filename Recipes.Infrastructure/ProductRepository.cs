@@ -46,7 +46,9 @@ public class ProductRepository : IProductRepository
     {
         _logger.LogInformation("Getting products by prefix {ProductNamePrefix}", productNamePrefix);
         var products = await GetAllProductsAsync();
-        return products.Where(p => p.Name.ToLower().StartsWith(productNamePrefix)).ToList();
+        return products.Where(p =>
+            p.Name.Split(' ').Any(w => w.StartsWith(productNamePrefix)))
+            .ToList();
     }
 
     public Task AddProductsAsync(IEnumerable<Product> products)
