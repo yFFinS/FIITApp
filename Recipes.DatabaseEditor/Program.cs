@@ -18,6 +18,9 @@ services.AddSingleton<Interpreter>();
 
 // Register commands
 services.AddSingleton<Command, DownloadRecipesDBCommand>();
+services.AddSingleton<Command, DownloadProductsDBCommand>();
+services.AddSingleton<Command, UploadRecipesDBCommand>();
+services.AddSingleton<Command, UploadProductsDBCommand>();
 services.AddSingleton<Command, AddProductCommand>();
 services.AddSingleton<Command, AddRecipeCommand>();
 services.AddSingleton<Command, RemoveProductsCommand>();

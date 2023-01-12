@@ -13,6 +13,8 @@ public class UploadRecipesDBCommand : Command
 
     public override void Execute(string[] args)
     {
+        DataBase.Upload("Recipes");
 
+        _output.WriteLine("Recipes uploaded");
     }
 }

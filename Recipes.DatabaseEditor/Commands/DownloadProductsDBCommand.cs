@@ -13,6 +13,8 @@ public class DownloadProductsDBCommand : Command
 
     public override void Execute(string[] args)
     {
+        DataBase.Download("Products");
 
+        _output.WriteLine("Products downloaded");
     }
 }

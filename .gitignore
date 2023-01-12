@@ -1,6 +1,6 @@
 # Common IntelliJ Platform excludes
 
-credentails.json
+DataBaseAccess.txt
 
 # User specific
 **/.idea/**/workspace.xml
