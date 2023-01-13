@@ -14,9 +14,16 @@ namespace Recipes.Presentation.ViewModels;
 public class ProductSearchViewModel : ViewModelBase
 {
     private string _searchPrefix;
+    private List<Product> _products;
     public IImageLoader ImageLoader { get; }
     public IProductRepository ProductRepository { get; }
-    public ObservableCollection<Product> Products { get; private set; }
+
+    public List<Product> Products
+    {
+        get => _products;
+        set => this.RaiseAndSetIfChanged(ref _products, value);
+    }
+
     public HashSet<Product> SelectedProducts { get; set; }
 
     public ProductSearchViewModel(IViewContainer container, IImageLoader imageLoader,
@@ -32,7 +39,7 @@ public class ProductSearchViewModel : ViewModelBase
                 exceptionContainer);
         CheckProductCommand = ReactiveCommandExtended.Create<Product>(CheckProduct, exceptionContainer);
 
-        Products = new ObservableCollection<Product>(Enumerable.Empty<Product>());
+        Products = new List<Product>();
         SelectedProducts = new HashSet<Product>();
     }
     
@@ -55,11 +62,7 @@ public class ProductSearchViewModel : ViewModelBase
     private async void Search(string? prefix)
     {
         prefix ??= string.Empty;
-        Products.Clear();
-        foreach (var product in await ProductRepository.GetProductsByPrefixAsync(prefix))
-        {
-            Products.Add(product);
-        }
+        Products = await ProductRepository.GetProductsByPrefixAsync(prefix);
     }
 
     private void CheckProduct(Product product)

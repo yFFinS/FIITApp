@@ -33,47 +33,40 @@
             </Label>
             <controls:SearchBar Grid.Row="2" />
             <ScrollViewer Grid.Row="4" VerticalAlignment="Stretch">
-                <ScrollViewer.OpacityMask>
-                    <LinearGradientBrush StartPoint="0%, 0%"
-                                         EndPoint="0%, 100%">
-                        <LinearGradientBrush.GradientStops>
-                            <GradientStop Offset="0" Color="Black" />
-                            <GradientStop Offset="0.9" Color="Black" />
-                            <GradientStop Offset="1" Color="Transparent" />
-                        </LinearGradientBrush.GradientStops>
-                    </LinearGradientBrush>
-                </ScrollViewer.OpacityMask>
-                <ItemsControl Grid.Row="4" Items="{Binding Products}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel HorizontalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ToggleButton Classes="Card"
-                                          Height="200"
-                                          Width="180"
-                                          Margin="5"
-                                          Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
-                                          CommandParameter="{Binding}">
-                                <ToggleButton.IsChecked>
-                                    <MultiBinding Converter="{StaticResource ProductCheckedConverter}">
-                                        <Binding Path="$parent[ItemsControl].DataContext.SelectedProducts"/>
-                                        <Binding />
-                                    </MultiBinding>
-                                </ToggleButton.IsChecked>
-                                <Panel>
-                                    <Image/>
-                                    <TextBlock Text="{Binding Name}"
-                                               VerticalAlignment="Bottom"
-                                               TextAlignment="Center"
-                                               TextWrapping="Wrap"/>
-                                </Panel>
-                            </ToggleButton>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <StackPanel>
+                    <ItemsControl  Items="{Binding Products}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton Classes="Card"
+                                              Height="200"
+                                              Width="180"
+                                              Margin="5"
+                                              Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
+                                              CommandParameter="{Binding}">
+                                    <ToggleButton.IsChecked>
+                                        <MultiBinding Converter="{StaticResource ProductCheckedConverter}">
+                                            <Binding Path="$parent[ItemsControl].DataContext.SelectedProducts"/>
+                                            <Binding />
+                                        </MultiBinding>
+                                    </ToggleButton.IsChecked>
+                                    <Panel>
+                                        <Image/>
+                                        <TextBlock Text="{Binding Name}"
+                                                   VerticalAlignment="Bottom"
+                                                   TextAlignment="Center"
+                                                   TextWrapping="Wrap"/>
+                                    </Panel>
+                                </ToggleButton>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Border Height="200" VerticalAlignment="Bottom"/>
+                </StackPanel>
             </ScrollViewer>
         </Grid>
     </Panel>

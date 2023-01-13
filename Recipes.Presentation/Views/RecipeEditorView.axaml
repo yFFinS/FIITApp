@@ -178,6 +178,7 @@
                                 CommandParameter="{Binding #CookingStep}" />
                     </Panel>
                 </Border>
+                <Border Height="200" VerticalAlignment="Bottom"/>
             </StackPanel>
         </ScrollViewer>
     </Panel>

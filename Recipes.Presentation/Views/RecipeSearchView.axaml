@@ -22,29 +22,44 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <controls:SearchBar Grid.Column="1" Grid.Row="0" />
-            
+            <Border Grid.Column="2" Classes="accent round" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock Text="Рецепты "/>
+                    <TextBlock Text="{Binding PageIndex}"/>
+                    <TextBlock Text="-"/>
+                    <TextBlock Text="{Binding PageLastIndex}"/>
+                    <TextBlock Text=" из "/>
+                    <TextBlock Text="{Binding Items.Count}"/>
+                </StackPanel>
+            </Border>
         </Grid>
         <Button VerticalAlignment="Stretch" Width="200"
                 HorizontalAlignment="Left"
-                Background="Transparent"/>
+                Background="Transparent"
+                Command="{Binding ShowPreviousPageCommand}"/>
         <Button VerticalAlignment="Stretch" Width="200"
                 HorizontalAlignment="Right"
-                Background="Transparent"/>
+                Background="Transparent"
+                Command="{Binding ShowNextPageCommand}"/>
         <ScrollViewer ZIndex="-2">
-            <ItemsControl ZIndex="100"
-                          Items="{Binding Page}"
-                          Margin="0 60 0 0">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Center" MaxWidth="1000"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <controls:RecipeCard Margin="5"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <StackPanel>
+
+                <ItemsControl ZIndex="100"
+                              Items="{Binding Page}"
+                              Margin="0 60 0 0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center" MaxWidth="1300"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <controls:RecipeCard Margin="5"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Border Height="200" VerticalAlignment="Bottom" />
+            </StackPanel>
         </ScrollViewer>
     </Panel>
 </UserControl>
