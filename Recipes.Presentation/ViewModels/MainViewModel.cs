@@ -60,6 +60,7 @@ namespace Recipes.Presentation.ViewModels
             ChangeView = ReactiveCommand.Create<Func<ViewModelBase>>(getView =>
             {
                 Content = getView();
+                Content.Refresh();
             });
 
             _logger = logger;

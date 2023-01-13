@@ -75,17 +75,17 @@ namespace Recipes.Presentation
                     new()
                     {
                         Title = "Search by ingregients",
-                        Page = ()=>_productSearchViewModel
+                        PageFactory = ()=>_productSearchViewModel
                     },
                     new()
                     {
                         Title = "Search by name",
-                        Page = ()=>_recipeSearchViewModel
+                        PageFactory = ()=>_recipeSearchViewModel
                     },
                     new()
                     {
                         Title = "Add own recipe",
-                        Page = ()=>_recipeEditorViewModel
+                        PageFactory = ()=>_recipeEditorViewModel
                     }
                 };
         }
@@ -99,17 +99,18 @@ namespace Recipes.Presentation
 
             ConfigureMenu(services);
 
-            services.AddSingleton<IViewContainer>(x => x.GetRequiredService<IMainViewModel>());
-            services.AddSingleton<IExceptionContainer>(x => x.GetRequiredService<IMainViewModel>());
-            services.AddSingleton<IMainViewModel, MainViewModel>();
-            services.AddSingleton<ProductSearchViewModel>();
-            services.AddSingleton<RecipeSearchViewModel>();
-            services.AddSingleton<RecipeViewFactory>();
-            services.AddTransient<RecipeEditorViewModel>();
-            services.AddTransient<MainMenuItemsBuilder>();
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<MainView>();
-            services.AddSingleton<ApplicationViewInitializer>();
+            services
+                .AddSingleton<IViewContainer>(x => x.GetRequiredService<IMainViewModel>())
+                .AddSingleton<IExceptionContainer>(x => x.GetRequiredService<IMainViewModel>())
+                .AddSingleton<IMainViewModel, MainViewModel>()
+                .AddSingleton<ProductSearchViewModel>().AddFactory<ProductSearchViewModel>()
+                .AddSingleton<RecipeSearchViewModel>().AddFactory<RecipeSearchViewModel>()
+                .AddTransient<RecipeEditorViewModel>().AddFactory<RecipeEditorViewModel>()
+                .AddSingleton<RecipeViewFactory>()
+                .AddTransient<MainMenuItemsBuilder>()
+                .AddSingleton<MainWindow>()
+                .AddSingleton<MainView>()
+                .AddSingleton<ApplicationViewInitializer>();
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
 
@@ -119,21 +120,10 @@ namespace Recipes.Presentation
 
         private void ConfigureMenu(IServiceCollection services)
         {
-            services.AddSingleton<MainMenuItem>(x => new()
-            {
-                Title = "Искать по ингредиентам",
-                Page = x.GetRequiredService<ProductSearchViewModel>
-            });
-            services.AddSingleton<MainMenuItem>(x => new()
-            {
-                Title = "Искать по имени",
-                Page = x.GetRequiredService<RecipeSearchViewModel>
-            });
-            services.AddSingleton<MainMenuItem>(x => new()
-            {
-                Title = "Добавить свой рецепт",
-                Page = x.GetRequiredService<RecipeEditorViewModel>
-            });
+            services
+                .AddSingleton<MainMenuItem, ProductSearchMenuItem>()
+                .AddSingleton<MainMenuItem, RecipeSearchMenuItem>()
+                .AddSingleton<MainMenuItem, RecipeEditorMenuItem>();
         }
 
         public override void OnFrameworkInitializationCompleted()

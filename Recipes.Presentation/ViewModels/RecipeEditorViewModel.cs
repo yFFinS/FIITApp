@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Recipes.Presentation.ViewModels;
 
-internal class RecipeEditorViewModel : ViewModelBase
+public class RecipeEditorViewModel : ViewModelBase
 {
 #if DEBUG
     public RecipeEditorViewModel() { }

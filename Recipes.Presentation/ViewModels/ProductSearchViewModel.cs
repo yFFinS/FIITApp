@@ -13,16 +13,20 @@ namespace Recipes.Presentation.ViewModels;
 
 public class ProductSearchViewModel : ViewModelBase
 {
+    private string _searchPrefix;
     public IImageLoader ImageLoader { get; }
+    public IProductRepository ProductRepository { get; }
     public ObservableCollection<Product> Products { get; private set; }
     public HashSet<Product> SelectedProducts { get; set; }
 
     public ProductSearchViewModel(IViewContainer container, IImageLoader imageLoader,
-        IProductRepository productRepository, IRecipePicker recipePicker, RecipeViewFactory factory, IExceptionContainer exceptionContainer)
+        IProductRepository productRepository, IRecipePicker recipePicker, RecipeViewFactory factory,
+        IExceptionContainer exceptionContainer)
     {
         ImageLoader = imageLoader;
+        ProductRepository = productRepository;
         SearchCommand =
-            ReactiveCommandExtended.Create<string>(name => Search(name, productRepository), exceptionContainer);
+            ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
         ShowRecipesCommand =
             ReactiveCommandExtended.Create(() => ShowRecipes(container, imageLoader, recipePicker, factory, exceptionContainer),
                 exceptionContainer);
@@ -31,15 +35,28 @@ public class ProductSearchViewModel : ViewModelBase
         Products = new ObservableCollection<Product>(Enumerable.Empty<Product>());
         SelectedProducts = new HashSet<Product>();
     }
+    
+    public string SearchPrefix
+    {
+        get => _searchPrefix;
+        set => this.RaiseAndSetIfChanged(ref _searchPrefix, value);
+    }
 
     public ReactiveCommand<Unit, Unit> ShowRecipesCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
     public ReactiveCommand<Product, Unit> CheckProductCommand { get; }
 
-    private async void Search(string name, IProductRepository repository)
+    public override void Refresh()
     {
+        Search(null);
+        SearchPrefix = "";
+    }
+
+    private async void Search(string? prefix)
+    {
+        prefix ??= string.Empty;
         Products.Clear();
-        foreach (var product in await repository.GetProductsByPrefixAsync(name))
+        foreach (var product in await ProductRepository.GetProductsByPrefixAsync(prefix))
         {
             Products.Add(product);
         }

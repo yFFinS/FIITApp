@@ -17,6 +17,7 @@ public class RecipeSearchViewModel : ViewModelBase
 {
     private readonly IRecipeRepository _recipeRepository;
     private List<ImageWrapper<Recipe>> _page;
+    private string _searchPrefix;
 
     public IImageLoader ImageLoader { get; }
 
@@ -28,13 +29,18 @@ public class RecipeSearchViewModel : ViewModelBase
         Page = new List<ImageWrapper<Recipe>>();
         _recipeRepository = recipeRepository;
         ImageLoader = imageLoader;
-        Search(null);
         ShowRecipeCommand = ReactiveCommandExtended.Create<Recipe>(recipe =>
             container.Content = ShowRecipe(recipe, factory), exceptionContainer);
         SearchCommand = ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
     }
 
     public List<ImageWrapper<Recipe>> Items { get; private set; }
+
+    public string SearchPrefix
+    {
+        get => _searchPrefix;
+        set => this.RaiseAndSetIfChanged(ref _searchPrefix, value);
+    }
 
     public List<ImageWrapper<Recipe>> Page
     {
@@ -44,6 +50,12 @@ public class RecipeSearchViewModel : ViewModelBase
 
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
+
+    public override void Refresh()
+    {
+        Search(null);
+        SearchPrefix = "";
+    }
 
     private ViewModelBase ShowRecipe(Recipe recipe, RecipeViewFactory factory)
     {

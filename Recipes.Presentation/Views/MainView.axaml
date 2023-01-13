@@ -36,7 +36,7 @@
                     <DataTemplate>
                         <Button Classes="menu-item"
                                 Command="{Binding $parent[ItemsControl].DataContext.ChangeView}"
-                                CommandParameter="{Binding Page}">
+                                CommandParameter="{Binding PageFactory}">
                             <TextBlock Text="{Binding Title}"
                                        TextAlignment="Left"
                                        TextWrapping="WrapWithOverflow"
