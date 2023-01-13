@@ -6,16 +6,8 @@ public static class DataBase
 {
     public static void Upload(string item)
     {
-        var info = File.ReadAllLines("DataBaseAccess.txt");
-
-        var ip = "ftp://" + info[0] + "/" + item + ".xml";
-        var UserId = info[1];
-        var Password = info[2];
-
-        var path =
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-            + Path.GetFullPath("/")[2..]
-            + item + ".xml";
+        string ip, UserId, Password, path;
+        PrepareToConnect(item, out ip, out UserId, out Password, out path);
 
         using WebClient client = new();
         client.Credentials = new NetworkCredential(UserId, Password);
@@ -24,20 +16,24 @@ public static class DataBase
 
     public static void Download(string item)
     {
-        var info = File.ReadAllLines("DataBaseAccess.txt");
-
-        var ip = "ftp://" + info[0] + "/" + item + ".xml";
-        var UserId = info[1];
-        var Password = info[2];
-
-        var path =
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-            + Path.GetFullPath("/")[2..]
-            + item + ".xml";
+        string ip, UserId, Password, path;
+        PrepareToConnect(item, out ip, out UserId, out Password, out path);
 
         using WebClient client = new();
         client.Credentials = new NetworkCredential(UserId, Password);
         client.DownloadFile(ip, path);
+    }
+
+    private static void PrepareToConnect(string item, out string ip, out string UserId, out string Password, out string path)
+    {
+        var info = File.ReadAllLines("DataBaseAccess.txt");
+
+        ip = "ftp://" + info[0] + "/" + item + ".xml";
+        UserId = info[1];
+        Password = info[2];
+        path = Path.Join(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            item + ".xml");
     }
 }
 

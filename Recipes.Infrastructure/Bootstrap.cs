@@ -53,14 +53,14 @@ public static class Bootstrap
         services.AddSingleton<IPreferenceService, PreferenceService>();
 
         var productsPath =
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-            + Path.GetFullPath("/")[2..]
-            + "Products.xml";
+            Path.Join(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Products.xml");
 
         var recipesPath =
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-            + Path.GetFullPath("/")[2..]
-            + "Recipes.xml";
+            Path.Join(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Recipes.xml");
 
         optionsInjector.AddFixedOptions(new DataBaseOptions(productsPath, recipesPath));
         services.AddSingleton<IDataBase, DataBase>();
