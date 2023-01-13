@@ -9,6 +9,10 @@ public sealed class AddRecipeCommand : Command
     private readonly RecipeParser _recipeParser;
     private readonly IRecipeRepository _recipeRepository;
 
+    private const string MissingProductsFile = "missing_products.txt";
+
+    private readonly HashSet<string> _missingProducts = new();
+
     public AddRecipeCommand(TextWriter output, RecipeParser recipeParser, IRecipeRepository recipeRepository)
         : base(new[] { "add", "recipe" },
             "Добавить рецепт[-ы] в базу данных - add recipe <file or folder>")
@@ -67,9 +71,16 @@ public sealed class AddRecipeCommand : Command
         {
             recipe = _recipeParser.TryParseRecipe(text);
         }
+        catch (ProductMissingException productMissingException)
+        {
+            AddMissingProductName(productMissingException.ProductName);
+            _output.WriteLine($"Не удалось загрузить рецепт {filePath}: {productMissingException.Message}");
+            return null;
+        }
         catch (RecipeParsingException e)
         {
             _output.WriteLine($"Не удалось загрузить рецепт {filePath}: {e.Message}");
+            return null;
         }
 
         if (recipe is not null)
@@ -79,5 +90,14 @@ public sealed class AddRecipeCommand : Command
 
         _output.WriteLine($"Не удалось распознать рецепт в файле {filePath}");
         return null;
+    }
+
+    private void AddMissingProductName(string name)
+    {
+        name = name.ToLower();
+        if (_missingProducts.Add(name))
+        {
+            File.AppendAllText(MissingProductsFile, name + '\n');
+        }
     }
 }

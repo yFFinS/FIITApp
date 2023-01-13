@@ -10,7 +10,7 @@ public class ProductParser
         var lines = text.ToList();
         var name = lines[0];
         var description = lines[1] == "-" ? null : lines[1];
-        var imageUrl = new Uri(lines[2], UriKind.Absolute);
+        var imageUrl = lines[2] == "-" ? null : new Uri(lines[2], UriKind.Absolute);
 
         return new Product(EntityId.NewId(), name)
         {
