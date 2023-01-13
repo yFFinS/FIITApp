@@ -31,18 +31,18 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Panel Width="{Binding #Viewer.Viewport.Width}">
-                            <Border CornerRadius="20"
+                            <Button CornerRadius="20"
                                     Margin="10 20"
+                                    VerticalAlignment="Stretch"
                                     Background="{DynamicResource AccentBackground}"
-                                    VerticalAlignment="Stretch">
+                                    ClipToBounds="True"
+                                    Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
+                                    CommandParameter="{Binding Object}">
                                 <Panel>
                                     <Image Source="{Binding Image^}"/>
-                                    <Button Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
-                                            CommandParameter="{Binding Object}">
-                                        <TextBlock Text="{Binding Object.Title}"/>
-                                    </Button>
+                                    <TextBlock Text="{Binding Object.Title}"/>
                                 </Panel>
-                            </Border>
+                            </Button>
                         </Panel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

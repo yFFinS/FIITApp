@@ -17,7 +17,7 @@
         <Panel>
             <TextBox Name="TextField"
                      Classes="search"
-                     Watermark="Search"
+                     Watermark="Искать"
                      Text=""
                      CornerRadius="20"/>
             <Button Classes="search"

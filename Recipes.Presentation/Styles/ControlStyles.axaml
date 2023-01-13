@@ -90,7 +90,7 @@
     
     <!-- Image -->
     <Style Selector="Image">
-        <Setter Property="Stretch" Value="Fill"/>
+        <Setter Property="Stretch" Value="UniformToFill"/>
     </Style>
     
     <!-- TextBlock -->
