@@ -25,8 +25,11 @@ public class QuantityParsingException : RecipeParsingException
 
 public class ProductMissingException : RecipeParsingException
 {
+    public string ProductName { get; }
+
     public ProductMissingException(string productName) : base($"Product {productName} is missing")
     {
+        ProductName = productName;
     }
 }
 
@@ -35,15 +38,13 @@ public class RecipeParser
     private readonly ILogger<RecipeParser> _logger;
     private readonly IProductRepository _productRepository;
     private readonly IQuantityParser _quantityParser;
-    private readonly IProductNameUnifier _productNameUnifier;
 
     public RecipeParser(ILogger<RecipeParser> logger, IProductRepository productRepository,
-        IQuantityParser quantityParser, IProductNameUnifier productNameUnifier)
+        IQuantityParser quantityParser)
     {
         _logger = logger;
         _productRepository = productRepository;
         _quantityParser = quantityParser;
-        _productNameUnifier = productNameUnifier;
     }
 
     private static string ParseValue(string line)
@@ -60,7 +61,7 @@ public class RecipeParser
     private Ingredient ParseIngredient(string line)
     {
         var split = line.Split(" - ");
-        var name = _productNameUnifier.GetUnifiedName(split[0].Trim()).FirstCharToUpper();
+        var name = split[0].Trim().FirstCharToUpper();
         var quantityString = split[1].Trim();
 
         var quantity = _quantityParser.TryParseQuantity(quantityString);
