@@ -7,20 +7,22 @@ using Recipes.Presentation.Interfaces;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using Recipes.Domain.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
 
 public class RecipeSearchViewModel : ViewModelBase
 {
-    private readonly IRecipePicker _picker;
+    private readonly IRecipeRepository _recipeRepository;
 
     public IImageLoader ImageLoader { get; }
 
-    public RecipeSearchViewModel(IViewContainer container, IRecipePicker picker, RecipeViewFactory factory,
+    public RecipeSearchViewModel(IViewContainer container, IRecipeRepository recipeRepository,
+        RecipeViewFactory factory,
         IExceptionContainer exceptionContainer, IImageLoader imageLoader)
     {
         Items = new ObservableCollection<ImageWrapper<Recipe>>(Enumerable.Empty<ImageWrapper<Recipe>>());
-        _picker = picker;
+        _recipeRepository = recipeRepository;
         ImageLoader = imageLoader;
         // Search("");
         ShowRecipeCommand = ReactiveCommandExtended.Create<Recipe>(recipe =>
@@ -38,14 +40,12 @@ public class RecipeSearchViewModel : ViewModelBase
         return factory.Create(recipe, this);
     }
 
-    public async void Search(string? name)
+    public async void Search(string? prefix)
     {
-        var filter = new RecipeFilter()
-        {
-            MaxRecipes = 24
-        };
+        prefix ??= string.Empty;
+
         Items.Clear();
-        foreach (var recipe in await _picker.PickRecipes(filter))
+        foreach (var recipe in await _recipeRepository.GetRecipesByPrefixAsync(prefix))
         {
             Items.Add(new ImageWrapper<Recipe>(recipe, ImageLoader));
         }

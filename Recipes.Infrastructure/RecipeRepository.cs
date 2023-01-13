@@ -48,6 +48,14 @@ public class RecipeRepository : IRecipeRepository
         return recipes.FirstOrDefault(r => r.Title == recipeName);
     }
 
+    public async Task<List<Recipe>> GetRecipesByPrefixAsync(string prefix)
+    {
+        prefix = prefix.ToLower();
+        _logger.LogDebug("Getting recipe by prefix {Prefix}", prefix);
+        var recipes = await GetAllRecipesAsync();
+        return recipes.Where(r => r.Title.Split(' ').Any(s => s.StartsWith(prefix))).ToList();
+    }
+
     private async Task AddMissingQuantitiesAsync(Recipe recipe)
     {
         InitConversionTable();
