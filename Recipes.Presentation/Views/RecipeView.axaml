@@ -51,7 +51,9 @@
                     </Grid>
                     <Grid Grid.Column="2" RowDefinitions="*, Auto" HorizontalAlignment="Stretch">
                         <Image Source="{Binding Image^}" />
-                        <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom">
+                        <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom"
+                                IsVisible="{Binding Recipe.Description,
+                                Converter={x:Static ObjectConverters.IsNotNull}}">
                             <TextBlock Text="{Binding Recipe.Description}"
                                        TextAlignment="End"
                                        TextWrapping="Wrap" />

@@ -19,8 +19,6 @@ public class RecipeListViewModel : ViewModelBase
     private List<ImageWrapper<Recipe>> Recipes { get; }
 
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
-    public ReactiveCommand<ScrollViewer, Unit> NextPageCommand { get; }
-    public ReactiveCommand<ScrollViewer, Unit> PreviousPageCommand { get; }
 
     public RecipeListViewModel(List<Recipe> recipes, IViewContainer container, IImageLoader imageLoader,
         RecipeViewFactory factory, IExceptionContainer exceptionContainer)
@@ -30,8 +28,6 @@ public class RecipeListViewModel : ViewModelBase
         ShowRecipeCommand =
             ReactiveCommandExtended.Create<Recipe>(recipe => ShowRecipe(recipe, container, factory),
                 exceptionContainer);
-        PreviousPageCommand = ReactiveCommandExtended.Create<ScrollViewer>(viewer => viewer.PageLeft(), exceptionContainer);
-        NextPageCommand = ReactiveCommandExtended.Create<ScrollViewer>(viewer => viewer.PageRight(), exceptionContainer);
     }
 
     private void ShowRecipe(Recipe recipe, IViewContainer container, RecipeViewFactory factory)

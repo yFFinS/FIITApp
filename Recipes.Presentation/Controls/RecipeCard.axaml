@@ -2,17 +2,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Recipes.Presentation.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Recipes.Presentation.Controls.RecipeCard">
-    <Button Width="200" Height="160"
+    <Button Width="300" Height="300"
             CommandParameter="{Binding Object}"
             Padding="0"
-            Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
-        <Panel>
+            Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
+            ToolTip.Placement="Left">
+        <ToolTip.Tip>
+            <Border Classes="accent">
+                <ItemsPresenter Items="{Binding Object.Ingredients}">
+                    <ItemsPresenter.ItemTemplate>
+                        <DataTemplate>
+                            <controls:IngredientLabel Margin="5"/>
+                        </DataTemplate>
+                    </ItemsPresenter.ItemTemplate>
+                </ItemsPresenter>
+            </Border>
+        </ToolTip.Tip>
+        <Panel VerticalAlignment="Stretch">
             <Image Source="{Binding Image^}"/>
-            <Border Classes="accent round"
+            <Border Classes="accent"
+                    Name="Label"
+                    Padding="8"
+                    Height="80"
                     VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Stretch">
                 <TextBlock Text="{Binding Object.Title}"
                            TextWrapping="WrapWithOverflow"/>
             </Border>

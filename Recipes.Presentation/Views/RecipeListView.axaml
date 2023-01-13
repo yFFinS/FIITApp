@@ -10,41 +10,17 @@
         <viewModels:RecipeListViewModel/>
     </Design.DataContext>
     <DockPanel>
-        <Button VerticalAlignment="Stretch" Width="200" DockPanel.Dock="Left" 
-                Command="{Binding PreviousPageCommand}"
-                Background="Transparent"
-                CommandParameter="{Binding #Viewer}"/>
-        <Button VerticalAlignment="Stretch" Width="200" DockPanel.Dock="Right" 
-                Command="{Binding NextPageCommand}"
-                Background="Transparent"
-                CommandParameter="{Binding #Viewer}"/>
-        <ScrollViewer Name="Viewer"
-                      HorizontalScrollBarVisibility="Hidden"
-                      VerticalScrollBarVisibility="Disabled">
+        <ScrollViewer>
             <ItemsControl Items="{Binding Recipes}"
                           Margin="0 0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="0"/>
+                        <WrapPanel HorizontalAlignment="Center" MaxWidth="1500"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Panel Width="{Binding #Viewer.Viewport.Width}">
-                            <Button CornerRadius="20"
-                                    Margin="10 20"
-                                    VerticalAlignment="Stretch"
-                                    Background="{DynamicResource AccentBackground}"
-                                    ClipToBounds="True"
-                                    Padding="0"
-                                    Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
-                                    CommandParameter="{Binding Object}">
-                                <Panel>
-                                    <Image Source="{Binding Image^}"/>
-                                    <TextBlock Text="{Binding Object.Title}"/>
-                                </Panel>
-                            </Button>
-                        </Panel>
+                        <controls:RecipeCard Margin="5"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
