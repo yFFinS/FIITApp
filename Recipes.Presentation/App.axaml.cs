@@ -26,14 +26,11 @@ namespace Recipes.Presentation
     {
         private readonly MainWindow _mainWindow;
         private readonly MainView _mainView;
-        private readonly MainMenuItemsBuilder _mainMenuItemsBuilder;
 
-        public ApplicationViewInitializer(MainMenuItemsBuilder mainMenuItemsBuilder,
-            MainWindow mainWindow, MainView mainView)
+        public ApplicationViewInitializer(MainWindow mainWindow, MainView mainView)
         {
             _mainWindow = mainWindow;
             _mainView = mainView;
-            _mainMenuItemsBuilder = mainMenuItemsBuilder;
         }
 
         public void InitializeLifetime(IClassicDesktopStyleApplicationLifetime desktop)
@@ -45,49 +42,6 @@ namespace Recipes.Presentation
         public void InitializeLifetime(ISingleViewApplicationLifetime singleView)
         {
             singleView.MainView = _mainView;
-        }
-
-        public List<MainMenuItem> GetMainMenuItems()
-        {
-            return _mainMenuItemsBuilder.Build();
-        }
-    }
-
-    internal class MainMenuItemsBuilder
-    {
-        private readonly ProductSearchViewModel _productSearchViewModel;
-        private readonly RecipeSearchViewModel _recipeSearchViewModel;
-        private readonly RecipeEditorViewModel _recipeEditorViewModel;
-
-        public MainMenuItemsBuilder(ProductSearchViewModel productSearchViewModel,
-            RecipeSearchViewModel recipeSearchViewModel,
-            RecipeEditorViewModel recipeEditorViewModel)
-        {
-            _productSearchViewModel = productSearchViewModel;
-            _recipeSearchViewModel = recipeSearchViewModel;
-            _recipeEditorViewModel = recipeEditorViewModel;
-        }
-
-        public List<MainMenuItem> Build()
-        {
-            return new List<MainMenuItem>
-                {
-                    new()
-                    {
-                        Title = "Search by ingregients",
-                        PageFactory = ()=>_productSearchViewModel
-                    },
-                    new()
-                    {
-                        Title = "Search by name",
-                        PageFactory = ()=>_recipeSearchViewModel
-                    },
-                    new()
-                    {
-                        Title = "Add own recipe",
-                        PageFactory = ()=>_recipeEditorViewModel
-                    }
-                };
         }
     }
 
@@ -107,7 +61,6 @@ namespace Recipes.Presentation
                 .AddSingleton<RecipeSearchViewModel>().AddFactory<RecipeSearchViewModel>()
                 .AddTransient<RecipeEditorViewModel>().AddFactory<RecipeEditorViewModel>()
                 .AddSingleton<RecipeViewFactory>()
-                .AddTransient<MainMenuItemsBuilder>()
                 .AddSingleton<MainWindow>()
                 .AddSingleton<MainView>()
                 .AddSingleton<ApplicationViewInitializer>();
