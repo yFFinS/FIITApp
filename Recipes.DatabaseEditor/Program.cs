@@ -9,9 +9,6 @@ var services = Bootstrap.ConfigureServices();
 services.AddSingleton(Console.In);
 services.AddSingleton(Console.Out);
 
-services.AddSingleton(new ProductNameUnifierOptions("product_mapping.csv"));
-services.AddSingleton<IProductNameUnifier, ProductNameUnifier>();
-
 services.AddSingleton<ProductParser>();
 services.AddSingleton<RecipeParser>();
 services.AddSingleton<Interpreter>();
