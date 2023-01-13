@@ -9,18 +9,13 @@ var services = Bootstrap.ConfigureServices();
 services.AddSingleton(Console.In);
 services.AddSingleton(Console.Out);
 
-services.AddSingleton(new ProductNameUnifierOptions("product_mapping.csv"));
-services.AddSingleton<IProductNameUnifier, ProductNameUnifier>();
-
 services.AddSingleton<ProductParser>();
 services.AddSingleton<RecipeParser>();
 services.AddSingleton<Interpreter>();
 
 // Register commands
-services.AddSingleton<Command, DownloadRecipesDBCommand>();
-services.AddSingleton<Command, DownloadProductsDBCommand>();
-services.AddSingleton<Command, UploadRecipesDBCommand>();
-services.AddSingleton<Command, UploadProductsDBCommand>();
+services.AddSingleton<Command, DownloadDBCommand>();
+services.AddSingleton<Command, UploadDBCommand>();
 services.AddSingleton<Command, AddProductCommand>();
 services.AddSingleton<Command, AddRecipeCommand>();
 services.AddSingleton<Command, RemoveProductsCommand>();

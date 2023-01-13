@@ -6,13 +6,8 @@ public static class DataBase
 {
     public static void Upload(string item)
     {
-        var info = File.ReadAllLines("DataBaseAccess.txt");
-
-        var ip = "ftp://" + info[0] + "/" + item + ".xml";
-        var UserId = info[1];
-        var Password = info[2];
-
-        var path = GetDirectoryOfDBs() + item + ".xml";
+        string ip, UserId, Password, path;
+        PrepareToConnect(item, out ip, out UserId, out Password, out path);
 
         using WebClient client = new();
         client.Credentials = new NetworkCredential(UserId, Password);
@@ -21,28 +16,24 @@ public static class DataBase
 
     public static void Download(string item)
     {
-        var info = File.ReadAllLines("DataBaseAccess.txt");
-
-        var ip = "ftp://" + info[0] + "/" + item + ".xml";
-        var UserId = info[1];
-        var Password = info[2];
-
-        var path = GetDirectoryOfDBs() + item + ".xml";
+        string ip, UserId, Password, path;
+        PrepareToConnect(item, out ip, out UserId, out Password, out path);
 
         using WebClient client = new();
         client.Credentials = new NetworkCredential(UserId, Password);
         client.DownloadFile(ip, path);
     }
 
-    private static string GetDirectoryOfDBs()
+    private static void PrepareToConnect(string item, out string ip, out string UserId, out string Password, out string path)
     {
-        var slash = Path.GetFullPath("/")[2..];
-        var rootPath = Environment.CurrentDirectory.Split(slash);
-        while (rootPath[rootPath.Length - 1] != "FIITApp")
-        {
-            rootPath = rootPath[..(rootPath.Length - 2)];
-        }
-        return string.Join(slash, rootPath) + slash + "Recipes.Presentation.Desktop" + slash;
+        var info = File.ReadAllLines("DataBaseAccess.txt");
+
+        ip = "ftp://" + info[0] + "/" + item + ".xml";
+        UserId = info[1];
+        Password = info[2];
+        path = Path.Join(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            item + ".xml");
     }
 }
 

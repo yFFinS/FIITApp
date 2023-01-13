@@ -33,9 +33,4 @@
         <HintPath>..\..\..\..\.nuget\packages\microsoft.extensions.logging.console\7.0.0-preview.7.22375.6\lib\net6.0\Microsoft.Extensions.Logging.Console.dll</HintPath>
       </Reference>
     </ItemGroup>
-    <ItemGroup>
-      <None Update="Products.xml">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
 </Project>

@@ -52,7 +52,17 @@ public static class Bootstrap
         optionsInjector.AddFixedOptions(new PreferenceServiceOptions("preferences.json"));
         services.AddSingleton<IPreferenceService, PreferenceService>();
 
-        optionsInjector.AddFixedOptions(new DataBaseOptions("Products.xml", "Recipes.xml"));
+        var productsPath =
+            Path.Join(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Products.xml");
+
+        var recipesPath =
+            Path.Join(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "Recipes.xml");
+
+        optionsInjector.AddFixedOptions(new DataBaseOptions(productsPath, recipesPath));
         services.AddSingleton<IDataBase, DataBase>();
 
         services.AddSingleton<IProductRepository, ProductRepository>();
