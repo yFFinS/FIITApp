@@ -1,4 +1,6 @@
-﻿using ReactiveUI;
+﻿using System;
+using System.Collections.Generic;
+using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.RecipeAggregate;
@@ -14,6 +16,7 @@ namespace Recipes.Presentation.ViewModels;
 public class RecipeSearchViewModel : ViewModelBase
 {
     private readonly IRecipeRepository _recipeRepository;
+    private List<ImageWrapper<Recipe>> _page;
 
     public IImageLoader ImageLoader { get; }
 
@@ -21,8 +24,8 @@ public class RecipeSearchViewModel : ViewModelBase
         RecipeViewFactory factory,
         IExceptionContainer exceptionContainer, IImageLoader imageLoader)
     {
-        Items = new ObservableCollection<ImageWrapper<Recipe>>(Enumerable.Empty<ImageWrapper<Recipe>>());
-        Page = new ObservableCollection<ImageWrapper<Recipe>>(Enumerable.Empty<ImageWrapper<Recipe>>());
+        Items = new List<ImageWrapper<Recipe>>();
+        Page = new List<ImageWrapper<Recipe>>();
         _recipeRepository = recipeRepository;
         ImageLoader = imageLoader;
         Search(null);
@@ -31,8 +34,13 @@ public class RecipeSearchViewModel : ViewModelBase
         SearchCommand = ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
     }
 
-    public ObservableCollection<ImageWrapper<Recipe>> Items { get; private set; }
-    public ObservableCollection<ImageWrapper<Recipe>> Page { get; private set; }
+    public List<ImageWrapper<Recipe>> Items { get; private set; }
+
+    public List<ImageWrapper<Recipe>> Page
+    {
+        get => _page;
+        set => this.RaiseAndSetIfChanged(ref _page, value);
+    }
 
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
@@ -47,7 +55,7 @@ public class RecipeSearchViewModel : ViewModelBase
         prefix ??= string.Empty;
 
         Items.Clear();
-        Page.Clear();
+        var page = new List<ImageWrapper<Recipe>>();
 
         var index = 0;
         
@@ -56,8 +64,10 @@ public class RecipeSearchViewModel : ViewModelBase
             var item = new ImageWrapper<Recipe>(recipe, ImageLoader);
             Items.Add(item);
             if (index >= 12) continue;
-            Page.Add(item);
+            page.Add(item);
             index++;
         }
+
+        Page = page;
     }
 }

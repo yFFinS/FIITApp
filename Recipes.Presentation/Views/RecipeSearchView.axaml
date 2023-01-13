@@ -24,13 +24,19 @@
             <controls:SearchBar Grid.Column="1" Grid.Row="0" />
             
         </Grid>
+        <Button VerticalAlignment="Stretch" Width="200"
+                HorizontalAlignment="Left"
+                Background="Transparent"/>
+        <Button VerticalAlignment="Stretch" Width="200"
+                HorizontalAlignment="Right"
+                Background="Transparent"/>
         <ScrollViewer ZIndex="-2">
             <ItemsControl ZIndex="100"
                           Items="{Binding Page}"
                           Margin="0 60 0 0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Center" MaxWidth="1500"/>
+                        <WrapPanel HorizontalAlignment="Center" MaxWidth="1000"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
