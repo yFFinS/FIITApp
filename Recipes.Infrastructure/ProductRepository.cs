@@ -12,6 +12,8 @@ public class ProductRepository : IProductRepository
     private readonly IDataBase _dataBase;
     private readonly IQuantityUnitRepository _quantityUnitRepository;
 
+    private Dictionary<EntityId, Product>? _products;
+
     public ProductRepository(ILogger<ProductRepository> logger, IDataBase dataBase,
         IQuantityUnitRepository quantityUnitRepository)
     {
@@ -20,19 +22,30 @@ public class ProductRepository : IProductRepository
         _quantityUnitRepository = quantityUnitRepository;
     }
 
-    public Task<List<Product>> GetAllProductsAsync()
+    private Task<Dictionary<EntityId, Product>> GetProductMappingAsync()
     {
-        _logger.LogInformation("Getting all products");
-        var productDbos = _dataBase.GetAllProducts();
-        var products = productDbos.Select(DboToProduct).ToList();
-        return Task.FromResult(products);
+        if (_products is null)
+        {
+            _logger.LogInformation("Getting all products");
+            var productDbos = _dataBase.GetAllProducts();
+            var products = productDbos.Select(DboToProduct).ToList();
+            _products = products.ToDictionary(p => p.Id);
+        }
+
+        return Task.FromResult(_products);
+    }
+
+    public async Task<List<Product>> GetAllProductsAsync()
+    {
+        var productMapping = await GetProductMappingAsync();
+        return productMapping.Values.ToList();
     }
 
     public async Task<Product?> GetProductByIdAsync(EntityId productId)
     {
         _logger.LogInformation("Getting product by id {ProductId}", productId);
-        var products = await GetAllProductsAsync();
-        return products.FirstOrDefault(p => p.Id == productId);
+        var products = await GetProductMappingAsync();
+        return products.GetValueOrDefault(productId);
     }
 
     public async Task<Product?> GetProductByNameAsync(string productName)
@@ -47,7 +60,7 @@ public class ProductRepository : IProductRepository
         _logger.LogInformation("Getting products by prefix {ProductNamePrefix}", productNamePrefix);
         var products = await GetAllProductsAsync();
         return products.Where(p =>
-            p.Name.Split(' ').Any(w => w.StartsWith(productNamePrefix)))
+                p.Name.Split(' ').Any(w => w.StartsWith(productNamePrefix)))
             .ToList();
     }
 
