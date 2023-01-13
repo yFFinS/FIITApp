@@ -61,7 +61,7 @@ public class ProductRepository : IProductRepository
         _logger.LogInformation("Getting products by prefix {ProductNamePrefix}", productNamePrefix);
         var products = await GetAllProductsAsync();
         return products.Where(p =>
-                p.Name.Split(' ').Any(w => w.StartsWith(productNamePrefix)))
+                p.Name.Split(' ').Any(w => w.ToLower().StartsWith(productNamePrefix)))
             .ToList();
     }
 

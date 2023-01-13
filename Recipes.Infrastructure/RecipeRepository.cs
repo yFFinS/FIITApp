@@ -53,7 +53,7 @@ public class RecipeRepository : IRecipeRepository
         prefix = prefix.ToLower();
         _logger.LogDebug("Getting recipe by prefix {Prefix}", prefix);
         var recipes = await GetAllRecipesAsync();
-        return recipes.Where(r => r.Title.Split(' ').Any(s => s.StartsWith(prefix))).ToList();
+        return recipes.Where(r => r.Title.Split(' ').Any(s => s.ToLower().StartsWith(prefix))).ToList();
     }
 
     private async Task AddMissingQuantitiesAsync(Recipe recipe)
