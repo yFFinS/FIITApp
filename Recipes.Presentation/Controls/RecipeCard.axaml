@@ -10,10 +10,12 @@
             Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
         <Panel>
             <Image Source="{Binding Image^}"/>
-            <TextBlock VerticalAlignment="Bottom"
-                       HorizontalAlignment="Center"
-                       Margin="10"
-                       Text="{Binding Object.Title}"/>
+            <Border Classes="accent round"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="{Binding Object.Title}"
+                           TextWrapping="WrapWithOverflow"/>
+            </Border>
         </Panel>
     </Button>
 </UserControl>

@@ -57,6 +57,12 @@
                                           Margin="5"
                                           Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
                                           CommandParameter="{Binding}">
+                                <ToggleButton.IsChecked>
+                                    <MultiBinding Converter="{StaticResource ProductCheckedConverter}">
+                                        <Binding Path="$parent[ItemsControl].DataContext.SelectedProducts"/>
+                                        <Binding />
+                                    </MultiBinding>
+                                </ToggleButton.IsChecked>
                                 <Panel>
                                     <Image/>
                                     <TextBlock Text="{Binding Name}"

@@ -10,7 +10,7 @@
                 <ResourceInclude Source="/Resources/Colors.axaml"/>
             </ResourceDictionary.MergedDictionaries>
             <test:TestRecipe x:Key="TestRecipe"/>
-            <converters:MainMenuAlignmentConverter x:Key="MainMenuAlignmentConverter"/>
+            <converters:ProductCheckedConverter x:Key="ProductCheckedConverter"/>
         </ResourceDictionary>
     </Application.Resources>
     <Application.DataTemplates>

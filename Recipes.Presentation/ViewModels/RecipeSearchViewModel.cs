@@ -22,7 +22,7 @@ public class RecipeSearchViewModel : ViewModelBase
         Items = new ObservableCollection<ImageWrapper<Recipe>>(Enumerable.Empty<ImageWrapper<Recipe>>());
         _picker = picker;
         ImageLoader = imageLoader;
-        Search("");
+        // Search("");
         ShowRecipeCommand = ReactiveCommandExtended.Create<Recipe>(recipe =>
             container.Content = ShowRecipe(recipe, factory), exceptionContainer);
         SearchCommand = ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
