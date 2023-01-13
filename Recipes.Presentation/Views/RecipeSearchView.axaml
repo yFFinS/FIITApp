@@ -26,7 +26,7 @@
         </Grid>
         <ScrollViewer ZIndex="-2">
             <ItemsControl ZIndex="100"
-                          Items="{Binding Items}"
+                          Items="{Binding Page}"
                           Margin="0 60 0 0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

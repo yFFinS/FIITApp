@@ -22,15 +22,17 @@ public class RecipeSearchViewModel : ViewModelBase
         IExceptionContainer exceptionContainer, IImageLoader imageLoader)
     {
         Items = new ObservableCollection<ImageWrapper<Recipe>>(Enumerable.Empty<ImageWrapper<Recipe>>());
+        Page = new ObservableCollection<ImageWrapper<Recipe>>(Enumerable.Empty<ImageWrapper<Recipe>>());
         _recipeRepository = recipeRepository;
         ImageLoader = imageLoader;
-        // Search("");
+        Search(null);
         ShowRecipeCommand = ReactiveCommandExtended.Create<Recipe>(recipe =>
             container.Content = ShowRecipe(recipe, factory), exceptionContainer);
         SearchCommand = ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
     }
 
     public ObservableCollection<ImageWrapper<Recipe>> Items { get; private set; }
+    public ObservableCollection<ImageWrapper<Recipe>> Page { get; private set; }
 
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
@@ -45,9 +47,17 @@ public class RecipeSearchViewModel : ViewModelBase
         prefix ??= string.Empty;
 
         Items.Clear();
+        Page.Clear();
+
+        var index = 0;
+        
         foreach (var recipe in await _recipeRepository.GetRecipesByPrefixAsync(prefix))
         {
-            Items.Add(new ImageWrapper<Recipe>(recipe, ImageLoader));
+            var item = new ImageWrapper<Recipe>(recipe, ImageLoader);
+            Items.Add(item);
+            if (index >= 12) continue;
+            Page.Add(item);
+            index++;
         }
     }
 }

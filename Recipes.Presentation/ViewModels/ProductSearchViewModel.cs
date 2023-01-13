@@ -57,6 +57,7 @@ public class ProductSearchViewModel : ViewModelBase
         RecipeViewFactory factory, IExceptionContainer exceptionContainer)
     {
         var filter = new RecipeFilter();
+        filter.MaxRecipes = 24;
         foreach (var product in SelectedProducts)
             filter.AddOption(new ProductFilterOption(product));
         var recipes = await recipePicker.PickRecipes(filter);
