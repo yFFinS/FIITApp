@@ -30,42 +30,31 @@
                 </Border>
                 <Grid ColumnDefinitions="*, 10, 2*"
                       HorizontalAlignment="Stretch">
-                    <Border Grid.Column="0" Classes="accent round">
-                        <ItemsControl Items="{Binding Recipe.Ingredients}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" Spacing="5" MinWidth="100" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <controls:IngredientLabel />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Border>
-                    <Grid Grid.Column="2" RowDefinitions="*, Auto, 10, Auto" HorizontalAlignment="Stretch">
+                    <Grid Grid.Column="0" RowDefinitions="Auto 10 Auto">
+                        <Border Grid.Row="0" Classes="accent round">
+                            <ItemsControl Items="{Binding Recipe.Ingredients}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" Spacing="5" MinWidth="100" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <controls:IngredientLabel />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+                        <Border Grid.Row="2" Classes="accent round">
+                            <controls:RecipeAdditionalInfoLabel/>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Column="2" RowDefinitions="*, Auto" HorizontalAlignment="Stretch">
                         <Image Source="{Binding Image^}" />
                         <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom">
                             <TextBlock Text="{Binding Recipe.Description}"
                                        TextAlignment="End"
                                        TextWrapping="Wrap" />
-                        </Border>
-                        <Border Grid.Row="3"
-                                Classes="accent round"
-                                HorizontalAlignment="Stretch">
-                            <Grid ColumnDefinitions="* 10 *">
-                                <Grid ColumnDefinitions="auto 10 auto"
-                                      HorizontalAlignment="Center">
-                                    <TextBlock Grid.Column="0" Text="Порции: " />
-                                    <TextBlock Grid.Column="2" Text="{Binding Recipe.Servings}" />
-                                </Grid>
-                                <Grid Grid.Column="2" ColumnDefinitions="auto 10 auto"
-                                      HorizontalAlignment="Center">
-                                    <TextBlock Grid.Column="0" Text="Время приготовления: " />
-                                    <TextBlock Grid.Column="2" Text="{Binding Recipe.CookDuration}" />
-                                </Grid>
-                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>

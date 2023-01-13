@@ -8,6 +8,7 @@
         <entry key="Recipes.Presentation/Controls/EditorIngredientLabel.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Controls/IngredientLabel.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Controls/LoadedImage.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
+        <entry key="Recipes.Presentation/Controls/RecipeAdditionalInfoLabel.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Controls/RecipeCard.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Controls/SearchBar.axaml" value="Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />
         <entry key="Recipes.Presentation/Recipes.Presentation/App.axaml" value="Recipes.Presentation/Recipes.Presentation.Desktop/Recipes.Presentation.Desktop.csproj" />

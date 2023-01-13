@@ -6,11 +6,13 @@
              x:Class="Recipes.Presentation.Controls.RecipeCard">
     <Button Width="200" Height="160"
             CommandParameter="{Binding Object}"
+            Padding="0"
             Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}">
         <Panel>
             <Image Source="{Binding Image^}"/>
             <TextBlock VerticalAlignment="Bottom"
                        HorizontalAlignment="Center"
+                       Margin="10"
                        Text="{Binding Object.Title}"/>
         </Panel>
     </Button>

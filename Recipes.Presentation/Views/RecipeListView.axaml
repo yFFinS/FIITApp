@@ -36,6 +36,7 @@
                                     VerticalAlignment="Stretch"
                                     Background="{DynamicResource AccentBackground}"
                                     ClipToBounds="True"
+                                    Padding="0"
                                     Command="{Binding $parent[ItemsControl].DataContext.ShowRecipeCommand}"
                                     CommandParameter="{Binding Object}">
                                 <Panel>

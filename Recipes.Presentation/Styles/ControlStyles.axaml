@@ -64,13 +64,13 @@
                                 Height="{TemplateBinding Height}"
                                 Background="{TemplateBinding Background}"
                                 CornerRadius="{TemplateBinding CornerRadius}" />
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          Padding="{TemplateBinding Padding}" />
                         <Border Name="Hover"
                                 Width="{TemplateBinding Width}"
                                 Height="{TemplateBinding Height}"
                                 Background="Transparent"
                                 CornerRadius="{TemplateBinding CornerRadius}" />
-                        <ContentPresenter Content="{TemplateBinding Content}"
-                                          Padding="{TemplateBinding Padding}" />
                     </Panel>
                 </ControlTemplate>
             </Setter.Value>
