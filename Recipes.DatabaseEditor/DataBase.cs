@@ -12,7 +12,10 @@ public static class DataBase
         var UserId = info[1];
         var Password = info[2];
 
-        var path = GetDirectoryOfDBs() + item + ".xml";
+        var path =
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+            + Path.GetFullPath("/")[2..]
+            + item + ".xml";
 
         using WebClient client = new();
         client.Credentials = new NetworkCredential(UserId, Password);
@@ -27,22 +30,14 @@ public static class DataBase
         var UserId = info[1];
         var Password = info[2];
 
-        var path = GetDirectoryOfDBs() + item + ".xml";
+        var path =
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+            + Path.GetFullPath("/")[2..]
+            + item + ".xml";
 
         using WebClient client = new();
         client.Credentials = new NetworkCredential(UserId, Password);
         client.DownloadFile(ip, path);
-    }
-
-    private static string GetDirectoryOfDBs()
-    {
-        var slash = Path.GetFullPath("/")[2..];
-        var rootPath = Environment.CurrentDirectory.Split(slash);
-        while (rootPath[rootPath.Length - 1] != "FIITApp")
-        {
-            rootPath = rootPath[..(rootPath.Length - 2)];
-        }
-        return string.Join(slash, rootPath) + slash + "Recipes.Presentation.Desktop" + slash;
     }
 }
 

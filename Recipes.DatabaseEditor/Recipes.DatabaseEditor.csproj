@@ -12,9 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="credentails.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
       <None Update="DataBaseAccess.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
