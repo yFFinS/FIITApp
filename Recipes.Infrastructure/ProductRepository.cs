@@ -57,6 +57,7 @@ public class ProductRepository : IProductRepository
 
     public async Task<List<Product>> GetProductsByPrefixAsync(string productNamePrefix)
     {
+        productNamePrefix = productNamePrefix.ToLower();
         _logger.LogInformation("Getting products by prefix {ProductNamePrefix}", productNamePrefix);
         var products = await GetAllProductsAsync();
         return products.Where(p =>
