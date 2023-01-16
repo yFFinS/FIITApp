@@ -39,4 +39,7 @@
     <ItemGroup>
       <UpToDateCheckInput Remove="Controls\IngredientCard.axaml" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Assets\Fonts" />
+    </ItemGroup>
 </Project>

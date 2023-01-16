@@ -103,7 +103,7 @@
     
     <!-- TextBlock -->
     <Style Selector="TextBlock">
-        <Setter Property="FontFamily" Value="Serif" />
+        <Setter Property="FontFamily" Value="{StaticResource Font}" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="Foreground" Value="{DynamicResource TextForeground}" />
     </Style>
@@ -129,8 +129,8 @@
                                        CaretBrush="{TemplateBinding CaretBrush}"
                                        HorizontalAlignment="Stretch"
                                        VerticalAlignment="Stretch"
-
-                                       FontFamily="Serif"
+                                       
+                                       FontFamily="{StaticResource Font}"
                                        FontSize="20"
                                        Foreground="{StaticResource TextForeground}" />
                         <TextBlock Name="PART_Watermark"
@@ -204,9 +204,6 @@
                                      BorderBrush="{TemplateBinding BorderBrush}"
                                      BorderThickness="{TemplateBinding BorderThickness}"
                                      CornerRadius="{TemplateBinding CornerRadius}"
-                                     FontSize="{TemplateBinding FontSize}"
-                                     FontFamily="{TemplateBinding FontFamily}"
-                                     FontWeight="{TemplateBinding FontWeight}"
                                      Padding="{TemplateBinding Padding}"
                                      Margin="0"/>
                             <Popup Name="PART_Popup"

@@ -11,6 +11,7 @@
             </ResourceDictionary.MergedDictionaries>
             <test:TestRecipe x:Key="TestRecipe"/>
             <converters:ProductCheckedConverter x:Key="ProductCheckedConverter"/>
+            <FontFamily x:Key="Font">avares://Recipes.Presentation/Assets/Fonts/PTSerif-Regular.ttf#PT Serif</FontFamily>
         </ResourceDictionary>
     </Application.Resources>
     <Application.DataTemplates>
