@@ -85,6 +85,7 @@
                                         </ComboBox>
                                     </StackPanel>
                                     <Button Grid.Column="3"
+                                            Classes="plus"
                                             Width="30"
                                             Height="30"
                                             Command="{Binding AddIngredientCommand}"
@@ -160,9 +161,19 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Classes="accent round">
-                                <TextBox Text="{Binding Description, Mode=TwoWay}"
-                                         CaretIndex="2"
-                                         TextWrapping="Wrap"/>
+                                <Panel>
+                                    <TextBox Text="{Binding Description, Mode=TwoWay}"
+                                             CaretIndex="2"
+                                             TextWrapping="Wrap"
+                                             Margin="0 0 40 0"/>
+                                    <Button HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Classes="cross"
+                                            Width="30"
+                                            Height="30"
+                                            Command="{Binding $parent[ItemsControl].DataContext.RemoveCookingStepCommand}"
+                                            CommandParameter="{Binding}"/> 
+                                </Panel>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -171,9 +182,14 @@
                     <Panel>
                         <TextBox Name="CookingStep"
                                  TextWrapping="Wrap"
-                                 Watermark="Шаг приготовления..." />
+                                 Watermark="Шаг приготовления..." 
+                                 Margin="0 0 40 0"/>
                         <Button IsDefault="{Binding #CookingStep.IsFocused}"
+                                Width="30"
+                                Height="30"
+                                Classes="plus"
                                 HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
                                 Command="{Binding AddCookingStepCommand}"
                                 CommandParameter="{Binding #CookingStep}" />
                     </Panel>

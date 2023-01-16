@@ -123,6 +123,7 @@ public class RecipeEditorViewModel : ViewModelBase
         SelectProduct = (search, item) => item.Name;
 
         AddCookingStepCommand = ReactiveCommandExtended.Create<TextBox>(AddCookingStep, exceptionContainer);
+        RemoveCookingStepCommand = ReactiveCommandExtended.Create<CookingStep>(RemoveCookingStep, exceptionContainer);
         AddIngredientCommand = ReactiveCommandExtended.Create<Grid>(AddIngredient, exceptionContainer);
         RemoveIngredientCommand = ReactiveCommandExtended.Create<Ingredient>(RemoveIngredient, exceptionContainer);
         SaveRecipeCommand = ReactiveCommandExtended.Create(() => SaveRecipe(viewContainer, factory), exceptionContainer);
@@ -132,6 +133,8 @@ public class RecipeEditorViewModel : ViewModelBase
     }
 
     public ReactiveCommand<TextBox, Unit> AddCookingStepCommand { get; }
+
+    public ReactiveCommand<CookingStep, Unit> RemoveCookingStepCommand { get; }
 
     public ReactiveCommand<Grid, Unit> AddIngredientCommand { get; }
 
@@ -145,6 +148,11 @@ public class RecipeEditorViewModel : ViewModelBase
     {
         CookingSteps.Add(new CookingStep($"{CookingSteps.Count + 1}. {description.Text}"));
         description.Text = "";
+    }
+
+    private void RemoveCookingStep(CookingStep step)
+    {
+        CookingSteps.Remove(step);
     }
 
     public Func<string?, CancellationToken, Task<IEnumerable<object>>> PopulateProducts { get; }

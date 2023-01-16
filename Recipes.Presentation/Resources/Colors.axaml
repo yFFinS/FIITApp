@@ -3,8 +3,11 @@
     <SolidColorBrush x:Key="AppBackground" Color="#E8D9B4"/>
     <SolidColorBrush x:Key="AppTitleBarBackground" Color="#D8C595"/>
     <SolidColorBrush x:Key="ButtonBackground" Color="#D8C595"/>
+    <SolidColorBrush x:Key="ButtonBackgroundTransparent" Color="#66D8C595"/>
     <SolidColorBrush x:Key="ButtonHover" Color="#10000000"/>
     <SolidColorBrush x:Key="AccentBackground" Color="#F5E8C5"/>
     <SolidColorBrush x:Key="TextForeground" Color="Black"/>
     <SolidColorBrush x:Key="ItemBackground" Color="#DDCCA0"/>
+    <SolidColorBrush x:Key="PathColor" Color="#8d7b4e"/>
+    <SolidColorBrush x:Key="PathColorTransparent" Color="#668d7b4e"/>
 </ResourceDictionary>

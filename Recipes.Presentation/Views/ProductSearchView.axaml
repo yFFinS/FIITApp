@@ -34,23 +34,23 @@
             <controls:SearchBar Grid.Row="2" />
             <ScrollViewer Grid.Row="4" VerticalAlignment="Stretch">
                 <StackPanel>
-                    <ItemsControl  Items="{Binding Products}">
-                        <ItemsControl.ItemsPanel>
+                    <ItemsPresenter Items="{Binding Products}">
+                        <ItemsPresenter.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel HorizontalAlignment="Center"/>
+                                <WrapPanel/>
                             </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
+                        </ItemsPresenter.ItemsPanel>
+                        <ItemsPresenter.ItemTemplate>
                             <DataTemplate>
                                 <ToggleButton Classes="Card"
                                               Height="200"
                                               Width="180"
                                               Margin="5"
-                                              Command="{Binding $parent[ItemsControl].DataContext.CheckProductCommand}"
+                                              Command="{Binding $parent[ItemsPresenter].DataContext.CheckProductCommand}"
                                               CommandParameter="{Binding}">
                                     <ToggleButton.IsChecked>
                                         <MultiBinding Converter="{StaticResource ProductCheckedConverter}">
-                                            <Binding Path="$parent[ItemsControl].DataContext.SelectedProducts"/>
+                                            <Binding Path="$parent[ItemsPresenter].DataContext.SelectedProducts"/>
                                             <Binding />
                                         </MultiBinding>
                                     </ToggleButton.IsChecked>
@@ -63,8 +63,8 @@
                                     </Panel>
                                 </ToggleButton>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        </ItemsPresenter.ItemTemplate>
+                    </ItemsPresenter>
                     <Border Height="200" VerticalAlignment="Bottom"/>
                 </StackPanel>
             </ScrollViewer>

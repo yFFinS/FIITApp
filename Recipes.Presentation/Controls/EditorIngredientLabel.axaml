@@ -6,6 +6,7 @@
              x:Class="Recipes.Presentation.Controls.EditorIngredientLabel">
     <DockPanel>
         <Button DockPanel.Dock="Right" 
+                Classes="cross"
                 Width="30" 
                 Height="30"
                 Command="{Binding $parent[ItemsControl].DataContext.RemoveIngredientCommand}"

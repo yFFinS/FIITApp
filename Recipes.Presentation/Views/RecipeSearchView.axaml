@@ -35,18 +35,22 @@
         </Grid>
         <Button VerticalAlignment="Stretch" Width="200"
                 HorizontalAlignment="Left"
-                Background="Transparent"
+                Classes="left"
+                Margin="0 60 0 0"
+                Background="{DynamicResource ButtonBackgroundTransparent}"
                 Command="{Binding ShowPreviousPageCommand}"/>
         <Button VerticalAlignment="Stretch" Width="200"
                 HorizontalAlignment="Right"
-                Background="Transparent"
+                Classes="right"
+                Margin="0 60 0 0"
+                Background="{DynamicResource ButtonBackgroundTransparent}"
                 Command="{Binding ShowNextPageCommand}"/>
         <ScrollViewer ZIndex="-2">
             <StackPanel>
 
                 <ItemsControl ZIndex="100"
                               Items="{Binding Page}"
-                              Margin="0 60 0 0">
+                              Margin="200 60 200 0">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel HorizontalAlignment="Center" MaxWidth="1300"/>
@@ -58,7 +62,6 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Border Height="200" VerticalAlignment="Bottom" />
             </StackPanel>
         </ScrollViewer>
     </Panel>

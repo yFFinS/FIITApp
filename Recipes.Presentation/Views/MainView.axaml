@@ -18,7 +18,14 @@
         <ToggleButton Height="40" Width="40" Name="MenuButton"
                       VerticalAlignment="Top"
                       HorizontalAlignment="Left"
-                      IsChecked="{Binding Path=#MenuPanel.IsPointerOver}"/>
+                      Margin="0 10"
+                      IsChecked="{Binding Path=#MenuPanel.IsPointerOver}">
+            <Path Data="M 9.5,28 H 30.5 M 9.5,20 H 30.5 M 9.5,12 h 21"
+                  Stroke="{DynamicResource PathColor}"
+                  StrokeThickness="2"
+                  StrokeLineCap="Round"
+                  Margin="-8"/>
+        </ToggleButton>
         <Panel Width="300"
                Name="MenuPanel"
                Classes="menu"
@@ -30,8 +37,11 @@
                     <Binding Path="#MenuButton.IsChecked"/>
                 </MultiBinding>
             </Panel.IsVisible>
+            <Panel Height="60" VerticalAlignment="Top">
+                <TextBlock TextAlignment="Center" Text="Меню" VerticalAlignment="Center"/>
+            </Panel>
             <ItemsControl Items="{Binding MenuItems}" 
-                          Margin="0 40 0 0">
+                          Margin="0 60 0 0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Classes="menu-item"

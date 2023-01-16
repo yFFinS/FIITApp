@@ -24,7 +24,13 @@
                     Command="{Binding SearchCommand}"
                     CommandParameter="{Binding #TextField.Text}"
                     HorizontalAlignment="Right"
-                    IsDefault="True"/>
+                    IsDefault="True"
+                    Padding="0">
+                <Path Data="M 23.363282,23.363282 30,30 M 26,17 a 9,9 0 0 1 -9,9 9,9 0 0 1 -9,-9 9,9 0 0 1 9,-9 9,9 0 0 1 9,9 z"
+                      Stroke="{DynamicResource PathColor}"
+                      StrokeThickness="2.5"
+                      StrokeLineCap="Round"/>
+            </Button>
         </Panel>
     </Border>
 </UserControl>
