@@ -8,7 +8,6 @@ using Recipes.Presentation.Interfaces;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
-using System.Collections.Generic;
 
 namespace Recipes.Presentation
 {
@@ -49,7 +48,7 @@ namespace Recipes.Presentation
     {
         public override void Initialize()
         {
-            var services = Bootstrap.ConfigureServices();
+            var services = Bootstrap.ConfigureServices("UserAccess");
 
             ConfigureMenu(services);
 

@@ -1,4 +1,6 @@
-﻿namespace Recipes.DatabaseEditor.Commands;
+﻿using Recipes.Infrastructure;
+
+namespace Recipes.DatabaseEditor.Commands;
 
 public class UploadDBCommand : Command
 {
@@ -13,12 +15,10 @@ public class UploadDBCommand : Command
 
     public override void Execute(string[] args)
     {
-        DataBase.Upload("Products");
-
+        FTPServices.Upload("AdminAccess", "Products");
         _output.WriteLine("Products uploaded");
 
-        DataBase.Upload("Recipes");
-
+        FTPServices.Upload("AdminAccess", "Recipes");
         _output.WriteLine("Recipes uploaded");
     }
 }

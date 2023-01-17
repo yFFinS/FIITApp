@@ -27,7 +27,7 @@ public static class Bootstrap
         return serviceCollection;
     }
 
-    public static IServiceCollection ConfigureServices()
+    public static IServiceCollection ConfigureServices(string access)
     {
         var services = new ServiceCollection();
         var optionsInjector = new OptionsInjector("Options");
@@ -52,17 +52,8 @@ public static class Bootstrap
         optionsInjector.AddFixedOptions(new PreferenceServiceOptions("preferences.json"));
         services.AddSingleton<IPreferenceService, PreferenceService>();
 
-        var productsPath =
-            Path.Join(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Products.xml");
-
-        var recipesPath =
-            Path.Join(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "Recipes.xml");
-
-        optionsInjector.AddFixedOptions(new DataBaseOptions(productsPath, recipesPath));
+        FTPServices.GetDBPaths(out string productsPath, out string recipesPath);
+        optionsInjector.AddFixedOptions(new DataBaseOptions(productsPath, recipesPath, access));
         services.AddSingleton<IDataBase, DataBase>();
 
         services.AddSingleton<IProductRepository, ProductRepository>();

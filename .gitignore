@@ -1,6 +1,7 @@
 # Common IntelliJ Platform excludes
 
-DataBaseAccess.txt
+AdminAccess.txt
+UserAccess.txt
 
 # User specific
 **/.idea/**/workspace.xml

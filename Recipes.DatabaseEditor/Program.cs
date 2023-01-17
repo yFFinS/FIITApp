@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Recipes.DatabaseEditor;
 using Recipes.DatabaseEditor.Commands;
-using Recipes.Domain.Interfaces;
 using Recipes.Infrastructure;
 
-var services = Bootstrap.ConfigureServices();
+var services = Bootstrap.ConfigureServices("AdminAccess");
 
 services.AddSingleton(Console.In);
 services.AddSingleton(Console.Out);

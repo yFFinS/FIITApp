@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace Recipes.Infrastructure;
 
-public record DataBaseOptions(string ProductsPath, string RecipesPath) : IOptions;
+public record DataBaseOptions(string ProductsPath, string RecipesPath, string dbAccessFileName) : IOptions;
 
 public class DataBase : IDataBase
 {
@@ -18,6 +18,9 @@ public class DataBase : IDataBase
     public DataBase(DataBaseOptions options)
     {
         _options = options;
+
+        FTPServices.CheckForUpdates(_options.dbAccessFileName, "Products");
+        FTPServices.CheckForUpdates(_options.dbAccessFileName, "Recipes");
     }
 
     private static void AddOrUpdate<T>(T obj, IList<T> dest) where T : IEquatable<T>

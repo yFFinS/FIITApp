@@ -1,4 +1,6 @@
-﻿namespace Recipes.DatabaseEditor.Commands;
+﻿using Recipes.Infrastructure;
+
+namespace Recipes.DatabaseEditor.Commands;
 
 public class DownloadDBCommand : Command
 {
@@ -13,12 +15,10 @@ public class DownloadDBCommand : Command
 
     public override void Execute(string[] args)
     {
-        DataBase.Download("Products");
-
+        FTPServices.Download("AdminAccess", "Products");
         _output.WriteLine("Products downloaded");
 
-        DataBase.Download("Recipes");
-
+        FTPServices.Download("AdminAccess", "Recipes");
         _output.WriteLine("Recipes downloaded");
     }
 }
