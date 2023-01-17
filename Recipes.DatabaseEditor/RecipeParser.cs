@@ -2,7 +2,6 @@ using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Domain.Entities.RecipeAggregate;
 using Recipes.Domain.IngredientsAggregate;
-using Recipes.Domain.Interfaces;
 using Recipes.Domain.Services;
 using Recipes.Domain.ValueObjects;
 using Recipes.Shared;

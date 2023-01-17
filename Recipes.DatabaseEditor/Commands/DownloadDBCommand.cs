@@ -1,5 +1,4 @@
-﻿using Recipes.Infrastructure;
-using Recipes.Infrastructure.DataBase;
+﻿using Recipes.Infrastructure.DataBase;
 
 namespace Recipes.DatabaseEditor.Commands;
 

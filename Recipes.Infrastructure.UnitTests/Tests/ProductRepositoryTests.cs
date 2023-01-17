@@ -2,11 +2,11 @@ using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
+using Recipes.Infrastructure.Repositories;
 using Recipes.Tests.Shared.BuilderEntries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Recipes.Infrastructure.Repositories;
 
 namespace Recipes.Infrastructure.UnitTests;
 

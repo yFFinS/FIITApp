@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using ReactiveUI;
+﻿using ReactiveUI;
 using Recipes.Application.Interfaces;
-using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.RecipeAggregate;
+using Recipes.Domain.Interfaces;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using Recipes.Domain.Interfaces;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -78,7 +77,7 @@ public class RecipeSearchViewModel : ViewModelBase
     {
         if (Items.Count - PageIndex <= 12) return;
         PageIndex += 12;
-        Page = Enumerable.Range(PageIndex, Math.Min(12, Items.Count-PageIndex)).Select(i => Items[i]).ToList();
+        Page = Enumerable.Range(PageIndex, Math.Min(12, Items.Count - PageIndex)).Select(i => Items[i]).ToList();
     }
 
     private void ShowPrevPage()

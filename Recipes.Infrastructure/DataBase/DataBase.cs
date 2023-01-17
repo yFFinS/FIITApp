@@ -1,6 +1,5 @@
-﻿using Recipes.Domain.Interfaces;
+﻿using Recipes.Domain.ValueObjects;
 using System.Xml.Serialization;
-using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Infrastructure.DataBase;
 

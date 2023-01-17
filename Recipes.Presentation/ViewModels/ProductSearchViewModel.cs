@@ -5,8 +5,6 @@ using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reactive;
 
 namespace Recipes.Presentation.ViewModels;

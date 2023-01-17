@@ -13,8 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Recipes.Presentation.ViewModels;
 

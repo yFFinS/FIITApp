@@ -3,12 +3,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Recipes.Infrastructure;
+using Recipes.Infrastructure.DataBase;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
-using Recipes.Infrastructure.DataBase;
 
 namespace Recipes.Presentation
 {

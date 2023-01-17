@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
 using Recipes.Application.Interfaces;
-using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Entities.RecipeAggregate;
-using Recipes.Presentation.Interfaces;
+using System.Threading.Tasks;
 
 namespace Recipes.Presentation.DataTypes;
 
