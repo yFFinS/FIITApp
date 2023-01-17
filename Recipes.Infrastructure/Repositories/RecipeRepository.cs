@@ -6,7 +6,7 @@ using Recipes.Domain.IngredientsAggregate;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Infrastructure;
+namespace Recipes.Infrastructure.Repositories;
 
 public class RecipeRepository : IRecipeRepository
 {
@@ -26,37 +26,37 @@ public class RecipeRepository : IRecipeRepository
         _quantityUnitRepository = quantityUnitRepository;
     }
 
-    public Task<List<Recipe>> GetAllRecipesAsync()
+    public List<Recipe> GetAllRecipes()
     {
         _logger.LogDebug("Getting all recipes");
         var recipeDbos = _dataBase.GetAllRecipes();
         var recipes = recipeDbos.Select(DboToRecipe).ToList();
-        return Task.FromResult(recipes);
+        return recipes;
     }
 
-    public async Task<Recipe?> GetRecipeByIdAsync(EntityId recipeId)
+    public Recipe? GetRecipeById(EntityId recipeId)
     {
         _logger.LogDebug("Getting recipe by id {RecipeId}", recipeId);
-        var recipes = await GetAllRecipesAsync();
+        var recipes = GetAllRecipes();
         return recipes.FirstOrDefault(r => r.Id == recipeId);
     }
 
-    public async Task<Recipe?> GetRecipeByNameAsync(string recipeName)
+    public Recipe? GetRecipeByName(string recipeName)
     {
         _logger.LogDebug("Getting recipe by name {RecipeName}", recipeName);
-        var recipes = await GetAllRecipesAsync();
+        var recipes = GetAllRecipes();
         return recipes.FirstOrDefault(r => r.Title == recipeName);
     }
 
-    public async Task<List<Recipe>> GetRecipesByPrefixAsync(string prefix)
+    public List<Recipe> GetRecipesByPrefix(string prefix)
     {
         prefix = prefix.ToLower();
         _logger.LogDebug("Getting recipe by prefix {Prefix}", prefix);
-        var recipes = await GetAllRecipesAsync();
+        var recipes = GetAllRecipes();
         return recipes.Where(r => r.Title.Split(' ').Any(s => s.ToLower().StartsWith(prefix))).ToList();
     }
 
-    private async Task AddMissingQuantitiesAsync(Recipe recipe)
+    private void AddMissingQuantities(Recipe recipe)
     {
         InitConversionTable();
 
@@ -64,7 +64,7 @@ public class RecipeRepository : IRecipeRepository
 
         foreach (var ingredient in recipe.Ingredients)
         {
-            var product = await _productRepository.GetProductByIdAsync(ingredient.Product.Id);
+            var product = _productRepository.GetProductById(ingredient.Product.Id);
             var quantityUnit = ingredient.Quantity.Unit;
 
             var convertibleTo = _convertibleTo.TryGetValue(quantityUnit, out var convertibleToSet)
@@ -79,7 +79,7 @@ public class RecipeRepository : IRecipeRepository
             }
         }
 
-        await _productRepository.AddProductsAsync(updatedProducts.Values.ToList());
+        _productRepository.AddProducts(updatedProducts.Values.ToList());
     }
 
     private void InitConversionTable()
@@ -114,22 +114,26 @@ public class RecipeRepository : IRecipeRepository
         }
     }
 
-    public async Task AddRecipesAsync(IEnumerable<Recipe> recipes, bool useUserDatabase = false)
+    public void AddRecipes(IEnumerable<Recipe> recipes, bool useUserDatabase = false)
     {
         foreach (var recipe in recipes)
         {
             _logger.LogDebug("Adding recipe {@Recipe}", recipe);
 
-            await AddMissingQuantitiesAsync(recipe);
+            AddMissingQuantities(recipe);
 
             var recipeDbo = RecipeToDbo(recipe);
             _dataBase.InsertRecipe(recipeDbo, useUserDatabase);
         }
     }
 
-    public Task RemoveRecipesByIdAsync(IEnumerable<EntityId> recipeIds)
+    public void RemoveRecipesById(IEnumerable<EntityId> recipeIds)
     {
-        throw new NotSupportedException();
+        foreach (var recipeId in recipeIds)
+        {
+            _logger.LogDebug("Removing recipe with id {RecipeId}", recipeId);
+            _dataBase.DeleteRecipe(recipeId);
+        }
     }
 
     private RecipeDbo RecipeToDbo(Recipe recipe)
@@ -195,7 +199,7 @@ public class RecipeRepository : IRecipeRepository
 
     private Ingredient? DboToIngredient(IngredientDbo ingredientDbo)
     {
-        var product = _productRepository.GetProductByIdAsync(new EntityId(ingredientDbo.ProductId)).Result;
+        var product = _productRepository.GetProductById(new EntityId(ingredientDbo.ProductId));
         if (product is null)
         {
             _logger.LogError("Product with id {ProductId} not found", ingredientDbo.ProductId);

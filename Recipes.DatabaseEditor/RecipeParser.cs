@@ -70,7 +70,7 @@ public class RecipeParser
             throw new QuantityParsingException(quantityString);
         }
 
-        var product = _productRepository.GetProductByNameAsync(name).Result;
+        var product = _productRepository.GetProductByName(name);
         if (product is null)
         {
             throw new ProductMissingException(name);

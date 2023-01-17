@@ -5,10 +5,10 @@ namespace Recipes.Domain.Interfaces;
 
 public interface IRecipeRepository
 {
-    Task<List<Recipe>> GetAllRecipesAsync();
-    Task<Recipe?> GetRecipeByIdAsync(EntityId recipeId);
-    Task<Recipe?> GetRecipeByNameAsync(string recipeName);
-    Task<List<Recipe>> GetRecipesByPrefixAsync(string prefix);
-    Task AddRecipesAsync(IEnumerable<Recipe> recipes, bool useUserDatabase = false);
-    Task RemoveRecipesByIdAsync(IEnumerable<EntityId> recipeIds);
+    List<Recipe> GetAllRecipes();
+    Recipe? GetRecipeById(EntityId recipeId);
+    Recipe? GetRecipeByName(string recipeName);
+    List<Recipe> GetRecipesByPrefix(string prefix);
+    void AddRecipes(IEnumerable<Recipe> recipes, bool useUserDatabase = false);
+    void RemoveRecipesById(IEnumerable<EntityId> recipeIds);
 }

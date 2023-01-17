@@ -1,5 +1,6 @@
 ﻿using Recipes.Domain.Interfaces;
 using System.Xml.Serialization;
+using Recipes.Domain.ValueObjects;
 
 namespace Recipes.Infrastructure.DataBase;
 
@@ -100,6 +101,26 @@ public class DataBase : IDataBase
     }
 
     public List<RecipeDbo> GetAllRecipes() => GetGlobalRecipes().Concat(GetUserRecipes()).ToList();
+
+    public void DeleteProduct(EntityId product)
+    {
+        var stringId = product.ToString();
+        var products = GetAllProducts();
+        products.RemoveAll(x => x.Id == stringId);
+
+        Serialize(products, _pathsProvider.GetDatabasePath(DatabaseName.Products));
+        _productsIsDirty = true;
+    }
+
+    public void DeleteRecipe(EntityId recipe)
+    {
+        var stringId = recipe.ToString();
+        var recipes = GetGlobalRecipes();
+        recipes.RemoveAll(x => x.Id == stringId);
+
+        Serialize(recipes, _pathsProvider.GetDatabasePath(DatabaseName.Recipes));
+        _recipesIsDirty = true;
+    }
 
 
     private static void Serialize<T>(T obj, string path) where T : notnull

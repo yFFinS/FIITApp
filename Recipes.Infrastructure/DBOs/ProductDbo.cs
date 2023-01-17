@@ -10,5 +10,5 @@ public class ProductDbo : EntityDbo<ProductDbo>
     public string? Description { get; set; }
     public double? PieceWeight { get; set; }
     public string? ImageUrl { get; set; }
-    public int[] QuantityUnitIds { get; set; }
+    public int[] QuantityUnitIds { get; set; } = Array.Empty<int>();
 }

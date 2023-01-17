@@ -108,10 +108,9 @@ public class RecipeEditorViewModel : ViewModelBase
 
     public ObservableCollection<CookingStep> CookingSteps { get; set; }
 
-    public IReadOnlyList<QuantityUnit> Units { get; }
+    public IReadOnlyList<QuantityUnit> Units { get; private set; }
 
-    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository,
-        IQuantityUnitRepository unitRepository, IViewContainer viewContainer, RecipeViewFactory factory,
+    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository, IViewContainer viewContainer, RecipeViewFactory factory,
         IExceptionContainer exceptionContainer)
     {
         RecipeRepository = recipeRepository;
@@ -121,10 +120,14 @@ public class RecipeEditorViewModel : ViewModelBase
         Description = "";
         Servings = 0;
         CookingSteps = new ObservableCollection<CookingStep>(new List<CookingStep>());
-        Units = unitRepository.GetAllUnits();
+        Units = new List<QuantityUnit>();
 
-        PopulateProducts = async (s, token) => await ProductRepository.GetProductsByPrefixAsync(s!.ToLower());
-        SelectProduct = (search, item) => item.Name;
+        PopulateProducts = (s) => ProductRepository.GetProductsByPrefix(s!.ToLower());
+        SelectProduct = (search, item) =>
+        {
+            Units = item.ValidQuantityUnits;
+            return item.Name;
+        };
 
         AddCookingStepCommand = ReactiveCommandExtended.Create<TextBox>(AddCookingStep, exceptionContainer);
         RemoveCookingStepCommand = ReactiveCommandExtended.Create<CookingStep>(RemoveCookingStep, exceptionContainer);
@@ -133,8 +136,8 @@ public class RecipeEditorViewModel : ViewModelBase
         SaveRecipeCommand =
             ReactiveCommandExtended.Create(() => SaveRecipe(viewContainer, factory), exceptionContainer);
 
-        GetProductNameCommand = ReactiveCommandExtended.CreateFromTask<EntityId, Product>(
-            id => productRepository.GetProductByIdAsync(id), exceptionContainer);
+        GetProductNameCommand = ReactiveCommandExtended.Create<EntityId>(
+            id => productRepository.GetProductById(id), exceptionContainer);
     }
 
     public ReactiveCommand<TextBox, Unit> AddCookingStepCommand { get; }
@@ -147,7 +150,7 @@ public class RecipeEditorViewModel : ViewModelBase
 
     public ReactiveCommand<Unit, Unit> SaveRecipeCommand { get; }
 
-    public ReactiveCommand<EntityId, Product> GetProductNameCommand { get; }
+    public ReactiveCommand<EntityId, Unit> GetProductNameCommand { get; }
 
     private void AddCookingStep(TextBox description)
     {
@@ -160,7 +163,7 @@ public class RecipeEditorViewModel : ViewModelBase
         CookingSteps.Remove(step);
     }
 
-    public Func<string?, CancellationToken, Task<IEnumerable<object>>> PopulateProducts { get; }
+    public Func<string?, IEnumerable<object>> PopulateProducts { get; }
 
     public AutoCompleteSelector<Product> SelectProduct { get; }
 
@@ -218,7 +221,7 @@ public class RecipeEditorViewModel : ViewModelBase
             recipe.AddIngredient(ingr);
         foreach (var cookingStep in CookingSteps)
             recipe.AddCookingStep(cookingStep);
-        RecipeRepository.AddRecipesAsync(new[] { recipe }, useUserDatabase: true);
+        RecipeRepository.AddRecipes(new[] { recipe }, useUserDatabase: true);
         container.Content = factory.Create(recipe, this);
     }
 }

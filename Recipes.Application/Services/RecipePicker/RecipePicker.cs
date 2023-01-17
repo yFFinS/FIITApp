@@ -20,11 +20,11 @@ public class RecipePicker : IRecipePicker
         _scoringCriteria = scoringCriteria;
     }
 
-    public async Task<List<Recipe>> PickRecipes(RecipeFilter filter)
+    public List<Recipe> PickRecipes(RecipeFilter filter)
     {
         _logger.LogInformation("Picking recipes for filter {@Filter}", filter);
 
-        var recipes = await _recipeRepository.GetAllRecipesAsync();
+        var recipes = _recipeRepository.GetAllRecipes();
         var allowedRecipes = GetAllowedRecipes(filter, recipes);
         var scoredRecipes = ScoreRecipes(filter, allowedRecipes);
 

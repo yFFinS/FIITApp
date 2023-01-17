@@ -35,14 +35,15 @@ public class ProductSearchViewModel : ViewModelBase
         SearchCommand =
             ReactiveCommandExtended.Create<string>(Search, exceptionContainer);
         ShowRecipesCommand =
-            ReactiveCommandExtended.Create(() => ShowRecipes(container, imageLoader, recipePicker, factory, exceptionContainer),
+            ReactiveCommandExtended.Create(
+                () => ShowRecipes(container, imageLoader, recipePicker, factory, exceptionContainer),
                 exceptionContainer);
         CheckProductCommand = ReactiveCommandExtended.Create<Product>(CheckProduct, exceptionContainer);
 
         Products = new List<Product>();
         SelectedProducts = new HashSet<Product>();
     }
-    
+
     public string SearchPrefix
     {
         get => _searchPrefix;
@@ -59,10 +60,11 @@ public class ProductSearchViewModel : ViewModelBase
         SearchPrefix = "";
     }
 
-    private async void Search(string? prefix)
+    private void Search(string? prefix)
     {
-        prefix ??= string.Empty;
-        Products = await ProductRepository.GetProductsByPrefixAsync(prefix);
+        Products = string.IsNullOrWhiteSpace(prefix)
+            ? ProductRepository.GetAllProducts()
+            : ProductRepository.GetProductsByPrefix(prefix);
     }
 
     private void CheckProduct(Product product)
@@ -73,14 +75,16 @@ public class ProductSearchViewModel : ViewModelBase
             SelectedProducts.Add(product);
     }
 
-    private async void ShowRecipes(IViewContainer container, IImageLoader loader, IRecipePicker recipePicker,
+    private void ShowRecipes(IViewContainer container, IImageLoader loader, IRecipePicker recipePicker,
         RecipeViewFactory factory, IExceptionContainer exceptionContainer)
     {
-        var filter = new RecipeFilter();
-        filter.MaxRecipes = 24;
+        var filter = new RecipeFilter
+        {
+            MaxRecipes = 24
+        };
         foreach (var product in SelectedProducts)
             filter.AddOption(new ProductFilterOption(product));
-        var recipes = await recipePicker.PickRecipes(filter);
+        var recipes = recipePicker.PickRecipes(filter);
         container.Content = new RecipeListViewModel(recipes, container, loader, factory, exceptionContainer);
     }
 }

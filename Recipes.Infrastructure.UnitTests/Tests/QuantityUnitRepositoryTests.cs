@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using System;
+using Recipes.Infrastructure.Repositories;
 
 namespace Recipes.Infrastructure.UnitTests;
 

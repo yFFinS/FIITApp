@@ -6,6 +6,7 @@ using Recipes.Tests.Shared.BuilderEntries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Recipes.Infrastructure.Repositories;
 
 namespace Recipes.Infrastructure.UnitTests;
 
@@ -20,7 +21,7 @@ public class ProductRepositoryTests
         var repository = new ProductRepository(NullLogger<ProductRepository>.Instance,
             fakeDatabase, fakeQuantityUnitRepository);
 
-        var products = repository.GetAllProductsAsync().Result;
+        var products = repository.GetAllProducts();
         var productNames = products.Select(p => p.Name).ToList();
         var expectedProductNames = fakeDatabase.TestProducts.Select(p => p.Name).ToList();
 
@@ -36,8 +37,8 @@ public class ProductRepositoryTests
             fakeDatabase, fakeQuantityUnitRepository);
 
         var products = new[] { A.Product.Build(), A.Product.Build() };
-        repository.AddProductsAsync(products).Wait();
-        var repositoryProducts = repository.GetAllProductsAsync().Result;
+        repository.AddProducts(products);
+        var repositoryProducts = repository.GetAllProducts();
 
         var productIds = repositoryProducts.Select(p => p.Id.ToString()).ToList();
         var expectedProductNames = fakeDatabase.TestProducts
@@ -57,7 +58,7 @@ public class ProductRepositoryTests
             fakeDatabase, fakeQuantityUnitRepository);
 
         var testProductId = fakeDatabase.TestProducts[0].Id;
-        var product = repository.GetProductByIdAsync(new EntityId(testProductId)).Result;
+        var product = repository.GetProductById(new EntityId(testProductId));
 
         Assert.That(product, Is.Not.Null);
         Assert.That(product!.Id.ToString(), Is.EqualTo(fakeDatabase.TestProducts[0].Id));
@@ -102,9 +103,12 @@ public class FakeDatabase : IDataBase
         return _products;
     }
 
-    public void InsertRecipe(RecipeDbo recipe) => throw new NotImplementedException();
+    public void InsertRecipe(RecipeDbo recipe, bool useUserDatabase) => throw new NotImplementedException();
 
     public List<RecipeDbo> GetAllRecipes() => throw new NotImplementedException();
+    public void DeleteProduct(EntityId product) => throw new NotImplementedException();
+
+    public void DeleteRecipe(EntityId recipe) => throw new NotImplementedException();
 }
 
 public class FakeQuantityUnitRepository : IQuantityUnitRepository

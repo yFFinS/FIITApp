@@ -5,5 +5,5 @@ namespace Recipes.Application.Interfaces;
 
 public interface IRecipePicker
 {
-    Task<List<Recipe>> PickRecipes(RecipeFilter filter);
+    List<Recipe> PickRecipes(RecipeFilter filter);
 }

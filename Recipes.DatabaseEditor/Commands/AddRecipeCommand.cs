@@ -42,7 +42,7 @@ public sealed class AddRecipeCommand : Command
             .Where(p => p is not null)
             .ToList();
 
-        _recipeRepository.AddRecipesAsync(recipes!).Wait();
+        _recipeRepository.AddRecipes(recipes!);
         _output.WriteLine($"Добавлено {recipes.Count} рецептов");
     }
 

@@ -4,7 +4,7 @@ using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.ValueObjects;
 
-namespace Recipes.Infrastructure;
+namespace Recipes.Infrastructure.Repositories;
 
 public class ProductRepository : IProductRepository
 {
@@ -22,7 +22,7 @@ public class ProductRepository : IProductRepository
         _quantityUnitRepository = quantityUnitRepository;
     }
 
-    private Task<Dictionary<EntityId, Product>> GetProductMappingAsync()
+    private Dictionary<EntityId, Product> GetProductMapping()
     {
         if (_products is null)
         {
@@ -32,40 +32,40 @@ public class ProductRepository : IProductRepository
             _products = products.ToDictionary(p => p.Id);
         }
 
-        return Task.FromResult(_products);
+        return _products;
     }
 
-    public async Task<List<Product>> GetAllProductsAsync()
+    public List<Product> GetAllProducts()
     {
-        var productMapping = await GetProductMappingAsync();
+        var productMapping = GetProductMapping();
         return productMapping.Values.ToList();
     }
 
-    public async Task<Product?> GetProductByIdAsync(EntityId productId)
+    public Product? GetProductById(EntityId productId)
     {
         _logger.LogInformation("Getting product by id {ProductId}", productId);
-        var products = await GetProductMappingAsync();
+        var products = GetProductMapping();
         return products.GetValueOrDefault(productId);
     }
 
-    public async Task<Product?> GetProductByNameAsync(string productName)
+    public Product? GetProductByName(string productName)
     {
         _logger.LogInformation("Getting product by name {ProductName}", productName);
-        var products = await GetAllProductsAsync();
+        var products = GetAllProducts();
         return products.FirstOrDefault(p => p.Name == productName);
     }
 
-    public async Task<List<Product>> GetProductsByPrefixAsync(string productNamePrefix)
+    public List<Product> GetProductsByPrefix(string productNamePrefix)
     {
         productNamePrefix = productNamePrefix.ToLower();
         _logger.LogInformation("Getting products by prefix {ProductNamePrefix}", productNamePrefix);
-        var products = await GetAllProductsAsync();
+        var products = GetAllProducts();
         return products.Where(p =>
                 p.Name.Split(' ').Any(w => w.ToLower().StartsWith(productNamePrefix)))
             .ToList();
     }
 
-    public Task AddProductsAsync(IEnumerable<Product> products)
+    public void AddProducts(IEnumerable<Product> products)
     {
         foreach (var product in products)
         {
@@ -73,13 +73,15 @@ public class ProductRepository : IProductRepository
             var productDbo = ProductToDbo(product);
             _dataBase.InsertProduct(productDbo);
         }
-
-        return Task.CompletedTask;
     }
 
-    public Task RemoveProductsByIdAsync(IEnumerable<EntityId> products)
+    public void RemoveProductsById(IEnumerable<EntityId> products)
     {
-        throw new NotImplementedException();
+        foreach (var productId in products)
+        {
+            _logger.LogInformation("Removing product {ProductId} from database", productId);
+            _dataBase.DeleteProduct(productId);
+        }
     }
 
     private ProductDbo ProductToDbo(Product product)

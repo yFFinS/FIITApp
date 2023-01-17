@@ -34,7 +34,7 @@ public class RemoveProductsCommand : Command
         }
         else
         {
-            var product = _productRepository.GetProductByNameAsync(idOrName).Result;
+            var product = _productRepository.GetProductByName(idOrName);
             if (product is null)
             {
                 _output.WriteLine($"Продукт с именем {idOrName} не найден");
@@ -44,7 +44,7 @@ public class RemoveProductsCommand : Command
             entityId = product.Id;
         }
 
-        _productRepository.RemoveProductsByIdAsync(new[] { entityId }).Wait();
+        _productRepository.RemoveProductsById(new[] { entityId });
 
         _output.WriteLine(isId ? $"Продукт с id {id} удален" : $"Продукт с именем {idOrName} удален");
     }

@@ -93,7 +93,7 @@ public class RecipeSearchViewModel : ViewModelBase
         return factory.Create(recipe, this);
     }
 
-    public async void Search(string? prefix)
+    public void Search(string? prefix)
     {
         prefix ??= string.Empty;
 
@@ -102,7 +102,7 @@ public class RecipeSearchViewModel : ViewModelBase
 
         var index = 0;
 
-        foreach (var recipe in await _recipeRepository.GetRecipesByPrefixAsync(prefix))
+        foreach (var recipe in _recipeRepository.GetRecipesByPrefix(prefix))
         {
             var item = new ImageWrapper<Recipe>(recipe, ImageLoader);
             Items.Add(item);

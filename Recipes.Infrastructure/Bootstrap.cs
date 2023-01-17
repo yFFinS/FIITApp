@@ -8,6 +8,7 @@ using Recipes.Application.Services.RecipePicker.ScoringCriteria;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.Services;
 using Recipes.Infrastructure.DataBase;
+using Recipes.Infrastructure.Repositories;
 
 namespace Recipes.Infrastructure;
 

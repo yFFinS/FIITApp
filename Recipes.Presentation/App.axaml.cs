@@ -66,11 +66,21 @@ namespace Recipes.Presentation
                 .AddSingleton<ApplicationViewInitializer>();
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
-            var ftpServices = serviceProvider.GetRequiredService<FtpServices>();
-            ftpServices.DownloadUpdatesIfPresent();
+
+            InitDatabases(serviceProvider);
 
             AvaloniaXamlLoader.Load(this);
             Resources.Add(typeof(IServiceProvider), serviceProvider);
+        }
+
+        private static void InitDatabases(IServiceProvider serviceProvider)
+        {
+            var ftpServices = serviceProvider.GetRequiredService<FtpServices>();
+            ftpServices.DownloadUpdatesIfPresent();
+
+            var database = serviceProvider.GetRequiredService<IDataBase>();
+            database.GetAllProducts();
+            database.GetAllRecipes();
         }
 
         private void ConfigureMenu(IServiceCollection services)

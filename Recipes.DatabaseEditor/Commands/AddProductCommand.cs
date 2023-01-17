@@ -38,7 +38,7 @@ public sealed class AddProductCommand : Command
             .Where(p => p is not null)
             .ToList();
 
-        _productRepository.AddProductsAsync(products!).Wait();
+        _productRepository.AddProducts(products!);
         _output.WriteLine($"Добавлено {products.Count} продуктов");
     }
 

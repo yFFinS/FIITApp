@@ -34,7 +34,7 @@ public class RemoveRecipeCommand : Command
         }
         else
         {
-            var recipe = _recipeRepository.GetRecipeByNameAsync(idOrName).Result;
+            var recipe = _recipeRepository.GetRecipeByName(idOrName);
             if (recipe is null)
             {
                 _output.WriteLine($"Рецепт с именем {idOrName} не найден");
@@ -44,7 +44,7 @@ public class RemoveRecipeCommand : Command
             entityId = recipe.Id;
         }
 
-        _recipeRepository.RemoveRecipesByIdAsync(new[] { entityId }).Wait();
+        _recipeRepository.RemoveRecipesById(new[] { entityId });
 
         _output.WriteLine(isId ? $"Рецепт с id {id} удален" : $"Рецепт с именем {idOrName} удален");
     }

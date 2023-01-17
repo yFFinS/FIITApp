@@ -5,10 +5,10 @@ namespace Recipes.Application.Interfaces;
 
 public interface IProductRepository
 {
-    Task<List<Product>> GetAllProductsAsync();
-    Task<Product?> GetProductByIdAsync(EntityId productId);
-    Task<Product?> GetProductByNameAsync(string productName);
-    Task<List<Product>> GetProductsByPrefixAsync(string productNamePrefix);
-    Task AddProductsAsync(IEnumerable<Product> products);
-    Task RemoveProductsByIdAsync(IEnumerable<EntityId> products);
+    List<Product> GetAllProducts();
+    Product? GetProductById(EntityId productId);
+    Product? GetProductByName(string productName);
+    List<Product> GetProductsByPrefix(string productNamePrefix);
+    void AddProducts(IEnumerable<Product> products);
+    void RemoveProductsById(IEnumerable<EntityId> products);
 }
