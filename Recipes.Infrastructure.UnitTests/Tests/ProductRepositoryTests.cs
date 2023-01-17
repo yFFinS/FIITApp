@@ -102,7 +102,7 @@ public class FakeDatabase : IDataBase
         return _products;
     }
 
-    public void InsertRecipe(RecipeDbo obj) => throw new NotImplementedException();
+    public void InsertRecipe(RecipeDbo recipe) => throw new NotImplementedException();
 
     public List<RecipeDbo> GetAllRecipes() => throw new NotImplementedException();
 }

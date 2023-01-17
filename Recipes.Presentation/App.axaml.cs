@@ -8,6 +8,7 @@ using Recipes.Presentation.Interfaces;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
+using Recipes.Infrastructure.DataBase;
 
 namespace Recipes.Presentation
 {
@@ -48,7 +49,7 @@ namespace Recipes.Presentation
     {
         public override void Initialize()
         {
-            var services = Bootstrap.ConfigureServices("UserAccess");
+            var services = Bootstrap.ConfigureServices();
 
             ConfigureMenu(services);
 
@@ -65,6 +66,8 @@ namespace Recipes.Presentation
                 .AddSingleton<ApplicationViewInitializer>();
 
             IServiceProvider serviceProvider = services.BuildServiceProvider();
+            var ftpServices = serviceProvider.GetRequiredService<FtpServices>();
+            ftpServices.DownloadUpdatesIfPresent();
 
             AvaloniaXamlLoader.Load(this);
             Resources.Add(typeof(IServiceProvider), serviceProvider);

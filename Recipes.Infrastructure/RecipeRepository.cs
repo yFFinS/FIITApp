@@ -114,7 +114,7 @@ public class RecipeRepository : IRecipeRepository
         }
     }
 
-    public async Task AddRecipesAsync(IEnumerable<Recipe> recipes)
+    public async Task AddRecipesAsync(IEnumerable<Recipe> recipes, bool useUserDatabase = false)
     {
         foreach (var recipe in recipes)
         {
@@ -123,13 +123,13 @@ public class RecipeRepository : IRecipeRepository
             await AddMissingQuantitiesAsync(recipe);
 
             var recipeDbo = RecipeToDbo(recipe);
-            _dataBase.InsertRecipe(recipeDbo);
+            _dataBase.InsertRecipe(recipeDbo, useUserDatabase);
         }
     }
 
     public Task RemoveRecipesByIdAsync(IEnumerable<EntityId> recipeIds)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     private RecipeDbo RecipeToDbo(Recipe recipe)

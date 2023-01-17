@@ -21,7 +21,9 @@ namespace Recipes.Presentation.ViewModels;
 public class RecipeEditorViewModel : ViewModelBase
 {
 #if DEBUG
-    public RecipeEditorViewModel() { }
+    public RecipeEditorViewModel()
+    {
+    }
 #endif
     public IRecipeRepository RecipeRepository { get; }
     public IProductRepository ProductRepository { get; }
@@ -75,6 +77,7 @@ public class RecipeEditorViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _hours, CookDuration.Hours);
         }
     }
+
     public int Minutes
     {
         get => CookDuration.Minutes;
@@ -85,6 +88,7 @@ public class RecipeEditorViewModel : ViewModelBase
             this.RaiseAndSetIfChanged(ref _minutes, CookDuration.Minutes);
         }
     }
+
     public int Seconds
     {
         get => CookDuration.Seconds;
@@ -126,10 +130,11 @@ public class RecipeEditorViewModel : ViewModelBase
         RemoveCookingStepCommand = ReactiveCommandExtended.Create<CookingStep>(RemoveCookingStep, exceptionContainer);
         AddIngredientCommand = ReactiveCommandExtended.Create<Grid>(AddIngredient, exceptionContainer);
         RemoveIngredientCommand = ReactiveCommandExtended.Create<Ingredient>(RemoveIngredient, exceptionContainer);
-        SaveRecipeCommand = ReactiveCommandExtended.Create(() => SaveRecipe(viewContainer, factory), exceptionContainer);
+        SaveRecipeCommand =
+            ReactiveCommandExtended.Create(() => SaveRecipe(viewContainer, factory), exceptionContainer);
 
         GetProductNameCommand = ReactiveCommandExtended.CreateFromTask<EntityId, Product>(
-                id => productRepository.GetProductByIdAsync(id), exceptionContainer);
+            id => productRepository.GetProductByIdAsync(id), exceptionContainer);
     }
 
     public ReactiveCommand<TextBox, Unit> AddCookingStepCommand { get; }
@@ -189,8 +194,6 @@ public class RecipeEditorViewModel : ViewModelBase
         box.Focus();
         CurrentCount = 1;
         CurrentUnit = null;
-
-
     }
 
     private void RemoveIngredient(Ingredient ingredient)
@@ -215,7 +218,7 @@ public class RecipeEditorViewModel : ViewModelBase
             recipe.AddIngredient(ingr);
         foreach (var cookingStep in CookingSteps)
             recipe.AddCookingStep(cookingStep);
-        RecipeRepository.AddRecipesAsync(new[] { recipe });
+        RecipeRepository.AddRecipesAsync(new[] { recipe }, useUserDatabase: true);
         container.Content = factory.Create(recipe, this);
     }
 }

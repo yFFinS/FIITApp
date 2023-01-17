@@ -9,6 +9,6 @@ public interface IRecipeRepository
     Task<Recipe?> GetRecipeByIdAsync(EntityId recipeId);
     Task<Recipe?> GetRecipeByNameAsync(string recipeName);
     Task<List<Recipe>> GetRecipesByPrefixAsync(string prefix);
-    Task AddRecipesAsync(IEnumerable<Recipe> recipes);
+    Task AddRecipesAsync(IEnumerable<Recipe> recipes, bool useUserDatabase = false);
     Task RemoveRecipesByIdAsync(IEnumerable<EntityId> recipeIds);
 }

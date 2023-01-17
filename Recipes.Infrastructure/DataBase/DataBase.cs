@@ -1,26 +1,23 @@
 ﻿using Recipes.Domain.Interfaces;
 using System.Xml.Serialization;
 
-namespace Recipes.Infrastructure;
-
-public record DataBaseOptions(string ProductsPath, string RecipesPath, string dbAccessFileName) : IOptions;
+namespace Recipes.Infrastructure.DataBase;
 
 public class DataBase : IDataBase
 {
     private List<RecipeDbo> _recipes = null!;
     private List<ProductDbo> _products = null!;
+    private List<RecipeDbo> _userRecipes = null!;
 
     private bool _productsIsDirty = true;
     private bool _recipesIsDirty = true;
+    private bool _userRecipesIsDirty = true;
 
-    private readonly DataBaseOptions _options;
+    private readonly DatabasePathsProvider _pathsProvider;
 
-    public DataBase(DataBaseOptions options)
+    public DataBase(DatabasePathsProvider pathsProvider)
     {
-        _options = options;
-
-        FTPServices.CheckForUpdates(_options.dbAccessFileName, "Products");
-        FTPServices.CheckForUpdates(_options.dbAccessFileName, "Recipes");
+        _pathsProvider = pathsProvider;
     }
 
     private static void AddOrUpdate<T>(T obj, IList<T> dest) where T : IEquatable<T>
@@ -41,20 +38,52 @@ public class DataBase : IDataBase
     {
         var products = GetAllProducts();
         AddOrUpdate(product, products);
-        Serialize(products, _options.ProductsPath);
+        Serialize(products, _pathsProvider.GetDatabasePath(DatabaseName.Products));
 
         _productsIsDirty = true;
     }
 
-    public void InsertRecipe(RecipeDbo obj)
+    public void InsertRecipe(RecipeDbo recipe, bool useUserDatabase)
     {
-        var recipes = GetAllRecipes();
-        AddOrUpdate(obj, recipes);
-        Serialize(recipes, _options.RecipesPath);
+        var recipes = useUserDatabase ? GetUserRecipes() : GetGlobalRecipes();
+        var databaseName = useUserDatabase ? DatabaseName.CustomRecipes : DatabaseName.Recipes;
 
-        _recipesIsDirty = true;
+        AddOrUpdate(recipe, recipes);
+        Serialize(recipes, _pathsProvider.GetDatabasePath(databaseName));
+
+        if (useUserDatabase)
+        {
+            _userRecipesIsDirty = true;
+        }
+        else
+        {
+            _recipesIsDirty = true;
+        }
     }
 
+    private List<RecipeDbo> GetUserRecipes()
+    {
+        if (_userRecipesIsDirty)
+        {
+            _userRecipes = Deserialize<List<RecipeDbo>>(_pathsProvider.GetDatabasePath(DatabaseName.CustomRecipes)) ??
+                           new List<RecipeDbo>();
+            _userRecipesIsDirty = false;
+        }
+
+        return _userRecipes;
+    }
+
+    private List<RecipeDbo> GetGlobalRecipes()
+    {
+        if (_recipesIsDirty)
+        {
+            _recipes = Deserialize<List<RecipeDbo>>(_pathsProvider.GetDatabasePath(DatabaseName.Recipes)) ??
+                       new List<RecipeDbo>();
+            _recipesIsDirty = false;
+        }
+
+        return _recipes;
+    }
 
     public List<ProductDbo> GetAllProducts()
     {
@@ -63,22 +92,14 @@ public class DataBase : IDataBase
             return _products;
         }
 
-        _products = Deserialize<List<ProductDbo>>(_options.ProductsPath) ?? new List<ProductDbo>();
+        _products = Deserialize<List<ProductDbo>>(_pathsProvider.GetDatabasePath(DatabaseName.Products)) ??
+                    new List<ProductDbo>();
         _productsIsDirty = false;
-        return _products;
+
+        return _products.ToList();
     }
 
-    public List<RecipeDbo> GetAllRecipes()
-    {
-        if (!_recipesIsDirty)
-        {
-            return _recipes;
-        }
-
-        _recipes = Deserialize<List<RecipeDbo>>(_options.RecipesPath) ?? new List<RecipeDbo>();
-        _recipesIsDirty = false;
-        return _recipes;
-    }
+    public List<RecipeDbo> GetAllRecipes() => GetGlobalRecipes().Concat(GetUserRecipes()).ToList();
 
 
     private static void Serialize<T>(T obj, string path) where T : notnull

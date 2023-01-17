@@ -1,24 +1,26 @@
-﻿using Recipes.Infrastructure;
+﻿using Recipes.Infrastructure.DataBase;
 
 namespace Recipes.DatabaseEditor.Commands;
 
-public class UploadDBCommand : Command
+public class UploadDbCommand : Command
 {
     private readonly TextWriter _output;
+    private readonly FtpServices _ftpServices;
 
-    public UploadDBCommand(TextWriter output)
+    public UploadDbCommand(TextWriter output, FtpServices ftpServices)
         : base(new[] { "upload", "db" },
             "Загрузить базу данных - upload db")
     {
         _output = output;
+        _ftpServices = ftpServices;
     }
 
     public override void Execute(string[] args)
     {
-        FTPServices.Upload("AdminAccess", "Products");
+        _ftpServices.Upload(DatabaseAccess.Admin, DatabaseName.Products);
         _output.WriteLine("Products uploaded");
 
-        FTPServices.Upload("AdminAccess", "Recipes");
+        _ftpServices.Upload(DatabaseAccess.Admin, DatabaseName.Recipes);
         _output.WriteLine("Recipes uploaded");
     }
 }

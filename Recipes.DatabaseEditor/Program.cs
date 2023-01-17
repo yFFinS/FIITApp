@@ -3,7 +3,7 @@ using Recipes.DatabaseEditor;
 using Recipes.DatabaseEditor.Commands;
 using Recipes.Infrastructure;
 
-var services = Bootstrap.ConfigureServices("AdminAccess");
+var services = Bootstrap.ConfigureServices();
 
 services.AddSingleton(Console.In);
 services.AddSingleton(Console.Out);
@@ -13,8 +13,8 @@ services.AddSingleton<RecipeParser>();
 services.AddSingleton<Interpreter>();
 
 // Register commands
-services.AddSingleton<Command, DownloadDBCommand>();
-services.AddSingleton<Command, UploadDBCommand>();
+services.AddSingleton<Command, DownloadDbCommand>();
+services.AddSingleton<Command, UploadDbCommand>();
 services.AddSingleton<Command, AddProductCommand>();
 services.AddSingleton<Command, AddRecipeCommand>();
 services.AddSingleton<Command, RemoveProductsCommand>();

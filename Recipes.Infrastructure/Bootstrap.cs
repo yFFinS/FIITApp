@@ -7,6 +7,7 @@ using Recipes.Application.Services.RecipePicker;
 using Recipes.Application.Services.RecipePicker.ScoringCriteria;
 using Recipes.Domain.Interfaces;
 using Recipes.Domain.Services;
+using Recipes.Infrastructure.DataBase;
 
 namespace Recipes.Infrastructure;
 
@@ -27,19 +28,25 @@ public static class Bootstrap
         return serviceCollection;
     }
 
-    public static IServiceCollection ConfigureServices(string access)
+    private static IServiceCollection ConfigureLogging(this IServiceCollection serviceCollection)
     {
-        var services = new ServiceCollection();
-        var optionsInjector = new OptionsInjector("Options");
-
 #if DEBUG
         const LogLevel loggingLevel = LogLevel.Debug;
 #else
         const LogLevel loggingLevel = LogLevel.Information;
 #endif
-        services.AddLogging(builder => builder.AddConsole()
+        serviceCollection.AddLogging(builder => builder.AddConsole()
             .SetMinimumLevel(loggingLevel));
 
+        return serviceCollection;
+    }
+
+    public static IServiceCollection ConfigureServices()
+    {
+        var services = new ServiceCollection();
+        var optionsInjector = new OptionsInjector("Options");
+
+        services.ConfigureLogging();
         services.AddSingleton<ILogger>(x =>
             x.GetRequiredService<ILoggerFactory>().CreateLogger("Default"));
 
@@ -47,23 +54,24 @@ public static class Bootstrap
         services.AddTransient<IRecipePicker, RecipePicker>();
         services.AddTransient<IQuantityParser, QuantityParser>();
         services.AddTransient<IIngredientGroupEditService, IngredientGroupEditService>();
-        services.AddTransient<IShoppingListService, ShoppingListService>();
 
-        optionsInjector.AddFixedOptions(new PreferenceServiceOptions("preferences.json"));
-        services.AddSingleton<IPreferenceService, PreferenceService>();
+        services.AddSingleton<IPreferenceService, PreferenceService>()
+            .AddSingleton(new PreferenceServiceOptions("preferences.json"));
 
-        FTPServices.GetDBPaths(out string productsPath, out string recipesPath);
-        optionsInjector.AddFixedOptions(new DataBaseOptions(productsPath, recipesPath, access));
-        services.AddSingleton<IDataBase, DataBase>();
+        services.AddSingleton<DatabasePathsProvider>()
+            .AddSingleton(new DatabasePaths("Products.xml", "Recipes.xml", "CustomRecipes.xml"));
+
+        services.AddSingleton<FtpServices>();
+        services.AddSingleton<IDataBase, DataBase.DataBase>();
 
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<IRecipeRepository, RecipeRepository>();
 
-        optionsInjector.AddFixedOptions(new QuantityUnitRepositoryOptions("units.csv", CacheUnits: true));
-        services.AddSingleton<IQuantityUnitRepository, QuantityUnitRepository>();
+        services.AddSingleton<IQuantityUnitRepository, QuantityUnitRepository>()
+            .AddSingleton(new QuantityUnitRepositoryOptions("units.csv", CacheUnits: true));
 
-        optionsInjector.AddFixedOptions(new CachingImageLoaderOptions(1024));
-        services.AddSingleton<IImageLoader, CachingImageLoader>();
+        services.AddSingleton<IImageLoader, CachingImageLoader>()
+            .AddSingleton(new CachingImageLoaderOptions(1024));
 
         services.AddScoringCriteria(optionsInjector);
 
