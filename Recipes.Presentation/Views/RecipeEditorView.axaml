@@ -18,7 +18,7 @@
                 VerticalAlignment="Bottom"
                 Command="{Binding SaveRecipeCommand}"
                 ZIndex="10">
-            <TextBlock Text="Save recipe" />
+            <TextBlock Text="Сохранить рецепт" />
         </Button>
         <ScrollViewer IsHitTestVisible="False">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10" MaxWidth="1000">

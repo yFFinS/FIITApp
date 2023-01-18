@@ -9,6 +9,7 @@ using Recipes.Presentation.Interfaces;
 using Recipes.Presentation.ViewModels;
 using Recipes.Presentation.Views;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Recipes.Presentation
 {
@@ -79,8 +80,18 @@ namespace Recipes.Presentation
             ftpServices.DownloadUpdatesIfPresent();
 
             var database = serviceProvider.GetRequiredService<IDataBase>();
-            database.GetAllProducts();
-            database.GetAllRecipes();
+            try
+            {
+                database.GetAllProducts();
+                database.GetAllRecipes();
+            }
+            catch (Exception ex)
+            {
+                var logger = serviceProvider.GetRequiredService<ILogger>();
+                logger.LogError(ex, "Database initialization failed. Loading default data");
+
+                ftpServices.ForceDownloadUpdates();
+            }
         }
 
         private void ConfigureMenu(IServiceCollection services)

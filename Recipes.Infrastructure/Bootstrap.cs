@@ -19,7 +19,7 @@ public static class Bootstrap
     {
         optionsInjector
             .AddExternalOptions(() => new PreferencesCriteriaScores(50, -50, 150, -300))
-            .AddExternalOptions(() => new FilterCriteriaScores(-30, 50, 150, -25))
+            .AddExternalOptions(() => new FilterCriteriaScores(-30, 50, 150, -25, -1000))
             .AddExternalOptions(() => new SimplicityCriteriaScores(5, 10.0, 900, 0.1));
 
         serviceCollection.AddTransient<IScoringCriteria, PreferencesScoringCriteria>();

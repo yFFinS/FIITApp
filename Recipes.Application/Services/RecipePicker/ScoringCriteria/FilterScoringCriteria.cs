@@ -4,7 +4,8 @@ using Recipes.Domain.Interfaces;
 namespace Recipes.Application.Services.RecipePicker.ScoringCriteria;
 
 public record FilterCriteriaScores(double NotEnoughProductPenalty,
-    double HasEnoughProductScore, double AllOptionsSatisfiedScore, double ProductNotUsedPenalty) : IOptions;
+    double HasEnoughProductScore, double AllOptionsSatisfiedScore,
+    double ProductNotUsedPenalty, double NoOptionsSatisfiedPenalty) : IOptions;
 
 public class FilterScoringCriteria : IScoringCriteria
 {

@@ -8,6 +8,8 @@ namespace Recipes.Application.Services.RecipePicker;
 
 public class RecipePicker : IRecipePicker
 {
+    private const double MinScore = -500;
+    
     private readonly ILogger<RecipePicker> _logger;
     private readonly IRecipeRepository _recipeRepository;
     private readonly IReadOnlyList<IScoringCriteria> _scoringCriteria;
@@ -28,7 +30,8 @@ public class RecipePicker : IRecipePicker
         var allowedRecipes = GetAllowedRecipes(filter, recipes);
         var scoredRecipes = ScoreRecipes(filter, allowedRecipes);
 
-        return scoredRecipes.Select(rec => rec.Recipe)
+        return scoredRecipes.Where(rec => rec.Score >= MinScore)
+            .Select(rec => rec.Recipe)
             .Take(filter.MaxRecipes)
             .ToList();
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Net;
+using Avalonia.Controls;
 
 namespace Recipes.Infrastructure.DataBase;
 
@@ -25,13 +26,19 @@ public class FtpService
         return Path.Join(appPath, databaseName + "LastModified.txt");
     }
 
-    public void DownloadUpdatesIfPresent()
+    public void ForceDownloadUpdates()
     {
-        DownloadUpdatesIfPresent(DatabaseAccess.User, DatabaseName.Products);
-        DownloadUpdatesIfPresent(DatabaseAccess.User, DatabaseName.Recipes);
+        DownloadUpdatesIfPresent(DatabaseAccess.User, DatabaseName.Products, true);
+        DownloadUpdatesIfPresent(DatabaseAccess.User, DatabaseName.Recipes, true);
     }
 
-    public void DownloadUpdatesIfPresent(DatabaseAccess databaseAccess, DatabaseName databaseName)
+    public void DownloadUpdatesIfPresent()
+    {
+        DownloadUpdatesIfPresent(DatabaseAccess.User, DatabaseName.Products, false);
+        DownloadUpdatesIfPresent(DatabaseAccess.User, DatabaseName.Recipes, false);
+    }
+
+    public void DownloadUpdatesIfPresent(DatabaseAccess databaseAccess, DatabaseName databaseName, bool forceDownload)
     {
         _logger.LogInformation("Checking for updates for {DatabaseName} as {DatabaseAccess}", databaseName,
             databaseAccess);
@@ -54,7 +61,7 @@ public class FtpService
 
         var lastModifiedRaw = File.ReadAllLines(GetLastModifiedFilePath(databaseName))[0];
         var parsed = long.TryParse(lastModifiedRaw, out var dateLastModified);
-        if (!parsed || dateLastModified < newDateLastModified)
+        if (!parsed || forceDownload || dateLastModified < newDateLastModified)
         {
             DownloadModified(databaseAccess, databaseName, newDateLastModified);
         }

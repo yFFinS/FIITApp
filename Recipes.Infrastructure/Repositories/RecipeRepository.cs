@@ -53,7 +53,12 @@ public class RecipeRepository : IRecipeRepository
         substring = substring.ToLower();
         _logger.LogDebug("Getting recipe by substring {Substring}", substring);
         var recipes = GetAllRecipes();
-        return recipes.Where(r => r.Title.Split(' ').Any(s => s.ToLower().Contains(substring))).ToList();
+        return recipes.Where(r => r.Title.ToLower().Contains(substring))
+            .Select(r => (Recipe: r, Score: r.Title.ToLower().Split().Contains(substring) ? 1 : 0))
+            .OrderByDescending(r => r.Score)
+            .ThenBy(r => r.Recipe.Title)
+            .Select(r => r.Recipe)
+            .ToList();
     }
 
     private void AddMissingQuantities(Recipe recipe)

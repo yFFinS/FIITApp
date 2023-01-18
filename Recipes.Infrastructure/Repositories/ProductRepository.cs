@@ -61,7 +61,11 @@ public class ProductRepository : IProductRepository
         _logger.LogInformation("Getting products by substring {Substring}", substring);
         var products = GetAllProducts();
         return products.Where(p =>
-                p.Name.Split(' ').Any(w => w.ToLower().Contains(substring)))
+                p.Name.ToLower().Contains(substring))
+            .Select(p => (Product: p, Score: p.Name.ToLower().Split().Contains(substring) ? 1 : 0))
+            .OrderByDescending(r => r.Score)
+            .ThenBy(r => r.Product.Name)
+            .Select(r => r.Product)
             .ToList();
     }
 

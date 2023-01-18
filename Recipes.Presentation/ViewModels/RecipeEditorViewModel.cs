@@ -33,11 +33,7 @@ public class RecipeEditorViewModel : ViewModelBase
     public Product? CurrentProduct
     {
         get => _currentProduct;
-        set 
-        {
-            this.RaiseAndSetIfChanged(ref _currentProduct, value);
-            Units = _currentProduct is null ? new List<QuantityUnit>(): _currentProduct.ValidQuantityUnits;
-        }
+        set => this.RaiseAndSetIfChanged(ref _currentProduct, value);
     }
 
     public float CurrentCount
@@ -119,7 +115,9 @@ public class RecipeEditorViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _units, value);
     }
 
-    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository, IViewContainer viewContainer, RecipeViewFactory factory,
+    public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository,
+        IQuantityUnitRepository unitRepository,
+        IViewContainer viewContainer, RecipeViewFactory factory,
         IExceptionContainer exceptionContainer)
     {
         RecipeRepository = recipeRepository;
@@ -129,7 +127,7 @@ public class RecipeEditorViewModel : ViewModelBase
         Description = "";
         Servings = 0;
         CookingSteps = new ObservableCollection<CookingStep>(new List<CookingStep>());
-        Units = new List<QuantityUnit>();
+        Units = unitRepository.GetAllUnits();
 
         AsyncPopulator = async (s, t) => ProductRepository.GetProductsBySubstring(s!.ToLower());
         TextSelector = (search, item) => item.Name;
@@ -221,7 +219,7 @@ public class RecipeEditorViewModel : ViewModelBase
             throw new RecipeEditorException("Напишите шаги приготовления");
 
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings, CookDuration);
-        recipe.ImageUrl = new Uri(ImageUrl);
+        recipe.ImageUrl = string.IsNullOrWhiteSpace(ImageUrl) ? null : new Uri(ImageUrl);
         foreach (var ingr in Ingredients)
             recipe.AddIngredient(ingr);
         foreach (var cookingStep in CookingSteps)
