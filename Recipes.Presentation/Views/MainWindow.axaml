@@ -29,6 +29,7 @@
                HorizontalAlignment="Stretch" 
                IsHitTestVisible="False" 
                Background="{DynamicResource AppTitleBarBackground}">
+            <TextBlock Text="RecipeKeeper" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5 0 0  0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Classes="title-btn" Click="MinimizeBtn_OnClick">
                     <Path Data="{StaticResource MinimizePath}"
