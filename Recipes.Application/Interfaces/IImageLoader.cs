@@ -4,5 +4,5 @@ namespace Recipes.Application.Interfaces;
 
 public interface IImageLoader
 {
-    Task<Bitmap> LoadImage(Uri imageUri);
+    Task<Bitmap> LoadImage(Uri? imageUri);
 }

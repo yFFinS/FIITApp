@@ -42,10 +42,12 @@ public class RecipeSearchViewModel : ViewModelBase
         {
             this.RaiseAndSetIfChanged(ref _pageIndex, value);
             this.RaisePropertyChanged("PageLastIndex");
+            this.RaisePropertyChanged("PageFirstIndex");
         }
     }
 
-    public int PageLastIndex => PageIndex + Page.Count;
+    public int PageLastIndex => Math.Min(PageIndex + Page.Count, 1);
+    public int PageFirstIndex => PageIndex + 1;
 
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
@@ -80,6 +82,7 @@ public class RecipeSearchViewModel : ViewModelBase
         if (Items.Count - PageIndex <= PageCapacity) return;
         PageIndex += PageCapacity;
         Page = Enumerable.Range(PageIndex, Math.Min(PageCapacity, Items.Count - PageIndex)).Select(i => Items[i]).ToList();
+        this.RaisePropertyChanged("PageLastIndex");
     }
 
     private void ShowPrevPage()
@@ -87,6 +90,7 @@ public class RecipeSearchViewModel : ViewModelBase
         if (PageIndex < PageCapacity) return;
         PageIndex -= PageCapacity;
         Page = Enumerable.Range(PageIndex, PageCapacity).Select(i => Items[i]).ToList();
+        this.RaisePropertyChanged("PageLastIndex");
     }
 
     private ViewModelBase ShowRecipe(Recipe recipe, RecipeViewFactory factory)
@@ -105,7 +109,7 @@ public class RecipeSearchViewModel : ViewModelBase
 
         foreach (var recipe in _recipeRepository.GetRecipesByPrefix(prefix))
         {
-            var item = new ImageWrapper<Recipe>(recipe, ImageLoader);
+            var item = new ImageWrapper<Recipe>(recipe, ImageLoader, recipe.ImageUrl);
             Items.Add(item);
             if (index >= 12) continue;
             page.Add(item);
