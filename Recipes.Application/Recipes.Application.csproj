@@ -25,4 +25,10 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Options\FilterCriteriaScores.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

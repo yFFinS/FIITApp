@@ -59,12 +59,11 @@ public class Interpreter
             }
 
             var args = SplitArgs(input);
-            var commandName = args[0];
 
             var (command, argumentsStart) = TryGetCommand(args);
             if (command is null)
             {
-                _output.WriteLine($"Неизвестная команда: {commandName}");
+                _output.WriteLine($"Неизвестная команда: {input}");
                 continue;
             }
 

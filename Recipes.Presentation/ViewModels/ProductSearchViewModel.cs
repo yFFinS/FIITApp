@@ -53,13 +53,13 @@ public class ProductSearchViewModel : ViewModelBase
         get => _searchPrefix;
         set => this.RaiseAndSetIfChanged(ref _searchPrefix, value);
     }
-    
+
     public List<ImageWrapper<Product>> Page
     {
         get => _page;
         set => this.RaiseAndSetIfChanged(ref _page, value);
     }
-    
+
     public int PageIndex
     {
         get => _pageIndex;
@@ -85,19 +85,19 @@ public class ProductSearchViewModel : ViewModelBase
         SelectedProducts.Clear();
     }
 
-    private void Search(string? prefix)
+    private void Search(string? substring)
     {
         Products.Clear();
         var page = new List<ImageWrapper<Product>>();
 
         var index = 0;
-        foreach (var product in string.IsNullOrWhiteSpace(prefix)
+        foreach (var product in string.IsNullOrWhiteSpace(substring)
                      ? ProductRepository.GetAllProducts()
-                     : ProductRepository.GetProductsByPrefix(prefix))
+                     : ProductRepository.GetProductsBySubstring(substring))
         {
             var item = new ImageWrapper<Product>(product, ImageLoader, product.ImageUrl);
             Products.Add(item);
-            if(index >= PageCapacity) continue;
+            if (index >= PageCapacity) continue;
             page.Add(item);
             index++;
         }
@@ -128,7 +128,7 @@ public class ProductSearchViewModel : ViewModelBase
     }
 
     private const int PageCapacity = 16;
-    
+
     private void ShowNextPage()
     {
         if (Products.Count - PageIndex <= PageCapacity) return;

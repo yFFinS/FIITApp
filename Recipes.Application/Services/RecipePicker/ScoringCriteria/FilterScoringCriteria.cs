@@ -4,7 +4,7 @@ using Recipes.Domain.Interfaces;
 namespace Recipes.Application.Services.RecipePicker.ScoringCriteria;
 
 public record FilterCriteriaScores(double NotEnoughProductPenalty,
-    double HasEnoughProductScore, double AllOptionsSatisfiedScore) : IOptions;
+    double HasEnoughProductScore, double AllOptionsSatisfiedScore, double ProductNotUsedPenalty) : IOptions;
 
 public class FilterScoringCriteria : IScoringCriteria
 {
@@ -20,6 +20,8 @@ public class FilterScoringCriteria : IScoringCriteria
         var score = 0.0;
         var satisfiedOptions = 0;
 
+        var optionsCount = 0;
+
         foreach (var ingredient in recipe.Ingredients)
         {
             var optionForProduct = recipeFilter.GetOption(ingredient.Product.Id);
@@ -28,6 +30,8 @@ public class FilterScoringCriteria : IScoringCriteria
                 continue;
             }
 
+            optionsCount++;
+
             if (optionForProduct.Quantity is not null && optionForProduct.Quantity < ingredient.Quantity)
             {
                 score += _scores.NotEnoughProductPenalty;
@@ -35,13 +39,15 @@ public class FilterScoringCriteria : IScoringCriteria
             else
             {
                 score += _scores.HasEnoughProductScore;
+                satisfiedOptions++;
             }
         }
 
-        if (satisfiedOptions == recipeFilter.OptionCount)
-        {
-            score += _scores.AllOptionsSatisfiedScore;
-        }
+        var satisfiedOptionsRatio = (double)satisfiedOptions / optionsCount;
+        score += _scores.AllOptionsSatisfiedScore * satisfiedOptionsRatio;
+
+        var notUsedOptionsCount = recipeFilter.OptionCount - optionsCount;
+        score += _scores.ProductNotUsedPenalty * notUsedOptionsCount;
 
         return score;
     }

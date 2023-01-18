@@ -55,13 +55,13 @@ public class ProductRepository : IProductRepository
         return products.FirstOrDefault(p => p.Name == productName);
     }
 
-    public List<Product> GetProductsByPrefix(string productNamePrefix)
+    public List<Product> GetProductsBySubstring(string substring)
     {
-        productNamePrefix = productNamePrefix.ToLower();
-        _logger.LogInformation("Getting products by prefix {ProductNamePrefix}", productNamePrefix);
+        substring = substring.ToLower();
+        _logger.LogInformation("Getting products by substring {Substring}", substring);
         var products = GetAllProducts();
         return products.Where(p =>
-                p.Name.Split(' ').Any(w => w.ToLower().StartsWith(productNamePrefix)))
+                p.Name.Split(' ').Any(w => w.ToLower().Contains(substring)))
             .ToList();
     }
 

@@ -20,6 +20,7 @@ services.AddSingleton<Command, AddRecipeCommand>();
 services.AddSingleton<Command, RemoveProductsCommand>();
 services.AddSingleton<Command, RemoveRecipeCommand>();
 services.AddSingleton<Command, HelpCommand>();
+services.AddSingleton<Command, UploadImagesCommand>();
 
 services.AddSingleton<IReadOnlyList<Command>>(sp => sp.GetServices<Command>().ToList());
 services.AddSingleton(sp => new Lazy<IReadOnlyList<Command>>(() => sp.GetServices<Command>().ToList()));

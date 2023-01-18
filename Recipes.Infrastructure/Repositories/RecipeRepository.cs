@@ -26,10 +26,10 @@ public class RecipeRepository : IRecipeRepository
         _quantityUnitRepository = quantityUnitRepository;
     }
 
-    public List<Recipe> GetAllRecipes()
+    public List<Recipe> GetAllRecipes(bool onlyGlobal = false)
     {
         _logger.LogDebug("Getting all recipes");
-        var recipeDbos = _dataBase.GetAllRecipes();
+        var recipeDbos = _dataBase.GetAllRecipes(onlyGlobal);
         var recipes = recipeDbos.Select(DboToRecipe).ToList();
         return recipes;
     }
@@ -48,12 +48,12 @@ public class RecipeRepository : IRecipeRepository
         return recipes.FirstOrDefault(r => r.Title == recipeName);
     }
 
-    public List<Recipe> GetRecipesByPrefix(string prefix)
+    public List<Recipe> GetRecipesBySubstring(string substring)
     {
-        prefix = prefix.ToLower();
-        _logger.LogDebug("Getting recipe by prefix {Prefix}", prefix);
+        substring = substring.ToLower();
+        _logger.LogDebug("Getting recipe by substring {Substring}", substring);
         var recipes = GetAllRecipes();
-        return recipes.Where(r => r.Title.Split(' ').Any(s => s.ToLower().StartsWith(prefix))).ToList();
+        return recipes.Where(r => r.Title.Split(' ').Any(s => s.ToLower().Contains(substring))).ToList();
     }
 
     private void AddMissingQuantities(Recipe recipe)

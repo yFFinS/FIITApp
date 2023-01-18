@@ -19,10 +19,12 @@ public static class Bootstrap
     {
         optionsInjector
             .AddExternalOptions(() => new PreferencesCriteriaScores(50, -50, 150, -300))
-            .AddExternalOptions(() => new FilterCriteriaScores(-30, 50, 150));
+            .AddExternalOptions(() => new FilterCriteriaScores(-30, 50, 150, -25))
+            .AddExternalOptions(() => new SimplicityCriteriaScores(5, 10.0, 900, 0.1));
 
         serviceCollection.AddTransient<IScoringCriteria, PreferencesScoringCriteria>();
         serviceCollection.AddTransient<IScoringCriteria, FilterScoringCriteria>();
+        serviceCollection.AddTransient<IScoringCriteria, SimplicityScoringCriteria>();
         serviceCollection.AddTransient<IReadOnlyList<IScoringCriteria>>(sp =>
             sp.GetServices<IScoringCriteria>().ToList());
 
@@ -62,7 +64,7 @@ public static class Bootstrap
         services.AddSingleton<DatabasePathsProvider>()
             .AddSingleton(new DatabasePaths("Products.xml", "Recipes.xml", "CustomRecipes.xml"));
 
-        services.AddSingleton<FtpServices>();
+        services.AddSingleton<FtpService>();
         services.AddSingleton<IDataBase, DataBase.DataBase>();
 
         services.AddSingleton<IProductRepository, ProductRepository>();

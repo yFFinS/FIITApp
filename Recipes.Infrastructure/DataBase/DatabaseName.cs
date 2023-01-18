@@ -4,5 +4,5 @@ public enum DatabaseName
 {
     Products,
     Recipes,
-    CustomRecipes
+    CustomRecipes,
 }
