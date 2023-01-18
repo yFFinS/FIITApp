@@ -37,9 +37,10 @@ public class FtpService
             databaseAccess);
 
         var details = GetDatabaseDetails(databaseAccess);
-        var databasePath = Path.GetFileName(_pathsProvider.GetDatabasePath(databaseName));
+        var remotePath = GetRemotePath(details.RemotePath, databaseName);
+        var databasePath = _pathsProvider.GetDatabasePath(databaseName);
 
-        var ftpRequest = (FtpWebRequest)WebRequest.Create(details.RemotePath);
+        var ftpRequest = (FtpWebRequest)WebRequest.Create(remotePath);
         ftpRequest.Credentials = new NetworkCredential(details.UserId, details.Password);
         ftpRequest.Method = WebRequestMethods.Ftp.GetDateTimestamp;
         var ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
@@ -71,12 +72,12 @@ public class FtpService
         _logger.LogInformation("Uploading {DatabaseName} as {DatabaseAccess}", databaseName, databaseAccess);
 
         var details = GetDatabaseDetails(databaseAccess);
-        ;
+        var remotePath = GetRemotePath(details.RemotePath, databaseName);
         var databasePath = Path.GetFileName(_pathsProvider.GetDatabasePath(databaseName));
 
         using var client = new WebClient();
         client.Credentials = new NetworkCredential(details.UserId, details.Password);
-        client.UploadFile(details.RemotePath, databasePath);
+        client.UploadFile(remotePath, databasePath);
     }
 
 
@@ -85,11 +86,17 @@ public class FtpService
         _logger.LogInformation("Downloading {DatabaseName} as {DatabaseAccess}", databaseName, databaseAccess);
 
         var details = GetDatabaseDetails(databaseAccess);
-        var databasePath = Path.GetFileName(_pathsProvider.GetDatabasePath(databaseName));
+        var remotePath = GetRemotePath(details.RemotePath, databaseName);
+        var databasePath = _pathsProvider.GetDatabasePath(databaseName);
 
         using var client = new WebClient();
         client.Credentials = new NetworkCredential(details.UserId, details.Password);
-        client.DownloadFile(details.RemotePath, databasePath);
+        client.DownloadFile(remotePath, databasePath);
+    }
+
+    private string GetRemotePath(string serverRemotePath, DatabaseName databaseName)
+    {
+        return serverRemotePath + Path.GetFileName(_pathsProvider.GetDatabasePath(databaseName));
     }
 
     private static string GetCredentialsPath(DatabaseAccess databaseAccess)

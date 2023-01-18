@@ -1,4 +1,5 @@
-﻿using Avalonia.Media.Imaging;
+﻿using System.Net;
+using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
 using Recipes.Infrastructure.DataBase;
@@ -41,12 +42,24 @@ public class CachingImageLoader : IImageLoader
 
         _logger.LogDebug("Image {ImageUri} not found in cache, loading from Uri", imageUri);
 
-        var imageData = await _ftpService.DownloadImage(imageUri);
-        using var stream = new MemoryStream(imageData);
-        image = new Bitmap(stream);
+        MemoryStream stream;
 
-        SaveToCache(imageUri, image);
+        try
+        {
+            var imageData = await _ftpService.DownloadImage(imageUri);
+            stream = new MemoryStream(imageData);
+        }
+        catch (WebException)
+        {
+            _logger.LogWarning("Image {ImageUri} not found on server. Loading directly from Uri", imageUri);
+            stream = await WebStreamLoader.LoadAsync(imageUri);
+        }
 
-        return image;
+        using (stream)
+        {
+            image = new Bitmap(stream);
+            SaveToCache(imageUri, image);
+            return image;
+        }
     }
 }

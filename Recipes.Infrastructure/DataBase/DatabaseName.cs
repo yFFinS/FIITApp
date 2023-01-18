@@ -5,5 +5,4 @@ public enum DatabaseName
     Products,
     Recipes,
     CustomRecipes,
-    Images
 }
