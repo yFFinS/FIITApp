@@ -62,7 +62,7 @@ public static class Bootstrap
         services.AddSingleton<DatabasePathsProvider>()
             .AddSingleton(new DatabasePaths("Products.xml", "Recipes.xml", "CustomRecipes.xml"));
 
-        services.AddSingleton<FtpServices>();
+        services.AddSingleton<FtpService>();
         services.AddSingleton<IDataBase, DataBase.DataBase>();
 
         services.AddSingleton<IProductRepository, ProductRepository>();

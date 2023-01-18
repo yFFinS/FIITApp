@@ -105,7 +105,7 @@ public class FakeDatabase : IDataBase
 
     public void InsertRecipe(RecipeDbo recipe, bool useUserDatabase) => throw new NotImplementedException();
 
-    public List<RecipeDbo> GetAllRecipes() => throw new NotImplementedException();
+    public List<RecipeDbo> GetAllRecipes(bool _) => throw new NotImplementedException();
     public void DeleteProduct(EntityId product) => throw new NotImplementedException();
 
     public void DeleteRecipe(EntityId recipe) => throw new NotImplementedException();

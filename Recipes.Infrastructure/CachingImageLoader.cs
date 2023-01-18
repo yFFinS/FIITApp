@@ -1,23 +1,23 @@
-using Avalonia.Media.Imaging;
+﻿using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
 using Recipes.Application.Interfaces;
-using Recipes.Domain.Interfaces;
+using Recipes.Infrastructure.DataBase;
 
-namespace Recipes.Application.Services;
-
-public record CachingImageLoaderOptions(int CacheSize = 100) : IOptions;
+namespace Recipes.Infrastructure;
 
 public class CachingImageLoader : IImageLoader
 {
     private readonly ILogger<CachingImageLoader> _logger;
+    private readonly FtpService _ftpService;
     private readonly CachingImageLoaderOptions _options;
 
-    private readonly HttpClient _httpClient = new();
     private readonly Dictionary<Uri, Bitmap> _cache = new();
 
-    public CachingImageLoader(ILogger<CachingImageLoader> logger, CachingImageLoaderOptions options)
+    public CachingImageLoader(ILogger<CachingImageLoader> logger, FtpService ftpService,
+        CachingImageLoaderOptions options)
     {
         _logger = logger;
+        _ftpService = ftpService;
         _options = options;
     }
 
@@ -41,13 +41,9 @@ public class CachingImageLoader : IImageLoader
 
         _logger.LogDebug("Image {ImageUri} not found in cache, loading from Uri", imageUri);
 
-        await using var httpStream = await _httpClient.GetStreamAsync(imageUri);
-
-        using var memoryStream = new MemoryStream();
-        await httpStream.CopyToAsync(memoryStream);
-        memoryStream.Position = 0;
-
-        image = new Bitmap(memoryStream);
+        var imageData = await _ftpService.DownloadImage(imageUri);
+        using var stream = new MemoryStream(imageData);
+        image = new Bitmap(stream);
 
         SaveToCache(imageUri, image);
 

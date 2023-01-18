@@ -16,17 +16,17 @@ public class RecipeSearchViewModel : ViewModelBase
 {
     private readonly IRecipeRepository _recipeRepository;
     private List<ImageWrapper<Recipe>> _page;
-    private string _searchPrefix;
+    private string _searchSubstring;
     private int _pageIndex;
 
     public IImageLoader ImageLoader { get; }
 
     public ObservableCollection<ImageWrapper<Recipe>> Items { get; private set; }
 
-    public string SearchPrefix
+    public string SearchSubstring
     {
-        get => _searchPrefix;
-        set => this.RaiseAndSetIfChanged(ref _searchPrefix, value);
+        get => _searchSubstring;
+        set => this.RaiseAndSetIfChanged(ref _searchSubstring, value);
     }
 
     public List<ImageWrapper<Recipe>> Page
@@ -70,7 +70,7 @@ public class RecipeSearchViewModel : ViewModelBase
     public override void Refresh()
     {
         Search(null);
-        SearchPrefix = "";
+        SearchSubstring = "";
     }
 
     private const int PageCapacity = 12;
@@ -94,18 +94,18 @@ public class RecipeSearchViewModel : ViewModelBase
         return factory.Create(recipe, this);
     }
 
-    public void Search(string? prefix)
+    public void Search(string? substring)
     {
-        prefix ??= string.Empty;
+        substring ??= string.Empty;
 
         Items.Clear();
         var page = new List<ImageWrapper<Recipe>>();
 
         var index = 0;
 
-        foreach (var recipe in _recipeRepository.GetRecipesByPrefix(prefix))
+        foreach (var item in _recipeRepository.GetRecipesBySubstring(substring)
+                     .Select(recipe => new ImageWrapper<Recipe>(recipe, ImageLoader)))
         {
-            var item = new ImageWrapper<Recipe>(recipe, ImageLoader);
             Items.Add(item);
             if (index >= 12) continue;
             page.Add(item);

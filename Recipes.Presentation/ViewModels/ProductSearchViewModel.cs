@@ -85,11 +85,11 @@ public class ProductSearchViewModel : ViewModelBase
         SelectedProducts.Clear();
     }
 
-    private void Search(string? prefix)
+    private void Search(string? substring)
     {
-        Products = string.IsNullOrWhiteSpace(prefix)
+        Products = string.IsNullOrWhiteSpace(substring)
             ? ProductRepository.GetAllProducts()
-            : ProductRepository.GetProductsByPrefix(prefix);
+            : ProductRepository.GetProductsBySubstring(substring);
         PageIndex = 0;
         Page = Enumerable.Range(PageIndex, Math.Min(PageCapacity, Products.Count - PageIndex)).Select(i => Products[i])
             .ToList();

@@ -5,22 +5,22 @@ namespace Recipes.DatabaseEditor.Commands;
 public class UploadDbCommand : Command
 {
     private readonly TextWriter _output;
-    private readonly FtpServices _ftpServices;
+    private readonly FtpService _ftpService;
 
-    public UploadDbCommand(TextWriter output, FtpServices ftpServices)
+    public UploadDbCommand(TextWriter output, FtpService ftpService)
         : base(new[] { "upload", "db" },
             "Загрузить базу данных - upload db")
     {
         _output = output;
-        _ftpServices = ftpServices;
+        _ftpService = ftpService;
     }
 
     public override void Execute(string[] args)
     {
-        _ftpServices.Upload(DatabaseAccess.Admin, DatabaseName.Products);
+        _ftpService.Upload(DatabaseAccess.Admin, DatabaseName.Products);
         _output.WriteLine("Products uploaded");
 
-        _ftpServices.Upload(DatabaseAccess.Admin, DatabaseName.Recipes);
+        _ftpService.Upload(DatabaseAccess.Admin, DatabaseName.Recipes);
         _output.WriteLine("Recipes uploaded");
     }
 }
