@@ -131,7 +131,7 @@ public class RecipeEditorViewModel : ViewModelBase
         CookingSteps = new ObservableCollection<CookingStep>(new List<CookingStep>());
         Units = new List<QuantityUnit>();
 
-        AsyncPopulator = async (s, t) => ProductRepository.GetProductsByPrefix(s!.ToLower());
+        AsyncPopulator = async (s, t) => ProductRepository.GetProductsBySubstring(s!.ToLower());
         TextSelector = (search, item) => item.Name;
 
         AddCookingStepCommand = ReactiveCommandExtended.Create<TextBox>(AddCookingStep, exceptionContainer);

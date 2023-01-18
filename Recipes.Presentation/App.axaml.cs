@@ -75,7 +75,7 @@ namespace Recipes.Presentation
 
         private static void InitDatabases(IServiceProvider serviceProvider)
         {
-            var ftpServices = serviceProvider.GetRequiredService<FtpServices>();
+            var ftpServices = serviceProvider.GetRequiredService<FtpService>();
             ftpServices.DownloadUpdatesIfPresent();
 
             var database = serviceProvider.GetRequiredService<IDataBase>();

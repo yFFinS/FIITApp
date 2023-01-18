@@ -99,7 +99,11 @@ public class DataBase : IDataBase
         return _products.ToList();
     }
 
-    public List<RecipeDbo> GetAllRecipes() => GetGlobalRecipes().Concat(GetUserRecipes()).ToList();
+    public List<RecipeDbo> GetAllRecipes(bool onlyGlobal)
+    {
+        var globalRecipes = GetGlobalRecipes();
+        return onlyGlobal ? globalRecipes : globalRecipes.Concat(GetUserRecipes()).ToList();
+    }
 
     public void DeleteProduct(EntityId product)
     {

@@ -5,10 +5,10 @@ namespace Recipes.Domain.Interfaces;
 
 public interface IRecipeRepository
 {
-    List<Recipe> GetAllRecipes();
+    List<Recipe> GetAllRecipes(bool onlyGlobal = false);
     Recipe? GetRecipeById(EntityId recipeId);
     Recipe? GetRecipeByName(string recipeName);
-    List<Recipe> GetRecipesByPrefix(string prefix);
+    List<Recipe> GetRecipesBySubstring(string substring);
     void AddRecipes(IEnumerable<Recipe> recipes, bool useUserDatabase = false);
     void RemoveRecipesById(IEnumerable<EntityId> recipeIds);
 }

@@ -1,0 +1,6 @@
+{
+  "NotEnoughProductPenalty": -30.0,
+  "HasEnoughProductScore": 50.0,
+  "AllOptionsSatisfiedScore": 300.0,
+  "ProductNotUsedPenalty": -25.0
+}
