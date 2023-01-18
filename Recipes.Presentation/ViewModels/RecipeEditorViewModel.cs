@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Recipes.Presentation.ViewModels;
 
@@ -28,10 +30,14 @@ public class RecipeEditorViewModel : ViewModelBase
 
     #region Ingredient
 
-    public Product CurrentProduct
+    public Product? CurrentProduct
     {
         get => _currentProduct;
-        set => this.RaiseAndSetIfChanged(ref _currentProduct, value);
+        set 
+        {
+            this.RaiseAndSetIfChanged(ref _currentProduct, value);
+            Units = _currentProduct is null ? new List<QuantityUnit>(): _currentProduct.ValidQuantityUnits;
+        }
     }
 
     public float CurrentCount
@@ -61,9 +67,10 @@ public class RecipeEditorViewModel : ViewModelBase
     private int _hours;
     private int _minutes;
     private int _seconds;
-    private Product _currentProduct;
+    private Product? _currentProduct;
     private float _currentCount = 1;
     private QuantityUnit _currentUnit;
+    private IReadOnlyList<QuantityUnit> _units;
 
     public int Hours
     {
@@ -106,7 +113,11 @@ public class RecipeEditorViewModel : ViewModelBase
 
     public ObservableCollection<CookingStep> CookingSteps { get; set; }
 
-    public IReadOnlyList<QuantityUnit> Units { get; private set; }
+    public IReadOnlyList<QuantityUnit> Units
+    {
+        get => _units;
+        private set => this.RaiseAndSetIfChanged(ref _units, value);
+    }
 
     public RecipeEditorViewModel(IRecipeRepository recipeRepository, IProductRepository productRepository, IViewContainer viewContainer, RecipeViewFactory factory,
         IExceptionContainer exceptionContainer)
@@ -120,12 +131,8 @@ public class RecipeEditorViewModel : ViewModelBase
         CookingSteps = new ObservableCollection<CookingStep>(new List<CookingStep>());
         Units = new List<QuantityUnit>();
 
-        PopulateProducts = (s) => ProductRepository.GetProductsByPrefix(s!.ToLower());
-        SelectProduct = (search, item) =>
-        {
-            Units = item.ValidQuantityUnits;
-            return item.Name;
-        };
+        AsyncPopulator = async (s, t) => ProductRepository.GetProductsByPrefix(s!.ToLower());
+        TextSelector = (search, item) => item.Name;
 
         AddCookingStepCommand = ReactiveCommandExtended.Create<TextBox>(AddCookingStep, exceptionContainer);
         RemoveCookingStepCommand = ReactiveCommandExtended.Create<CookingStep>(RemoveCookingStep, exceptionContainer);
@@ -161,9 +168,9 @@ public class RecipeEditorViewModel : ViewModelBase
         CookingSteps.Remove(step);
     }
 
-    public Func<string?, IEnumerable<object>> PopulateProducts { get; }
+    public Func<string?, CancellationToken, Task<IEnumerable<object>>> AsyncPopulator { get; }
 
-    public AutoCompleteSelector<Product> SelectProduct { get; }
+    public AutoCompleteSelector<Product> TextSelector { get; }
 
     private void AddIngredient(Grid parent)
     {

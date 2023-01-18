@@ -52,8 +52,8 @@
                                       x:DataType="productAggregate:Product">
                                     <AutoCompleteBox Grid.Column="0"
                                                      Watermark="Product"
-                                                     AsyncPopulator="{Binding PopulateProducts}"
-                                                     TextSelector="{Binding SelectProduct}"
+                                                     AsyncPopulator="{Binding AsyncPopulator}"
+                                                     TextSelector="{Binding TextSelector}"
                                                      SelectedItem="{Binding CurrentProduct, Mode=TwoWay}"
                                                      ValueMemberBinding="{CompiledBinding Name}">
                                         <AutoCompleteBox.ItemTemplate>
