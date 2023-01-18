@@ -38,6 +38,7 @@ namespace Recipes.Presentation
         {
             desktop.MainWindow = _mainWindow;
             _mainWindow.ViewBorder.Child = _mainView;
+            _mainWindow.Title = "RecipeKeeper";
         }
 
         public void InitializeLifetime(ISingleViewApplicationLifetime singleView)
