@@ -182,8 +182,14 @@ public class RecipeEditorViewModel : ViewModelBase
         if (CurrentProduct is null)
         {
             var ex = new RecipeEditorException("Выберете продукт");
-            // DataValidationErrors.SetError(box, ex);
-            throw ex;
+            Product? product = null;
+            if (!string.IsNullOrWhiteSpace(box.Text))
+            {
+                product = ProductRepository.GetProductByName(box.Text);
+            }
+            if(product is null)
+                throw ex;
+            CurrentProduct = product;
         }
 
         if (CurrentUnit is null)
@@ -221,7 +227,17 @@ public class RecipeEditorViewModel : ViewModelBase
         var recipe = new Recipe(EntityId.NewId(), Title, Description, Servings, CookDuration);
         recipe.ImageUrl = string.IsNullOrWhiteSpace(ImageUrl) ? null : new Uri(ImageUrl);
         foreach (var ingr in Ingredients)
-            recipe.AddIngredient(ingr);
+        {
+            try
+            {
+                recipe.AddIngredient(ingr);
+            }
+            catch (IngredientExistsException e)
+            {
+                var ex = new RecipeEditorException("Некоторые продукты записаны несколько раз", e);
+                throw ex;
+            }
+        }
         foreach (var cookingStep in CookingSteps)
             recipe.AddCookingStep(cookingStep);
         RecipeRepository.AddRecipes(new[] { recipe }, useUserDatabase: true);
