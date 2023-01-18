@@ -46,8 +46,8 @@ public class RecipeSearchViewModel : ViewModelBase
         }
     }
 
-    public int PageLastIndex => Math.Max(PageIndex + Page.Count, 1);
-    public int PageFirstIndex => PageIndex + 1;
+    public int PageLastIndex => Page.Count == 0 ? 0 : Math.Max(PageIndex + Page.Count, 1);
+    public int PageFirstIndex => Page.Count == 0 ? 0 : PageIndex + 1;
 
     public ReactiveCommand<Recipe, Unit> ShowRecipeCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }

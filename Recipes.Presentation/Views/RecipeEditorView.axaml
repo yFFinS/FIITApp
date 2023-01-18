@@ -51,7 +51,7 @@
                                       VerticalAlignment="Top"
                                       x:DataType="productAggregate:Product">
                                     <AutoCompleteBox Grid.Column="0"
-                                                     Watermark="Product"
+                                                     Watermark="Продукт"
                                                      AsyncPopulator="{Binding AsyncPopulator}"
                                                      TextSelector="{Binding TextSelector}"
                                                      SelectedItem="{Binding CurrentProduct, Mode=TwoWay}"
@@ -142,7 +142,7 @@
                     </Grid>
                     <Grid Grid.Column="2" RowDefinitions="*, Auto" HorizontalAlignment="Stretch">
                         <Border Margin="0 0 0 10" Grid.Row="0" Classes="accent round">
-                            <TextBox Watermark="Image Url"
+                            <TextBox Watermark="Вставьте ссылку на изображение..."
                                      Text="{Binding ImageUrl}"/>
                         </Border>
                         <Border Grid.Row="1" Classes="accent round" VerticalAlignment="Bottom">
