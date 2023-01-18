@@ -11,19 +11,30 @@
     </Design.DataContext>
     <DockPanel>
         <ScrollViewer>
-            <ItemsControl Items="{Binding Recipes}"
-                          Margin="0 0">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Center" MaxWidth="1500"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <controls:RecipeCard Margin="5"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            <Panel>
+                <ItemsControl Items="{Binding Recipes}"
+                              Margin="0 0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel HorizontalAlignment="Center" MaxWidth="1500"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <controls:RecipeCard Margin="5"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Border Classes="accent round"
+                        IsVisible="{Binding !Recipes.Count}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="20">
+                    <TextBlock Text="Ничего не найдено"
+                               FontSize="24"
+                               Foreground="#80000000"/>
+                </Border>
+            </Panel>
         </ScrollViewer>
     </DockPanel>
 </UserControl>

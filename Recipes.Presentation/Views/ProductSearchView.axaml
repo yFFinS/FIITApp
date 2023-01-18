@@ -46,6 +46,14 @@
             <ScrollViewer Grid.Column="1" Grid.Row="4" VerticalAlignment="Stretch"
                           VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
+                    <Border Classes="accent round"
+                            IsVisible="{Binding !Page.Count}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top">
+                        <TextBlock Text="Ничего не найдено"
+                                   FontSize="24"
+                                   Foreground="#80000000"/>
+                    </Border>
                     <ItemsPresenter Items="{Binding Page}">
                         <ItemsPresenter.ItemsPanel>
                             <ItemsPanelTemplate>

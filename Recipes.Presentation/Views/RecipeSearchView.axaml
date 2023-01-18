@@ -47,7 +47,15 @@
                 Command="{Binding ShowNextPageCommand}"/>
         <ScrollViewer ZIndex="-2">
             <StackPanel>
-
+                <Border Classes="accent round"
+                        IsVisible="{Binding !Page.Count}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="20 60 20 20">
+                    <TextBlock Text="Ничего не найдено"
+                               FontSize="24"
+                               Foreground="#80000000"/>
+                </Border>
                 <ItemsControl ZIndex="100"
                               Items="{Binding Page}"
                               Margin="200 60 200 0">
