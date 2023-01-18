@@ -16,7 +16,8 @@
         <Button VerticalAlignment="Stretch"
                 ZIndex="1"
                 MinWidth="150"
-                Classes="back"
+                Classes="left"
+                Background="{DynamicResource ButtonBackgroundTransparent}"
                 Command="{Binding BackCommand}"
                 HorizontalAlignment="Left" />
         <ScrollViewer IsHitTestVisible="False">

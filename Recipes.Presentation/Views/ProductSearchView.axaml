@@ -20,24 +20,36 @@
             Найти рецепты
         </Button>
         <Grid RowDefinitions="50, 15, 40, 15, *"
+              ColumnDefinitions="100 800 100"
               VerticalAlignment="Stretch"
               HorizontalAlignment="Center"
-              Width="800">
+              Width="1000">
             <Label Classes="accent"
-                   Grid.Row="0"
+                   Grid.Row="0" Grid.Column="1"
                    CornerRadius="10">
                 <TextBlock Text="Какие ингредиенты у вас есть?"
                            TextAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="20" />
             </Label>
-            <controls:SearchBar Grid.Row="2" />
-            <ScrollViewer Grid.Row="4" VerticalAlignment="Stretch">
+            <controls:SearchBar Grid.Row="2" Grid.Column="1" />
+            <Button Grid.Row="4" Grid.Column="0" VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Classes="left"
+                    Background="{DynamicResource ButtonBackgroundTransparent}"
+                    Command="{Binding ShowPreviousPageCommand}"/>
+            <Button Grid.Row="4" Grid.Column="2"  VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Classes="right"
+                    Background="{DynamicResource ButtonBackgroundTransparent}"
+                    Command="{Binding ShowNextPageCommand}"/>
+            <ScrollViewer Grid.Column="1" Grid.Row="4" VerticalAlignment="Stretch"
+                          VerticalScrollBarVisibility="Hidden">
                 <StackPanel>
-                    <ItemsPresenter Items="{Binding Products}">
+                    <ItemsPresenter Items="{Binding Page}">
                         <ItemsPresenter.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel/>
+                                <WrapPanel HorizontalAlignment="Center"/>
                             </ItemsPanelTemplate>
                         </ItemsPresenter.ItemsPanel>
                         <ItemsPresenter.ItemTemplate>

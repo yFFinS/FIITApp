@@ -73,18 +73,20 @@ public class RecipeSearchViewModel : ViewModelBase
         SearchPrefix = "";
     }
 
+    private const int PageCapacity = 12;
+
     private void ShowNextPage()
     {
-        if (Items.Count - PageIndex <= 12) return;
-        PageIndex += 12;
-        Page = Enumerable.Range(PageIndex, Math.Min(12, Items.Count - PageIndex)).Select(i => Items[i]).ToList();
+        if (Items.Count - PageIndex <= PageCapacity) return;
+        PageIndex += PageCapacity;
+        Page = Enumerable.Range(PageIndex, Math.Min(PageCapacity, Items.Count - PageIndex)).Select(i => Items[i]).ToList();
     }
 
     private void ShowPrevPage()
     {
-        if (PageIndex < 12) return;
-        PageIndex -= 12;
-        Page = Enumerable.Range(PageIndex, 12).Select(i => Items[i]).ToList();
+        if (PageIndex < PageCapacity) return;
+        PageIndex -= PageCapacity;
+        Page = Enumerable.Range(PageIndex, PageCapacity).Select(i => Items[i]).ToList();
     }
 
     private ViewModelBase ShowRecipe(Recipe recipe, RecipeViewFactory factory)

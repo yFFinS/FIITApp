@@ -1,10 +1,12 @@
-﻿using ReactiveUI;
+﻿using System;
+using ReactiveUI;
 using Recipes.Application.Interfaces;
 using Recipes.Application.Services.RecipePicker;
 using Recipes.Domain.Entities.ProductAggregate;
 using Recipes.Presentation.DataTypes;
 using Recipes.Presentation.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 
 namespace Recipes.Presentation.ViewModels;
@@ -13,6 +15,8 @@ public class ProductSearchViewModel : ViewModelBase
 {
     private string _searchPrefix;
     private List<Product> _products;
+    private int _pageIndex;
+    private List<Product> _page;
     public IImageLoader ImageLoader { get; }
     public IProductRepository ProductRepository { get; }
 
@@ -37,6 +41,8 @@ public class ProductSearchViewModel : ViewModelBase
                 () => ShowRecipes(container, imageLoader, recipePicker, factory, exceptionContainer),
                 exceptionContainer);
         CheckProductCommand = ReactiveCommandExtended.Create<Product>(CheckProduct, exceptionContainer);
+        ShowNextPageCommand = ReactiveCommandExtended.Create(ShowNextPage, exceptionContainer);
+        ShowPreviousPageCommand = ReactiveCommandExtended.Create(ShowPrevPage, exceptionContainer);
 
         Products = new List<Product>();
         SelectedProducts = new HashSet<Product>();
@@ -47,15 +53,36 @@ public class ProductSearchViewModel : ViewModelBase
         get => _searchPrefix;
         set => this.RaiseAndSetIfChanged(ref _searchPrefix, value);
     }
+    
+    public List<Product> Page
+    {
+        get => _page;
+        set => this.RaiseAndSetIfChanged(ref _page, value);
+    }
+    
+    public int PageIndex
+    {
+        get => _pageIndex;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _pageIndex, value);
+            this.RaisePropertyChanged("PageLastIndex");
+        }
+    }
+
+    public int PageLastIndex => PageIndex + Page.Count;
 
     public ReactiveCommand<Unit, Unit> ShowRecipesCommand { get; }
     public ReactiveCommand<string, Unit> SearchCommand { get; }
     public ReactiveCommand<Product, Unit> CheckProductCommand { get; }
+    public ReactiveCommand<Unit, Unit> ShowNextPageCommand { get; }
+    public ReactiveCommand<Unit, Unit> ShowPreviousPageCommand { get; }
 
     public override void Refresh()
     {
         Search(null);
         SearchPrefix = "";
+        SelectedProducts.Clear();
     }
 
     private void Search(string? prefix)
@@ -63,6 +90,9 @@ public class ProductSearchViewModel : ViewModelBase
         Products = string.IsNullOrWhiteSpace(prefix)
             ? ProductRepository.GetAllProducts()
             : ProductRepository.GetProductsByPrefix(prefix);
+        PageIndex = 0;
+        Page = Enumerable.Range(PageIndex, Math.Min(PageCapacity, Products.Count - PageIndex)).Select(i => Products[i])
+            .ToList();
     }
 
     private void CheckProduct(Product product)
@@ -84,5 +114,22 @@ public class ProductSearchViewModel : ViewModelBase
             filter.AddOption(new ProductFilterOption(product));
         var recipes = recipePicker.PickRecipes(filter);
         container.Content = new RecipeListViewModel(recipes, container, loader, factory, exceptionContainer);
+    }
+
+    private const int PageCapacity = 16;
+    
+    private void ShowNextPage()
+    {
+        if (Products.Count - PageIndex <= PageCapacity) return;
+        PageIndex += PageCapacity;
+        Page = Enumerable.Range(PageIndex, Math.Min(PageCapacity, Products.Count - PageIndex)).Select(i => Products[i])
+            .ToList();
+    }
+
+    private void ShowPrevPage()
+    {
+        if (PageIndex < PageCapacity) return;
+        PageIndex -= PageCapacity;
+        Page = Enumerable.Range(PageIndex, PageCapacity).Select(i => Products[i]).ToList();
     }
 }
