@@ -13,7 +13,7 @@ public class CachingImageLoader : IImageLoader
     private readonly CachingImageLoaderOptions _options;
 
     private readonly HttpClient _httpClient = new();
-    private readonly Dictionary<Uri, Bitmap> _cache = new();
+    private readonly Dictionary<Uri?, Bitmap> _cache = new();
 
     public CachingImageLoader(ILogger<CachingImageLoader> logger, CachingImageLoaderOptions options)
     {
@@ -21,7 +21,7 @@ public class CachingImageLoader : IImageLoader
         _options = options;
     }
 
-    private void SaveToCache(Uri uri, Bitmap bitmap)
+    private void SaveToCache(Uri? uri, Bitmap bitmap)
     {
         if (_cache.Count >= _options.CacheSize)
         {
@@ -31,7 +31,7 @@ public class CachingImageLoader : IImageLoader
         _cache.Add(uri, bitmap);
     }
 
-    public async Task<Bitmap> LoadImage(Uri imageUri)
+    public async Task<Bitmap> LoadImage(Uri? imageUri)
     {
         if (_cache.TryGetValue(imageUri, out var image))
         {

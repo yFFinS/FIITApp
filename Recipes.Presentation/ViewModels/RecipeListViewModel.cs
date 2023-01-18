@@ -22,7 +22,7 @@ public class RecipeListViewModel : ViewModelBase
     public RecipeListViewModel(List<Recipe> recipes, IViewContainer container, IImageLoader imageLoader,
         RecipeViewFactory factory, IExceptionContainer exceptionContainer)
     {
-        Recipes = recipes.Select(i => new ImageWrapper<Recipe>(i, imageLoader)).ToList();
+        Recipes = recipes.Select(i => new ImageWrapper<Recipe>(i, imageLoader, i.ImageUrl)).ToList();
         ImageLoader = imageLoader;
         ShowRecipeCommand =
             ReactiveCommandExtended.Create<Recipe>(recipe => ShowRecipe(recipe, container, factory),

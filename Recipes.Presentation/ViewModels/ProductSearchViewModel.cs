@@ -14,13 +14,13 @@ namespace Recipes.Presentation.ViewModels;
 public class ProductSearchViewModel : ViewModelBase
 {
     private string _searchPrefix;
-    private List<Product> _products;
+    private List<ImageWrapper<Product>> _products;
     private int _pageIndex;
-    private List<Product> _page;
+    private List<ImageWrapper<Product>> _page;
     public IImageLoader ImageLoader { get; }
     public IProductRepository ProductRepository { get; }
 
-    public List<Product> Products
+    public List<ImageWrapper<Product>> Products
     {
         get => _products;
         set => this.RaiseAndSetIfChanged(ref _products, value);
@@ -44,7 +44,7 @@ public class ProductSearchViewModel : ViewModelBase
         ShowNextPageCommand = ReactiveCommandExtended.Create(ShowNextPage, exceptionContainer);
         ShowPreviousPageCommand = ReactiveCommandExtended.Create(ShowPrevPage, exceptionContainer);
 
-        Products = new List<Product>();
+        Products = new List<ImageWrapper<Product>>();
         SelectedProducts = new HashSet<Product>();
     }
 
@@ -54,7 +54,7 @@ public class ProductSearchViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _searchPrefix, value);
     }
     
-    public List<Product> Page
+    public List<ImageWrapper<Product>> Page
     {
         get => _page;
         set => this.RaiseAndSetIfChanged(ref _page, value);
@@ -87,12 +87,23 @@ public class ProductSearchViewModel : ViewModelBase
 
     private void Search(string? prefix)
     {
-        Products = string.IsNullOrWhiteSpace(prefix)
-            ? ProductRepository.GetAllProducts()
-            : ProductRepository.GetProductsByPrefix(prefix);
+        Products.Clear();
+        var page = new List<ImageWrapper<Product>>();
+
+        var index = 0;
+        foreach (var product in string.IsNullOrWhiteSpace(prefix)
+                     ? ProductRepository.GetAllProducts()
+                     : ProductRepository.GetProductsByPrefix(prefix))
+        {
+            var item = new ImageWrapper<Product>(product, ImageLoader, product.ImageUrl);
+            Products.Add(item);
+            if(index >= PageCapacity) continue;
+            page.Add(item);
+            index++;
+        }
+
+        Page = page;
         PageIndex = 0;
-        Page = Enumerable.Range(PageIndex, Math.Min(PageCapacity, Products.Count - PageIndex)).Select(i => Products[i])
-            .ToList();
     }
 
     private void CheckProduct(Product product)

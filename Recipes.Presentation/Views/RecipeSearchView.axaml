@@ -25,7 +25,7 @@
             <Border Grid.Column="2" Classes="accent round" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="Рецепты "/>
-                    <TextBlock Text="{Binding PageIndex}"/>
+                    <TextBlock Text="{Binding PageFirstIndex}"/>
                     <TextBlock Text="-"/>
                     <TextBlock Text="{Binding PageLastIndex}"/>
                     <TextBlock Text=" из "/>

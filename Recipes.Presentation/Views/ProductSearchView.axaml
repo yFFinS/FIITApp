@@ -59,20 +59,30 @@
                                               Width="180"
                                               Margin="5"
                                               Command="{Binding $parent[ItemsPresenter].DataContext.CheckProductCommand}"
-                                              CommandParameter="{Binding}">
+                                              CommandParameter="{Binding Object}">
                                     <ToggleButton.IsChecked>
                                         <MultiBinding Converter="{StaticResource ProductCheckedConverter}">
                                             <Binding Path="$parent[ItemsPresenter].DataContext.SelectedProducts"/>
-                                            <Binding />
+                                            <Binding Path="Object" />
                                         </MultiBinding>
                                     </ToggleButton.IsChecked>
-                                    <Panel>
-                                        <Image/>
-                                        <TextBlock Text="{Binding Name}"
-                                                   VerticalAlignment="Bottom"
-                                                   TextAlignment="Center"
-                                                   TextWrapping="Wrap"/>
-                                    </Panel>
+                                    <RelativePanel>
+                                        <Image Name="Image" Source="{Binding Image^}"
+                                               RelativePanel.AlignTopWithPanel="True"
+                                               RelativePanel.AlignLeftWithPanel="True"
+                                               RelativePanel.AlignRightWithPanel="True"
+                                               RelativePanel.Above="Panel"/>
+                                        <Border RelativePanel.AlignBottomWithPanel="True"
+                                                RelativePanel.AlignLeftWithPanel="True"
+                                                RelativePanel.AlignRightWithPanel="True"
+                                                Classes="accent"
+                                                Name="Panel">
+                                            <TextBlock Text="{Binding Object.Name}"
+                                                       VerticalAlignment="Bottom"
+                                                       TextAlignment="Center"
+                                                       TextWrapping="Wrap"/>
+                                        </Border>
+                                    </RelativePanel>
                                 </ToggleButton>
                             </DataTemplate>
                         </ItemsPresenter.ItemTemplate>
