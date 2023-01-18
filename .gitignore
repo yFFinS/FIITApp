@@ -36,3 +36,5 @@ Desktop.ini
 .DS_Store
 
 Recipes.Infrastructure/Products.xml
+Recipes.DatabaseEditor/DataBaseAccess.txt
+Recipes.Presentation.Desktop/UserAccess.txt
